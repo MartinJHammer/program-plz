@@ -1,5 +1,5 @@
 ## Intro
-write-host "setting up local development for sequencer"
+write-host "setting up local development for program-plz"
 
 ### NodeJS
 & "$PSScriptRoot\setup\s1-install-nodejs.ps1"

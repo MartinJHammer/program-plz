@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'sequencer-start',
+  selector: 'program-plz-start',
   templateUrl: './start.component.html',
   styleUrls: ['./start.component.scss']
 })

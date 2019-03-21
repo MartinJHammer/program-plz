@@ -4,13 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "sequencer",
+      "program-plz",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "sequencer",
+      "program-plz",
       "kebab-case"
     ]
   }

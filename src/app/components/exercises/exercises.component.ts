@@ -5,7 +5,7 @@ import { ExerciseTable } from 'src/app/database/tables/exercise-table';
 import { Exercise } from 'src/app/models/exercise';
 
 @Component({
-  selector: 'sequencer-exercises',
+  selector: 'program-plz-exercises',
   templateUrl: './exercises.component.html',
   styleUrls: ['./exercises.component.scss']
 })

@@ -3,11 +3,11 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sequencer": {
+    "program-plz": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "sequencer",
+      "prefix": "program-plz",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/sequencer",
+            "outputPath": "dist/program-plz",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -58,18 +58,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sequencer:build"
+            "browserTarget": "program-plz:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sequencer:build:production"
+              "browserTarget": "program-plz:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sequencer:build"
+            "browserTarget": "program-plz:build"
           }
         },
         "test": {
@@ -103,7 +103,7 @@
         }
       }
     },
-    "sequencer-e2e": {
+    "program-plz-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -112,11 +112,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "sequencer:serve"
+            "devServerTarget": "program-plz:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "sequencer:serve:production"
+              "devServerTarget": "program-plz:serve:production"
             }
           }
         },
@@ -132,5 +132,5 @@
       }
     }
   },
-  "defaultProject": "sequencer"
+  "defaultProject": "program-plz"
 }

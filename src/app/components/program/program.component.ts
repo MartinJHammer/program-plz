@@ -5,7 +5,7 @@ import { Database } from 'src/app/database/database';
 import { FullBodyProgram } from 'src/app/models/programs/full-body-program';
 
 @Component({
-  selector: 'sequencer-program',
+  selector: 'program-plz-program',
   templateUrl: './program.component.html',
   styleUrls: ['./program.component.scss']
 })
