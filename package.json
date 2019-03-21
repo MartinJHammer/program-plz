@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
-    "build": "ng build",
+    "build": "ng build --prod --base-href https://martinjhammer.github.io/program-plz/ --output-path docs",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "pp:deploy": "npm run build && git commit -m \"Committing build files\" && git push && ngh"
   },
   "private": true,
   "dependencies": {
