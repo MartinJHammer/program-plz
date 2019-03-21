@@ -1,0 +1,27 @@
+<!-- Requirements -->
+<h1>Program</h1>
+<h2>Requirements</h2>
+<form [formGroup]="requirements" (ngSubmit)="getProgram()">
+
+  <label for="duration">
+    Duration:
+    <input type="text" name="duration" formControlName="duration" placeholder="Duration">
+  </label>
+  <br>
+
+  <label for="timeBudget">
+    Time budget:
+    <input type="text" name="timeBudget" formControlName="timeBudget" placeholder="Time budget">
+  </label>
+  <br>
+
+  <button type="submit">Get a program</button>
+</form>
+
+<!-- Program -->
+<ng-container *ngIf="program">
+  <h2>Program</h2>
+  <ul *ngFor="let exercise of program.exercises">
+    <li>{{ exercise.name }}</li>
+  </ul>
+</ng-container>

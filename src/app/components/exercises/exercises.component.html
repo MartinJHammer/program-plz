@@ -1,0 +1,30 @@
+<h1>Exercises</h1>
+
+<!-- RESET -->
+<button (click)="reset()">Reset all exercises</button>
+<br><br>
+
+<!-- CREATE -->
+<form *ngIf="!editForm" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label for="name">
+    Exercise name:
+    <input type="text" name="name" formControlName="name" placeholder="name">
+  </label>
+  <button type="submit">Create</button>
+</form>
+
+<!-- EDIT -->
+<form *ngIf="editForm" [formGroup]="editForm" (ngSubmit)="onEditSubmit()">
+  <label for="name">
+    Exercise name:
+    <input type="text" name="name" formControlName="name" placeholder="name">
+  </label>
+  <button type="submit">Edit</button>
+</form>
+
+<!-- LIST -->
+<ng-container *ngIf="exercises">
+  <ul *ngFor="let exercise of exercises.getAll()">
+    <li>{{ exercise.name }} - <button (click)="edit(exercise)">Edit</button> | <button (click)="exercises.delete(exercise)">Delete</button></li>
+  </ul>
+</ng-container>
