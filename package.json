@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pp:deploy": "npm run build && git commit -m \"Committing build files\" && git push && ngh"
+    "pp:deploy": "npm run build && git add . && git commit -m \"Committing build files\" && git push && ngh --dist docs"
   },
   "private": true,
   "dependencies": {
