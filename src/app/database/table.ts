@@ -72,7 +72,7 @@ export abstract class Table<T extends Entry> {
 
     private seedIfEmpty() {
         this.retrieve().then((values: T[]) => {
-            values.length === 0 ? this.seed() : this.entries = values;
+            values && values.length === 0 ? this.seed() : this.entries = values;
         });
     }
 }
