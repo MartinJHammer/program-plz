@@ -1,9 +1,9 @@
 <button (click)="getProgram()">Program plz!</button>
 
 <!-- Program -->
-<ng-container *ngIf="program">
+<ng-container *ngIf="program && program.exercises">
   <h2>Program</h2>
-  <ul *ngFor="let exercise of program.exercises">
-    <li>{{ exercise.name }}</li>
+  <ul *ngFor="let exercise of program.exercises; trackBy: trackById">
+    <li>{{ exercise.name }} - <a href="#" (click)="differentVersion(exercise)">replace</a></li>
   </ul>
 </ng-container>

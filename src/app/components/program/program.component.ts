@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Program } from 'src/app/models/program';
-import { Database } from 'src/app/database/database';
-import { FullBodyProgram } from 'src/app/models/programs/full-body-program';
+import { Exercise } from 'src/app/models/exercise';
 
 @Component({
   selector: 'program-plz-program',
@@ -9,18 +8,22 @@ import { FullBodyProgram } from 'src/app/models/programs/full-body-program';
   styleUrls: ['./program.component.scss']
 })
 export class ProgramComponent implements OnInit {
-  public program: Program;
-
   constructor(
-    public database: Database
+    public program: Program
   ) { }
 
   ngOnInit() {
   }
 
   public getProgram() {
-    const program = new FullBodyProgram({});
-    program.createProgram(this.database);
-    this.program = program;
+    this.program.createProgram();
+  }
+
+  public differentVersion(exercise: Exercise) {
+    this.program.differentVersion(exercise);
+  }
+
+  public trackById(index, item) {
+    return item.id;
   }
 }
