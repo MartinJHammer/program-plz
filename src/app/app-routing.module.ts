@@ -9,7 +9,8 @@ const routes: Routes = [
   },
   {
     path: 'exercises', component: ExercisesComponent
-  }
+  },
+  { path: '**', component: ProgramComponent }
 ];
 
 @NgModule({
