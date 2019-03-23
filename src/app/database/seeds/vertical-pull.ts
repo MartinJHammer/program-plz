@@ -36,7 +36,13 @@ export const verticalPullExercises: Exercise[] = [
         ]
     }),
     new Exercise({
-        name: 'Band high pulls',
+        name: 'Band pulls',
+        types: [
+            ExerciseType.verticalPull
+        ]
+    }),
+    new Exercise({
+        name: 'Vertical pulls',
         types: [
             ExerciseType.verticalPull
         ]

@@ -75,6 +75,12 @@ export const coreExercises: Exercise[] = [
         ]
     }),
     new Exercise({
+        name: 'Farmers walk',
+        types: [
+            ExerciseType.core
+        ]
+    }),
+    new Exercise({
         name: 'Plank',
         types: [
             ExerciseType.core

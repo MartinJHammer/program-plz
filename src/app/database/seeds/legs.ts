@@ -51,7 +51,20 @@ export const legExercises: Exercise[] = [
         ]
     }),
     new Exercise({
+        name: 'Bulgarian step ups',
+        types: [
+            ExerciseType.lift
+        ]
+    }),
+    new Exercise({
         name: 'Ball bridge roll-outs',
+        types: [
+            ExerciseType.lift,
+            ExerciseType.lunge,
+        ]
+    }),
+    new Exercise({
+        name: 'Bridges',
         types: [
             ExerciseType.lift,
             ExerciseType.lunge,
