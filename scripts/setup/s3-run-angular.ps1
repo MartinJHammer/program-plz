@@ -14,5 +14,5 @@ if(-not $node_modules_installed) {
 write-host "opening code and booting up angular dev server."
 cd $root
 code .
-npm run start
+ng serve --open
 
