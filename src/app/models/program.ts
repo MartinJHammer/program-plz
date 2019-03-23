@@ -9,7 +9,11 @@ export class Program {
     public exercises: Exercise[];
     public duration: number;
 
-    constructor(public db: Database) { }
+    constructor(public db: Database) {
+        if (this.db.exercises.getAll().length === 0) {
+            this.db.exercises.seed();
+        }
+    }
 
     public createProgram() {
         this.exercises = [];
