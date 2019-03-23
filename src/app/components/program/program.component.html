@@ -1,9 +1,60 @@
-<button (click)="getProgram()">Program plz!</button>
+<div class="row mt-2">
+  <div class="col-10">
+    <button class="btn btn-primary btn-lg" (click)="getProgram()">Program plz!</button>
+  </div>
+  <div class="col-2">
+    <a [routerLink]="['exercises']" class="exercises">🏋🏻‍</a>
+  </div>
+</div>
 
 <!-- Program -->
 <ng-container *ngIf="program && program.exercises">
-  <h2>Program</h2>
-  <ul *ngFor="let exercise of program.exercises; trackBy: trackById">
-    <li>{{ exercise.name }} - <a href="#" (click)="differentVersion(exercise)">replace</a></li>
-  </ul>
+  <ng-container *ngFor="let exercise of program.exercises; trackBy: trackById">
+    <div class="card my-2" style="width: 18rem;">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10 mb-2">
+            <h6 class="card-title">{{ exercise.name }}</h6>
+            <p class="card-text">3s x failure</p>
+          </div>
+          <div class="col-2">
+            <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
+              data-target="#exerciseModal"></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercise);">Replace</a>
+          </div>
+          <div class="col-4">
+            <a href="javascript:void(0)" class=" card-link">Easier</a>
+          </div>
+          <div class="col-4">
+            <a href="javascript:void(0)" class=" card-link">Harder</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </ng-container>
+
+<!-- Modal -->
+<div *ngIf="currentExercise" class="modal" id="exerciseModal" tabindex="-1" role="dialog"
+  aria-labelledby="exerciseModalTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exerciseModalTitle">{{ currentExercise.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This section will contain instructions on how to do the exercise, do's and dont's etc.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
