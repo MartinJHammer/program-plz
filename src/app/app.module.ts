@@ -9,6 +9,8 @@ import { ExerciseIndexComponent } from './components/exercises-index/exercises-i
 import { ProgramComponent } from './components/program/program.component';
 import { StartComponent } from './components/start/start.component';
 import { environment } from 'src/environments/environment';
+import { ExercisesCreateComponent } from './components/exercises-create/exercises-create.component';
+import { ExercisesEditComponent } from './components/exercises-edit/exercises-edit.component';
 
 @NgModule({
   imports: [
@@ -21,7 +23,9 @@ import { environment } from 'src/environments/environment';
   declarations: [
     ExerciseIndexComponent,
     ProgramComponent,
-    StartComponent
+    StartComponent,
+    ExercisesCreateComponent,
+    ExercisesEditComponent
   ],
   providers: [],
   bootstrap: [StartComponent]
