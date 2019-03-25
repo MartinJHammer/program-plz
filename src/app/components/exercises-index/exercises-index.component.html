@@ -1,5 +1,7 @@
 <h1>Exercises</h1>
 
+<a class="btn btn-success" [routerLink]="['create']">Create</a>
+
 <ul *ngFor="let exercise of exercises | async">
   <li>{{ exercise.name }} - <a [routerLink]="['edit', exercise.id]" (click)="edit(exercise)">Edit</a> - <a
       (click)="delete(exercise)">Delete</a></li>

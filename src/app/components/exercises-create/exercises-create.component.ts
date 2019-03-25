@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Exercise } from 'src/app/models/exercise';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'pp-exercises-create',
@@ -7,9 +11,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExercisesCreateComponent implements OnInit {
 
-  constructor() { }
+  public form: FormGroup;
+
+  constructor(
+    public db: AngularFirestore,
+    public fb: FormBuilder,
+    public router: Router
+  ) { }
 
   ngOnInit() {
+    this.form = this.fb.group({
+      name: ''
+    });
+  }
+
+  onSubmit() {
+    const exercise: Exercise = this.form.value;
+    this.db.collection<Exercise>('exercises').add(exercise).then(() => {
+      this.router.navigate(['exercises']);
+    });
   }
 
 }
