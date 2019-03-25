@@ -25,4 +25,8 @@ export class ExercisesIndexComponent implements OnInit {
       }))
     );
   }
+
+  public delete(exercise: Exercise) {
+    this.db.doc(`exercises/${exercise.id}`).delete();
+  }
 }
