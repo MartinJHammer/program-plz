@@ -1,14 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProgramComponent } from './components/program/program.component';
-import { ExerciseIndexComponent } from './components/exercises-index/exercises-index.component';
+import { ExercisesIndexComponent } from './components/exercises-index/exercises-index.component';
+import { ExercisesCreateComponent } from './components/exercises-create/exercises-create.component';
+import { ExercisesEditComponent } from './components/exercises-edit/exercises-edit.component';
 
 const routes: Routes = [
   {
     path: '', component: ProgramComponent
   },
   {
-    path: 'exercises', component: ExerciseIndexComponent
+    path: 'exercises', component: ExercisesIndexComponent
+  },
+  {
+    path: 'exercises/create', component: ExercisesCreateComponent
+  },
+  {
+    path: 'exercises/edit/:id', component: ExercisesEditComponent
   },
   { path: '**', component: ProgramComponent }
 ];

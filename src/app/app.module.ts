@@ -5,7 +5,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ExerciseIndexComponent } from './components/exercises-index/exercises-index.component';
+import { ExercisesIndexComponent } from './components/exercises-index/exercises-index.component';
 import { ProgramComponent } from './components/program/program.component';
 import { StartComponent } from './components/start/start.component';
 import { environment } from 'src/environments/environment';
@@ -21,7 +21,7 @@ import { ExercisesEditComponent } from './components/exercises-edit/exercises-ed
     AngularFirestoreModule
   ],
   declarations: [
-    ExerciseIndexComponent,
+    ExercisesIndexComponent,
     ProgramComponent,
     StartComponent,
     ExercisesCreateComponent,
