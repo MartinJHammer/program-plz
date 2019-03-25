@@ -1,0 +1,6 @@
+<h1>Exercises</h1>
+
+<ul *ngFor="let exercise of exercises | async">
+  <li>{{ exercise.name }} - <a [routerLink]="['edit', exercise.id]" (click)="edit(exercise)">Edit</a> - <a
+      (click)="delete(exercise)">Delete</a></li>
+</ul>

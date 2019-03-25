@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProgramComponent } from './components/program/program.component';
-import { ExercisesComponent } from './components/exercises/exercises.component';
+import { ExerciseIndexComponent } from './components/exercises-index/exercises-index.component';
 
 const routes: Routes = [
   {
     path: '', component: ProgramComponent
   },
   {
-    path: 'exercises', component: ExercisesComponent
+    path: 'exercises', component: ExerciseIndexComponent
   },
   { path: '**', component: ProgramComponent }
 ];
