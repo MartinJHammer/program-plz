@@ -18,7 +18,7 @@ export const verticalPullExercises: Exercise[] = [
         ]
     }),
     new Exercise({
-        name: 'Inlcline curls',
+        name: 'Incline curls',
         types: [
             ExerciseType.verticalPull
         ]

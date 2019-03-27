@@ -5,12 +5,12 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ExercisesIndexComponent } from './components/exercises-index/exercises-index.component';
+import { ExercisesIndexComponent } from './components/exercises/exercises-index/exercises-index.component';
 import { ProgramComponent } from './components/program/program.component';
 import { StartComponent } from './components/start/start.component';
 import { environment } from 'src/environments/environment';
-import { ExercisesCreateComponent } from './components/exercises-create/exercises-create.component';
-import { ExercisesEditComponent } from './components/exercises-edit/exercises-edit.component';
+import { ExercisesCreateComponent } from './components/exercises/exercises-create/exercises-create.component';
+import { ExercisesEditComponent } from './components/exercises/exercises-edit/exercises-edit.component';
 
 @NgModule({
   imports: [

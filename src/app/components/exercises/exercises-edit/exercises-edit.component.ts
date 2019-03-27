@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Exercise } from 'src/app/models/exercise';
-import { map, switchMap, mergeAll, take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-exercises-edit',

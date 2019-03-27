@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProgramComponent } from './components/program/program.component';
-import { ExercisesIndexComponent } from './components/exercises-index/exercises-index.component';
-import { ExercisesCreateComponent } from './components/exercises-create/exercises-create.component';
-import { ExercisesEditComponent } from './components/exercises-edit/exercises-edit.component';
+import { ExercisesIndexComponent } from './components/exercises/exercises-index/exercises-index.component';
+import { ExercisesCreateComponent } from './components/exercises/exercises-create/exercises-create.component';
+import { ExercisesEditComponent } from './components/exercises/exercises-edit/exercises-edit.component';
 
 const routes: Routes = [
   {
