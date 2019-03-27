@@ -1,8 +1,12 @@
-import { Entry } from '../models/entry';
 import * as localForage from 'localforage';
+import { Injectable } from '@angular/core';
 
-export abstract class Table<T extends Entry> {
-    protected entries: T[] = [];
+// Note: Needs a bit of refactoring to be of use.
+
+@Injectable({ providedIn: 'root' })
+export class StorageService {
+
+    public entries: any[];
 
     constructor(
         protected key: string
@@ -10,28 +14,26 @@ export abstract class Table<T extends Entry> {
         this.seedIfEmpty();
     }
 
-    abstract seed(): void;
-
-    public get(id: string): T | undefined {
+    public get(id: string): any | undefined {
         return this.entries.find(entry => entry.id === id);
     }
 
-    public getAll(): T[] {
+    public getAll(): any[] {
         return this.entries;
     }
 
-    public add(value: T): T {
+    public add(value: any): any {
         value.id = this.generateGUID();
         this.entries.push(value);
         this.persist();
         return value;
     }
 
-    public addRange(values: T[]) {
+    public addRange(values: any[]) {
         values.forEach(value => this.add(value));
     }
 
-    public update(value: T): T {
+    public update(value: any): any {
         const oldValue = this.get(value.id);
         if (oldValue) {
             const newValue = Object.assign(oldValue, value);
@@ -42,7 +44,7 @@ export abstract class Table<T extends Entry> {
         }
     }
 
-    public delete(value: T): T | undefined {
+    public delete(value: any): any | undefined {
         const index = this.entries.findIndex(entry => entry.id === value.id);
         const removedValue = this.entries[index];
         this.entries.splice(index, 1);
@@ -71,8 +73,8 @@ export abstract class Table<T extends Entry> {
     }
 
     private seedIfEmpty() {
-        this.retrieve().then((values: T[]) => {
-            values && values.length === 0 ? this.seed() : this.entries = values;
-        });
+        // this.retrieve().then((values: T[]) => {
+        //     values && values.length === 0 ? this.seed() : this.entries = values;
+        // });
     }
 }

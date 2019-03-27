@@ -1,10 +1,5 @@
-export enum ExerciseType {
-    horizontalPush,
-    horizontalPull,
-    verticalPull,
-    verticalPush,
-    lunge,
-    lift,
-    squat,
-    core
+import { Entry } from './entry';
+
+export class ExerciseType extends Entry {
+    public name: string;
 }

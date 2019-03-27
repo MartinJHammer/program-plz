@@ -1,37 +1,33 @@
 import { Exercise } from './exercise';
-import { Database } from '../database/database';
 import { Injectable } from '@angular/core';
 import { ExerciseType } from './exercise-type';
 
 @Injectable({ providedIn: 'root' })
 export class Program {
-    public description: string;
     public exercises: Exercise[];
-    public duration: number;
 
-    constructor(public db: Database) {
-        if (this.db.exercises.getAll().length === 0) {
-            this.db.exercises.seed();
-        }
-    }
+    // TODO: replace with firestore
+    public db: any;
+
+    constructor() { }
 
     public createProgram() {
-        this.exercises = [];
-        const hPull = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.horizontalPull));
-        const hPush = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.horizontalPush));
-        const vPull = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.verticalPull));
-        const vPush = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.verticalPush));
-        const legs = this.db.exercises.getAll().filter(exercise => [ExerciseType.lift, ExerciseType.lunge, ExerciseType.squat].some(condition => exercise.types.includes(condition)));
-        const core = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.core));
+        // this.exercises = [];
+        // const hPull = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.horizontalPull));
+        // const hPush = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.horizontalPush));
+        // const vPull = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.verticalPull));
+        // const vPush = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.verticalPush));
+        // const legs = this.db.exercises.getAll().filter(exercise => [ExerciseType.lift, ExerciseType.lunge, ExerciseType.squat].some(condition => exercise.types.includes(condition)));
+        // const core = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.core));
 
-        this.exercises = this.exercises.concat([
-            ...shuffle(hPull).slice(0, 1),
-            ...shuffle(hPush).slice(0, 1),
-            ...shuffle(vPull).slice(0, 1),
-            ...shuffle(vPush).slice(0, 1),
-            ...shuffle(legs).slice(0, 2),
-            ...shuffle(core).slice(0, 2)
-        ]);
+        // this.exercises = this.exercises.concat([
+        //     ...shuffle(hPull).slice(0, 1),
+        //     ...shuffle(hPush).slice(0, 1),
+        //     ...shuffle(vPull).slice(0, 1),
+        //     ...shuffle(vPush).slice(0, 1),
+        //     ...shuffle(legs).slice(0, 2),
+        //     ...shuffle(core).slice(0, 2)
+        // ]);
     }
 
     /**
