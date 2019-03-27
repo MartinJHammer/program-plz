@@ -21,19 +21,19 @@ const routes: Routes = [
     path: 'exercises', component: ExercisesIndexComponent
   },
   {
-    path: 'create', component: ExercisesCreateComponent
+    path: 'exercises/create', component: ExercisesCreateComponent
   },
   {
-    path: 'edit/:id', component: ExercisesEditComponent
+    path: 'exercises/edit/:id', component: ExercisesEditComponent
   },
   {
     path: 'exercise-types', component: ExerciseTypesIndexComponent
   },
   {
-    path: 'create', component: ExerciseTypesCreateComponent
+    path: 'exercise-types/create', component: ExerciseTypesCreateComponent
   },
   {
-    path: 'edit/:id', component: ExerciseTypesEditComponent
+    path: 'exercise-types/edit/:id', component: ExerciseTypesEditComponent
   },
   { path: '**', component: NotFoundComponent }
 ];
