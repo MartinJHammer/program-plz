@@ -4,82 +4,80 @@ import { ExerciseType } from 'src/app/models/exercise-type';
 export const legExercises: Exercise[] = [
     new Exercise({
         name: 'High bar squats',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Low bar squats',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Front squats',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Pistols',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Lunges',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: '3D lunges',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Quad curls',
-        types: [
-            ExerciseType.squat
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Nordic curls',
-        types: [
-            ExerciseType.lift
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Bulgarian step ups',
-        types: [
-            ExerciseType.lift
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Ball bridge roll-outs',
-        types: [
-            ExerciseType.lift,
-            ExerciseType.lunge,
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Bridges',
-        types: [
-            ExerciseType.lift,
-            ExerciseType.lunge,
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Deadlifts',
-        types: [
-            ExerciseType.lift
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Single leg deadlifts',
-        types: [
-            ExerciseType.lift
+        exerciseTypes: [
+
         ]
     })
 ];

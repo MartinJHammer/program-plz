@@ -4,86 +4,86 @@ import { ExerciseType } from 'src/app/models/exercise-type';
 export const coreExercises: Exercise[] = [
     new Exercise({
         name: 'Ab wheel',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Walk outs',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Heel to heavens',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Stir the pot',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Russian twist',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Scissors',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Leg raises',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Hanging leg raises',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Yoga planche leg-to-x',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Pallof press',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Bridge',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Side plank',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Farmers walk',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Plank',
-        types: [
-            ExerciseType.core
+        exerciseTypes: [
+
         ]
     })
 ];

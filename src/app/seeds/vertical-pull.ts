@@ -7,44 +7,44 @@ export const verticalPullExercises: Exercise[] = [
     }),
     new Exercise({
         name: 'KB Renegade rows',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Face pulls',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Incline curls',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Bar rows',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'See saw rows',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Band pulls',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     }),
     new Exercise({
         name: 'Vertical pulls',
-        types: [
-            ExerciseType.verticalPull
+        exerciseTypes: [
+
         ]
     })
 ];

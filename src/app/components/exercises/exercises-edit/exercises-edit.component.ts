@@ -54,7 +54,7 @@ export class ExercisesEditComponent implements OnInit {
     ).pipe(
       map(values => {
         const [exercise, exerciseTypes] = values;
-        this.exerciseType = exerciseTypes;
+        this.exerciseTypes = exerciseTypes;
 
         this.form = this.fb.group({
           id: exercise.id,

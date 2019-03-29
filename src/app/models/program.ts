@@ -18,7 +18,7 @@ export class Program {
         // const vPull = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.verticalPull));
         // const vPush = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.verticalPush));
         // const legs = this.db.exercises.getAll().filter(exercise => [ExerciseType.lift, ExerciseType.lunge, ExerciseType.squat].some(condition => exercise.types.includes(condition)));
-        // const core = this.db.exercises.getAll().filter(exercise => exercise.types.includes(ExerciseType.core));
+        // const core = this.db.exercises.getAll().filter(exercise => exercise.types.includes());
 
         // this.exercises = this.exercises.concat([
         //     ...shuffle(hPull).slice(0, 1),
@@ -37,7 +37,7 @@ export class Program {
     public differentVersion(exercise: Exercise) {
         const otherExercises = this.db.exercises
             .getAll()
-            .filter(ex => exercise.types.some(condition => ex.types.includes(condition)))
+            .filter(ex => exercise.exerciseTypes.some(condition => ex.types.includes(condition)))
             .filter(ex => ex.id !== exercise.id);
         const newExercise = shuffle(otherExercises).slice(0, 1)[0];
         this.replaceExercise(exercise, newExercise);
