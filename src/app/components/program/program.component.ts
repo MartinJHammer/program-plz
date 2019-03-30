@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Program } from 'src/app/models/program';
 import { Exercise } from 'src/app/models/exercise';
 
-declare var $: any;
-
 @Component({
   selector: 'program-plz-program',
   templateUrl: './program.component.html',
@@ -30,10 +28,6 @@ export class ProgramComponent implements OnInit {
 
   public setCurrentExercise(exercise: Exercise) {
     this.currentExercise = exercise;
-  }
-
-  public closeExerciseModal() {
-    $('#exerciseModal').modal('hide');
   }
 
   public trackById(index, item) {

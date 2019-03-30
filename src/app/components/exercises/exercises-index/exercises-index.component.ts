@@ -12,6 +12,7 @@ import { map } from 'rxjs/operators';
 export class ExercisesIndexComponent implements OnInit {
 
   public exercises: Observable<Exercise[]>;
+  public currentExercise: Exercise;
 
   constructor(public db: AngularFirestore) { }
 
@@ -24,6 +25,10 @@ export class ExercisesIndexComponent implements OnInit {
         } as Exercise;
       }))
     );
+  }
+
+  public setCurrentExercise(exercise: Exercise) {
+    this.currentExercise = exercise;
   }
 
   public delete(exercise: Exercise) {
