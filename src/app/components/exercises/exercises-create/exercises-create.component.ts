@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Exercise } from 'src/app/models/exercise';
 import { Router } from '@angular/router';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'pp-exercises-create',
@@ -14,7 +14,7 @@ export class ExercisesCreateComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    public db: AngularFirestore,
+    public db: DatabaseService,
     public fb: FormBuilder,
     public router: Router
   ) { }
@@ -27,9 +27,7 @@ export class ExercisesCreateComponent implements OnInit {
 
   onSubmit() {
     const exercise: Exercise = this.form.value;
-    this.db.collection<Exercise>('exercises').add(exercise).then(() => {
-      this.router.navigate(['exercises']);
-    });
+    this.db.add<Exercise>('exercises', exercise);
+    this.router.navigate(['exercises']);
   }
-
 }

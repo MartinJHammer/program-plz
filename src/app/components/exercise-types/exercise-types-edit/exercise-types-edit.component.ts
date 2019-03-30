@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Exercise } from 'src/app/models/exercise';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/models/exercise-type';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'pp-exercise-types-edit',
@@ -16,31 +15,25 @@ export class ExerciseTypesEditComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    public db: AngularFirestore,
+    public db: DatabaseService,
     public fb: FormBuilder,
     public router: Router,
     public activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(
-      map(params => params['id']),
-      switchMap(id => this.db.doc<ExerciseType>(`exercise-types/${id}`).get()),
-      map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as ExerciseType)),
-      map(exercise => this.form = this.fb.group({
-        id: exercise.id,
-        name: exercise.name
+    this.db.getSingleByParams<ExerciseType>('exercise-types', this.activatedRoute).pipe(
+      map(exerciseType => this.form = this.fb.group({
+        id: exerciseType.id,
+        name: exerciseType.name
       })),
       take(1)
     ).subscribe();
   }
 
   onSubmit() {
-    const exercise: Exercise = this.form.value;
-    this.db.doc(`exercise-types/${exercise.id}`).update(exercise);
+    const exerciseType: ExerciseType = this.form.value;
+    this.db.update<ExerciseType>(`exercise-types/${exerciseType.id}`, exerciseType);
     this.router.navigate(['exercise-types']);
   }
 }

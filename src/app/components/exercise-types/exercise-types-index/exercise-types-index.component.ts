@@ -3,6 +3,8 @@ import { Exercise } from 'src/app/models/exercise';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { DatabaseService } from 'src/app/services/database.service';
+import { ExerciseType } from 'src/app/models/exercise-type';
 
 @Component({
   selector: 'pp-exercise-types',
@@ -11,22 +13,15 @@ import { map } from 'rxjs/operators';
 })
 export class ExerciseTypesIndexComponent implements OnInit {
 
-  public exerciseTypes: Observable<Exercise[]>;
+  public exerciseTypes: Observable<ExerciseType[]>;
 
-  constructor(public db: AngularFirestore) { }
+  constructor(public db: DatabaseService) { }
 
   ngOnInit() {
-    this.exerciseTypes = this.db.collection<Exercise>('exercise-types').snapshotChanges().pipe(
-      map(docs => docs.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Exercise;
-      }))
-    );
+    this.exerciseTypes = this.db.getAll<ExerciseType>('exercise-types');
   }
 
   public delete(exercise: Exercise) {
-    this.db.doc(`exercise-types/${exercise.id}`).delete();
+    this.db.delete(`exercise-types/${exercise.id}`);
   }
 }

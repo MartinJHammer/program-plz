@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Exercise } from 'src/app/models/exercise';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { DatabaseService } from 'src/app/services/database.service';
+import { ExerciseType } from 'src/app/models/exercise-type';
 
 @Component({
   selector: 'pp-exercise-types-create',
@@ -14,7 +14,7 @@ export class ExerciseTypesCreateComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    public db: AngularFirestore,
+    public db: DatabaseService,
     public fb: FormBuilder,
     public router: Router
   ) { }
@@ -26,10 +26,8 @@ export class ExerciseTypesCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    const exercise: Exercise = this.form.value;
-    this.db.collection<Exercise>('exercise-types').add(exercise).then(() => {
-      this.router.navigate(['exercise-types']);
-    });
+    const exerciseType: ExerciseType = this.form.value;
+    this.db.add<ExerciseType>('exercise-types', exerciseType);
+    this.router.navigate(['exercise-types']);
   }
-
 }

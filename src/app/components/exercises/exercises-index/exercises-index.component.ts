@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'program-plz-exercises',
@@ -14,17 +13,10 @@ export class ExercisesIndexComponent implements OnInit {
   public exercises: Observable<Exercise[]>;
   public currentExercise: Exercise;
 
-  constructor(public db: AngularFirestore) { }
+  constructor(public db: DatabaseService) { }
 
   ngOnInit() {
-    this.exercises = this.db.collection<Exercise>('exercises').snapshotChanges().pipe(
-      map(docs => docs.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Exercise;
-      }))
-    );
+    this.exercises = this.db.getAll<Exercise>('exercises');
   }
 
   public setCurrentExercise(exercise: Exercise) {
@@ -32,6 +24,6 @@ export class ExercisesIndexComponent implements OnInit {
   }
 
   public delete(exercise: Exercise) {
-    this.db.doc(`exercises/${exercise.id}`).delete();
+    this.db.delete(`exercises/${exercise.id}`);
   }
 }
