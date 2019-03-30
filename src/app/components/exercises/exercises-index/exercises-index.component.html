@@ -13,8 +13,8 @@
 
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
     <ul *ngFor="let exercise of exercises | async">
-      <li>{{ exercise.name }} - <a [routerLink]="['edit', exercise.id]">Edit</a> - <a data-toggle="modal"
-          data-target="#deleteModal" (click)="setCurrentExercise(exercise)">Delete</a>
+      <li>{{ exercise.name }} - <a [routerLink]="['edit', exercise.id]">Edit</a> - <a style="color:red;cursor: pointer;"
+          data-toggle="modal" data-target="#deleteModal" (click)="setCurrentExercise(exercise)">Delete</a>
       </li>
     </ul>
   </div>
