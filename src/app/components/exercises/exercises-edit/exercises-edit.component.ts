@@ -55,30 +55,40 @@ export class ExercisesEditComponent implements OnInit {
       map(values => {
         const [exercise, exerciseTypes] = values;
         this.exerciseTypes = exerciseTypes;
+        console.log(this.exerciseTypes);
 
         this.form = this.fb.group({
           id: exercise.id,
           name: exercise.name,
-          exerciseTypes: new FormArray(exerciseTypes.map((exerciseType) => {
-            const selected = exercise.exerciseTypes ? exercise.exerciseTypes.some(et => et === exerciseType.id) : false;
-            return new FormControl(selected);
-          }))
+          exerciseTypes: new FormArray([])
+        });
+
+        exerciseTypes.map((exerciseType) => {
+          const selected = exercise.exerciseTypes ? exercise.exerciseTypes.some(et => et === exerciseType.id) : false;
+          (this.form.controls.exerciseTypes as FormArray).push(new FormControl(selected));
         });
       })
     ).subscribe();
   }
 
-  public buildExerciseTypes(exercise: Exercise, exerciseTypes: ExerciseType[]) {
-    return this.fb.array(exerciseTypes.map(exerciseType => {
-      const selected = exercise.exerciseTypes ? exercise.exerciseTypes.find(et => et === exerciseType.id) : undefined;
-      return this.fb.control(selected ? true : false);
-    }));
-  }
+  // public buildExerciseTypes(exercise: Exercise, exerciseTypes: ExerciseType[]) {
+  //   return this.fb.array(exerciseTypes.map(exerciseType => {
+  //     const selected = exercise.exerciseTypes ? exercise.exerciseTypes.find(et => et === exerciseType.id) : undefined;
+  //     return this.fb.control(selected ? true : false);
+  //   }));
+  // }
 
   public onSubmit() {
     const exercise: Exercise = this.form.value;
-    this.db.doc(`exercises/${exercise.id}`).update(exercise);
-    this.router.navigate(['exercises']);
+
+    const selected = this.form.value.exerciseTypes
+      .map((checked, index) => checked ? this.exerciseTypes[index].id : null)
+      .filter(value => value !== null);
+
+    console.log(selected);
+
+    // this.db.doc(`exercises/${exercise.id}`).update(exercise);
+    // this.router.navigate(['exercises']);
   }
 
 }

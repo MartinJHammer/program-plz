@@ -14,7 +14,7 @@
     <h4>Exercise types</h4>
     <div class="form-check" *ngFor="let exerciseType of form.controls.exerciseTypes.controls; let i = index">
       <label class="form-check-label" formArrayName="exerciseTypes" for="exerciseType.id">
-        <input class="form-check-input" type="checkbox" [formControlName]="i">
+        <input class="form-check-input" type="checkbox" [value]="exerciseType.id" [formControlName]="i">
         {{exerciseTypes[i].name}}
       </label>
     </div>
