@@ -8,34 +8,32 @@
 </div>
 
 <!-- Program -->
-<ng-container *ngIf="program && program.exercises">
-  <ng-container *ngFor="let exercise of program.exercises; trackBy: trackById">
-    <div class="card my-2" style="width: 18rem;">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-10 mb-2">
-            <h6 class="card-title">{{ exercise.name }}</h6>
-            <p class="card-text">3s x failure</p>
-          </div>
-          <div class="col-2">
-            <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
-              data-target="#exerciseModal"></i>
-          </div>
+<ng-container *ngFor="let exercise of exercises$ | async; trackBy: trackById">
+  <div class="card my-2" style="width: 18rem;">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-10 mb-2">
+          <h6 class="card-title">{{ exercise.name }}</h6>
+          <p class="card-text">3s x failure</p>
         </div>
-        <div class="row">
-          <div class="col-4">
-            <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercise);">Replace</a>
-          </div>
-          <div class="col-4">
-            <a href="javascript:void(0)" class=" card-link">Easier</a>
-          </div>
-          <div class="col-4">
-            <a href="javascript:void(0)" class=" card-link">Harder</a>
-          </div>
+        <div class="col-2">
+          <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
+            data-target="#exerciseModal"></i>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercise);">Replace</a>
+        </div>
+        <div class="col-4">
+          <a href="javascript:void(0)" class=" card-link">Easier</a>
+        </div>
+        <div class="col-4">
+          <a href="javascript:void(0)" class=" card-link">Harder</a>
         </div>
       </div>
     </div>
-  </ng-container>
+  </div>
 </ng-container>
 
 <!-- Modal -->
