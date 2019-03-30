@@ -5,20 +5,14 @@
     <input type="name" formControlName="name" class="form-control" placeholder="Enter exercise name">
   </div>
 
-  <!-- <input class="form-check-input" type="checkbox" value="exerciseType.id" id="exerciseType.id">
-          <label class="form-check-label" for="exerciseType.id">
-            {{ exerciseType.name }}
-          </label> -->
-
-  <ng-container *ngIf="exerciseTypes">
-    <h4>Exercise types</h4>
-    <div class="form-check" *ngFor="let exerciseType of form.controls.exerciseTypes.controls; let i = index">
-      <label class="form-check-label" formArrayName="exerciseTypes" for="exerciseType.id">
-        <input class="form-check-input" type="checkbox" [value]="exerciseType.id" [formControlName]="i">
-        {{exerciseTypes[i].name}}
-      </label>
-    </div>
-  </ng-container>
+  <h4>Exercise types</h4>
+  <div class="form-check" *ngFor="let exerciseType of exerciseTypes$ | async">
+    <label class="form-check-label" [for]="exerciseType.id">
+      <input class="form-check-input" type="checkbox" (change)="setCheckboxValue($event)" [value]="exerciseType.id"
+        [id]="exerciseType.id" [checked]="exerciseType.id | checked: form.get('exerciseTypes').value">
+      {{ exerciseType.name }}
+    </label>
+  </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

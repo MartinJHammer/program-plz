@@ -16,6 +16,7 @@ import { ExerciseTypesIndexComponent } from '../components/exercise-types/exerci
 import { ExerciseTypesCreateComponent } from '../components/exercise-types/exercise-types-create/exercise-types-create.component';
 import { ExerciseTypesEditComponent } from '../components/exercise-types/exercise-types-edit/exercise-types-edit.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
+import { pipes } from '../pipes/pipes';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { NotFoundComponent } from '../components/not-found/not-found.component';
     ExercisesEditComponent,
     ExerciseTypesIndexComponent,
     ExerciseTypesCreateComponent,
-    ExerciseTypesEditComponent
+    ExerciseTypesEditComponent,
+    ...pipes
   ],
   providers: [],
   bootstrap: [StartComponent]

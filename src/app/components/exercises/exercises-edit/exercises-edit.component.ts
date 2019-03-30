@@ -1,23 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Exercise } from 'src/app/models/exercise';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/models/exercise-type';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
+import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 
 @Component({
   selector: 'pp-exercises-edit',
   templateUrl: './exercises-edit.component.html',
   styleUrls: ['./exercises-edit.component.scss']
 })
-export class ExercisesEditComponent implements OnInit {
+export class ExercisesEditComponent implements OnInit, OnDestroy {
 
   public form: FormGroup;
   public exercise$: Observable<Exercise>;
   public exerciseTypes$: Observable<ExerciseType[]>;
-  public exerciseTypes: ExerciseType[];
+
+  public subHandler = new SubscriptionHandler();
 
   constructor(
     public db: AngularFirestore,
@@ -29,7 +31,7 @@ export class ExercisesEditComponent implements OnInit {
   ngOnInit() {
     // Get selected exercise
     this.exercise$ = this.activatedRoute.params.pipe(
-      map(params => params['id']),
+      map(params => params.id),
       switchMap(id => this.db.doc<Exercise>(`exercises/${id}`).get()),
       map(doc => ({
         id: doc.id,
@@ -48,47 +50,30 @@ export class ExercisesEditComponent implements OnInit {
     );
 
     // Create form
-    combineLatest(
-      this.exercise$,
-      this.exerciseTypes$
-    ).pipe(
-      map(values => {
-        const [exercise, exerciseTypes] = values;
-        this.exerciseTypes = exerciseTypes;
-        console.log(this.exerciseTypes);
-
+    this.subHandler.register(this.exercise$.pipe(
+      map(exercise => {
         this.form = this.fb.group({
           id: exercise.id,
           name: exercise.name,
-          exerciseTypes: new FormArray([])
-        });
-
-        exerciseTypes.map((exerciseType) => {
-          const selected = exercise.exerciseTypes ? exercise.exerciseTypes.some(et => et === exerciseType.id) : false;
-          (this.form.controls.exerciseTypes as FormArray).push(new FormControl(selected));
+          exerciseTypes: exercise.exerciseTypes ? [exercise.exerciseTypes] : [[]]
         });
       })
-    ).subscribe();
+    ).subscribe());
   }
 
-  // public buildExerciseTypes(exercise: Exercise, exerciseTypes: ExerciseType[]) {
-  //   return this.fb.array(exerciseTypes.map(exerciseType => {
-  //     const selected = exercise.exerciseTypes ? exercise.exerciseTypes.find(et => et === exerciseType.id) : undefined;
-  //     return this.fb.control(selected ? true : false);
-  //   }));
-  // }
+  ngOnDestroy() {
+    this.subHandler.unsubscribe();
+  }
+
+  public setCheckboxValue(checkboxField) {
+    const checkbox = checkboxField.target;
+    const control = this.form.get('exerciseTypes');
+    control.setValue(checkbox.checked ? [...control.value, checkbox.value] : control.value.filter(id => checkbox.value !== id));
+  }
 
   public onSubmit() {
-    const exercise: Exercise = this.form.value;
-
-    const selected = this.form.value.exerciseTypes
-      .map((checked, index) => checked ? this.exerciseTypes[index].id : null)
-      .filter(value => value !== null);
-
-    console.log(selected);
-
-    // this.db.doc(`exercises/${exercise.id}`).update(exercise);
-    // this.router.navigate(['exercises']);
+    const exercise = this.form.value as Exercise;
+    this.db.doc(`exercises/${exercise.id}`).update(exercise);
+    this.router.navigate(['exercises']);
   }
-
 }
