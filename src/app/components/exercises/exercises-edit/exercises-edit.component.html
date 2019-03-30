@@ -1,22 +1,24 @@
-<h1>Editing exercise</h1>
+<pp-form>
+  <h1>Editing exercise</h1>
 
-<form *ngIf="exerciseTypes$ | async as exerciseTypes" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <input type="name" formControlName="name" class="form-control" placeholder="Enter exercise name">
-  </div>
+  <form *ngIf="exerciseTypes$ | async as exerciseTypes" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <input type="name" formControlName="name" class="form-control" placeholder="Enter exercise name">
+    </div>
 
-  <h4>Exercise types</h4>
-  <label class="checkbox-container" *ngFor="let exerciseType of exerciseTypes" [for]="exerciseType.id">
-    <input type="checkbox" (change)="setCheckboxValue($event)" [value]="exerciseType.id" [id]="exerciseType.id"
-      [checked]="exerciseType.id | checked: form.get('exerciseTypes').value">
-    <span class="checkmark"></span>
-    {{ exerciseType.name }}
+    <h4>Exercise types</h4>
+    <label class="checkbox-container" *ngFor="let exerciseType of exerciseTypes" [for]="exerciseType.id">
+      <input type="checkbox" (change)="setCheckboxValue($event)" [value]="exerciseType.id" [id]="exerciseType.id"
+        [checked]="exerciseType.id | checked: form.get('exerciseTypes').value">
+      <span class="checkmark"></span>
+      {{ exerciseType.name }}
 
-  </label>
+    </label>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 
-<pre *ngIf="form">
+  <pre *ngIf="form">
   {{ form.value | json }}
 </pre>
+</pp-form>
