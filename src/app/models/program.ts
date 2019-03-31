@@ -1,18 +1,21 @@
 import { Exercise } from './exercise';
 import { Injectable } from '@angular/core';
 import { ExerciseType } from './exercise-type';
-import { DatabaseService } from '../services/database.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ExerciseService } from '../services/exercise.service';
 
 @Injectable({ providedIn: 'root' })
 export class Program {
     public exercises$: Observable<Exercise[]>;
     public exerciseTypes$: Observable<ExerciseType[]>;
 
-    constructor(public db: DatabaseService) {
-        this.exercises$ = this.db.getAll<Exercise>('exercises');
-        this.exerciseTypes$ = this.db.getAll<Exercise>('exercise-types');
+    constructor(
+        public exerciseService: ExerciseService,
+        public exerciseTypeService: ExerciseService
+    ) {
+        this.exercises$ = this.exerciseService.getAll();
+        this.exerciseTypes$ = this.exerciseTypeService.getAll();
     }
 
     public createProgram(): Observable<Exercise[]> {
