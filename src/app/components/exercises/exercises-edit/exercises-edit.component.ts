@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Exercise } from 'src/app/models/exercise';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/models/exercise-type';
 import { Observable } from 'rxjs';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 import { DatabaseService } from 'src/app/services/database.service';
+import { ExerciseTypeService } from 'src/app/services/exercise-type.service';
 import { ExerciseService } from 'src/app/services/exercise.service';
 
 @Component({
@@ -24,14 +25,15 @@ export class ExercisesEditComponent implements OnInit, OnDestroy {
 
   constructor(
     public db: DatabaseService,
-    public exerciseTypeService: ExerciseService,
+    public exerciseService: ExerciseService,
+    public exerciseTypeService: ExerciseTypeService,
     public fb: FormBuilder,
     public router: Router,
     public activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.exercise$ = this.db.getSingleByParams('exercises', this.activatedRoute);
+    this.exercise$ = this.activatedRoute.params.pipe(switchMap(params => this.exerciseService.getById(params.id)));
     this.exerciseTypes$ = this.exerciseTypeService.getAll();
 
     // Create form

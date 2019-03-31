@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Exercise } from '../models/exercise';
 import { DatabaseService } from './database.service';
-import { shareReplay } from 'rxjs/operators';
+import { shareReplay, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseService {
@@ -11,13 +11,19 @@ export class ExerciseService {
     constructor(private db: DatabaseService) { }
 
     public getAll() {
-        if (!this.cache$) {
+        @        if (!this.cache$) {
             this.cache$ = this.get().pipe(
                 shareReplay(1)
             );
         }
 
         return this.cache$;
+    }
+
+    public getById(id: string): Observable<Exercise> {
+        return this.getAll().pipe(
+            map(exercises => exercises.find(exercise => exercise.id === id))
+        );
     }
 
     private get(): Observable<Exercise[]> {
