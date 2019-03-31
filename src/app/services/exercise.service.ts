@@ -11,7 +11,7 @@ export class ExerciseService {
     constructor(private db: DatabaseService) { }
 
     public getAll() {
-        @        if (!this.cache$) {
+        if (!this.cache$) {
             this.cache$ = this.get().pipe(
                 shareReplay(1)
             );
