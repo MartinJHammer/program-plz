@@ -14,7 +14,7 @@ export class ExercisesCreateComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    public db: DatabaseService,
+    public db: DatabaseService<Exercise>,
     public fb: FormBuilder,
     public router: Router
   ) { }
@@ -27,7 +27,7 @@ export class ExercisesCreateComponent implements OnInit {
 
   onSubmit() {
     const exercise: Exercise = this.form.value;
-    this.db.add<Exercise>('exercises', exercise);
+    this.db.add('exercises', exercise);
     this.router.navigate(['exercises']);
   }
 }

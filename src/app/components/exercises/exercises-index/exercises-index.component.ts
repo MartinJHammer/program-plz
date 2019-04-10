@@ -3,7 +3,7 @@ import { Exercise } from 'src/app/models/exercise';
 import { Observable } from 'rxjs';
 import { DatabaseService } from 'src/app/services/database.service';
 import { ExerciseService } from 'src/app/services/exercise.service';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'program-plz-exercises',
@@ -16,14 +16,24 @@ export class ExercisesIndexComponent implements OnInit {
   public currentExercise: Exercise;
 
   constructor(
-    public db: DatabaseService,
+    public db: DatabaseService<Exercise>,
     public service: ExerciseService
   ) { }
 
   ngOnInit() {
-    this.exercises = this.service.getAll().pipe(map(ex => {
+    this.exercises = this.service.get().pipe(map(ex => {
       return ex.sort((a, b) => (a.name > b.name) ? 1 : -1);
     }));
+  }
+
+  public nextPage() {
+    // TODO: THIS IS BAD - TOO MANY REQUESTS ETC.
+    // SEE https://angularfirebase.com/lessons/infinite-scroll-firestore-angular/ INSTEAD
+    this.exercises = this.exercises.pipe(
+      switchMap(values => {
+        return this.service.get().pipe(map(newValues => values.concat(newValues)));
+      })
+    );
   }
 
   public setCurrentExercise(exercise: Exercise) {

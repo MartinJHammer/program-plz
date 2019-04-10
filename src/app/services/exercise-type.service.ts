@@ -8,7 +8,7 @@ import { ExerciseType } from '../models/exercise-type';
 export class ExerciseTypeService {
     private cache$: Observable<ExerciseType[]>;
 
-    constructor(private db: DatabaseService) { }
+    constructor(private db: DatabaseService<ExerciseType>) { }
 
     public getAll() {
         if (!this.cache$) {
@@ -21,6 +21,6 @@ export class ExerciseTypeService {
     }
 
     private get(): Observable<ExerciseType[]> {
-        return this.db.getAll<ExerciseType>('exercise-types');
+        return this.db.getAll('exercise-types');
     }
 }

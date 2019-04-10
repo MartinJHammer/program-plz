@@ -1,16 +1,32 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class DatabaseService {
+export class DatabaseService<T> {
+
+    private lastVisible: any;
 
     constructor(
         public db: AngularFirestore
     ) { }
 
-    public getAll<T>(path: string): Observable<T[]> {
+    public get(path: string): Observable<T[]> {
+        return this.db.collection(path, ref => ref.orderBy('name').startAt(this.lastVisible ? this.lastVisible : 0).limit(10)).get().pipe(
+            map(docs => {
+                this.lastVisible = docs.docs[docs.docs.length - 1];
+                return docs.docs.map(e => {
+                    return {
+                        id: e.id,
+                        ...e.data()
+                    } as any;
+                });
+            })
+        );
+    }
+
+    public getAll(path: string): Observable<T[]> {
         return this.db.collection<T>(path).snapshotChanges().pipe(
             map(docs => docs.map(e => {
                 return {
@@ -21,8 +37,7 @@ export class DatabaseService {
         );
     }
 
-    // get local data --> if undefined, get from firestore --> push to local vars --> persist
-    public getSingle<T>(path: string, id: string): Observable<T> {
+    public getSingle(path: string, id: string): Observable<T> {
         return this.db.doc<T>(`${path}/${id}`).get().pipe(
             map(doc => {
                 return {
@@ -33,17 +48,14 @@ export class DatabaseService {
         );
     }
 
-    // Push to fb --> push to local data --> persist
-    public add<T>(path: string, entity: T): Promise<DocumentReference> {
+    public add(path: string, entity: T): Promise<DocumentReference> {
         return this.db.collection<T>(path).add(entity);
     }
 
-    // Push to fb --> replace local data --> persist
-    public update<T>(path: string, entity: T): Promise<void> {
+    public update(path: string, entity: T): Promise<void> {
         return this.db.doc(path).update(entity);
     }
 
-    // Push to fb -> remove from local data --> persist
     public delete(path: string): Promise<void> {
         return this.db.doc(path).delete();
     }

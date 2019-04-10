@@ -15,14 +15,14 @@ export class ExerciseTypesEditComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    public db: DatabaseService,
+    public db: DatabaseService<ExerciseType>,
     public fb: FormBuilder,
     public router: Router,
     public activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(switchMap(params => this.db.getSingle<ExerciseType>('exercise-types', params.id))).pipe(
+    this.activatedRoute.params.pipe(switchMap(params => this.db.getSingle('exercise-types', params.id))).pipe(
       map(exerciseType => this.form = this.fb.group({
         id: exerciseType.id,
         name: exerciseType.name
@@ -33,7 +33,7 @@ export class ExerciseTypesEditComponent implements OnInit {
 
   onSubmit() {
     const exerciseType: ExerciseType = this.form.value;
-    this.db.update<ExerciseType>(`exercise-types/${exerciseType.id}`, exerciseType);
+    this.db.update(`exercise-types/${exerciseType.id}`, exerciseType);
     this.router.navigate(['exercise-types']);
   }
 }

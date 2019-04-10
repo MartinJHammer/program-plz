@@ -14,7 +14,7 @@ export class ExerciseTypesIndexComponent implements OnInit {
 
   public exerciseTypes: Observable<ExerciseType[]>;
 
-  constructor(public db: DatabaseService, public service: ExerciseTypeService) { }
+  constructor(public db: DatabaseService<ExerciseType>, public service: ExerciseTypeService) { }
 
   ngOnInit() {
     this.exerciseTypes = this.service.getAll();

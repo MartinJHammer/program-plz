@@ -24,7 +24,7 @@ export class ExercisesEditComponent implements OnInit, OnDestroy {
   public subHandler = new SubscriptionHandler();
 
   constructor(
-    public db: DatabaseService,
+    public db: DatabaseService<Exercise>,
     public exerciseService: ExerciseService,
     public exerciseTypeService: ExerciseTypeService,
     public fb: FormBuilder,
@@ -60,7 +60,7 @@ export class ExercisesEditComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     const exercise = this.form.value as Exercise;
-    this.db.update<Exercise>(`exercises/${exercise.id}`, exercise);
+    this.db.update(`exercises/${exercise.id}`, exercise);
     this.router.navigate(['exercises']);
   }
 }
