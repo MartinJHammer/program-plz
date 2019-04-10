@@ -33,7 +33,7 @@ export class ExercisesEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.exercise$ = this.activatedRoute.params.pipe(switchMap(params => this.exerciseService.getById(params.id)));
+    this.exercise$ = this.activatedRoute.params.pipe(switchMap(params => this.exerciseService.getSingle(params.id)));
     this.exerciseTypes$ = this.exerciseTypeService.getAll();
 
     // Create form

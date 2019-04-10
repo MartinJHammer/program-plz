@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { map, take } from 'rxjs/operators';
+import { map, take, switchMap } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/models/exercise-type';
 import { DatabaseService } from 'src/app/services/database.service';
 
@@ -22,7 +22,7 @@ export class ExerciseTypesEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.db.getSingleByParams<ExerciseType>('exercise-types', this.activatedRoute).pipe(
+    this.activatedRoute.params.pipe(switchMap(params => this.db.getSingle<ExerciseType>('exercise-types', params.id))).pipe(
       map(exerciseType => this.form = this.fb.group({
         id: exerciseType.id,
         name: exerciseType.name

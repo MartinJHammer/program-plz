@@ -3,6 +3,7 @@ import { Exercise } from 'src/app/models/exercise';
 import { Observable } from 'rxjs';
 import { DatabaseService } from 'src/app/services/database.service';
 import { ExerciseService } from 'src/app/services/exercise.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'program-plz-exercises',
@@ -20,7 +21,9 @@ export class ExercisesIndexComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.exercises = this.service.getAll();
+    this.exercises = this.service.getAll().pipe(map(ex => {
+      return ex.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    }));
   }
 
   public setCurrentExercise(exercise: Exercise) {

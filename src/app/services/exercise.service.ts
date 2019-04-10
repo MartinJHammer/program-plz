@@ -20,7 +20,7 @@ export class ExerciseService {
         return this.cache$;
     }
 
-    public getById(id: string): Observable<Exercise> {
+    public getSingle(id: string): Observable<Exercise> {
         return this.getAll().pipe(
             map(exercises => exercises.find(exercise => exercise.id === id))
         );
