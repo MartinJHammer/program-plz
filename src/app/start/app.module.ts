@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 
 import { pipes } from '../pipes/pipes';
 import { components } from '../components/components';
+import { directives } from '../directives/directives';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { components } from '../components/components';
   ],
   declarations: [
     ...components,
+    ...directives,
     ...pipes
   ],
   providers: [],

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'program-plz-start',
+  selector: 'pp-start',
   templateUrl: './start.component.html',
   styleUrls: ['./start.component.scss']
 })

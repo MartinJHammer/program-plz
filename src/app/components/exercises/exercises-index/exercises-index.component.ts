@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable } from 'rxjs';
 import { DatabaseService } from 'src/app/services/database.service';
 import { ExerciseService } from 'src/app/services/exercise.service';
 import { map, switchMap } from 'rxjs/operators';
+import { CrudService } from 'src/app/services/crud.service';
 
 @Component({
   selector: 'program-plz-exercises',
@@ -17,7 +18,8 @@ export class ExercisesIndexComponent implements OnInit {
 
   constructor(
     public db: DatabaseService<Exercise>,
-    public service: ExerciseService
+    public service: ExerciseService,
+    public crudService: CrudService
   ) { }
 
   ngOnInit() {
@@ -26,7 +28,7 @@ export class ExercisesIndexComponent implements OnInit {
     }));
   }
 
-  public nextPage() {
+  public nextPage(): void {
     // TODO: THIS IS BAD - TOO MANY REQUESTS ETC.
     // SEE https://angularfirebase.com/lessons/infinite-scroll-firestore-angular/ INSTEAD
     this.exercises = this.exercises.pipe(
@@ -36,11 +38,11 @@ export class ExercisesIndexComponent implements OnInit {
     );
   }
 
-  public setCurrentExercise(exercise: Exercise) {
+  public setCurrentExercise(exercise: Exercise): void {
     this.currentExercise = exercise;
   }
 
-  public delete(exercise: Exercise) {
+  public delete(exercise: Exercise): void {
     this.db.delete(`exercises/${exercise.id}`);
   }
 }
