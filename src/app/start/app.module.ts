@@ -6,10 +6,12 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AppRoutingModule } from './app-routing.module';
 import { StartComponent } from './../components/start/start.component';
 import { environment } from 'src/environments/environment';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 import { pipes } from '../pipes/pipes';
 import { components } from '../components/components';
 import { directives } from '../directives/directives';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -17,7 +19,9 @@ import { directives } from '../directives/directives';
     AppRoutingModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    BrowserAnimationsModule,
+    ScrollDispatchModule
   ],
   declarations: [
     ...components,
