@@ -10,13 +10,15 @@
       </div>
     </div>
     <hr />
-
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
-    <ul *ngFor="let exercise of exercises | async">
-      <li>{{ exercise.name }} - <a [routerLink]="['edit', exercise.id]">Edit</a> - <a style="color:red;cursor: pointer;"
-          data-toggle="modal" data-target="#deleteModal" (click)="setCurrentExercise(exercise)">Delete</a>
-      </li>
-    </ul>
+    <cdk-virtual-scroll-viewport itemSize="100" (scrolledIndexChange)="nextPage($event)">
+      <ul>
+        <li *cdkVirtualFor="let exercise of exercises | async">{{ exercise.name }} - <a
+            [routerLink]="['edit', exercise.id]">Edit</a> - <a style="color:red;cursor: pointer;" data-toggle="modal"
+            data-target="#deleteModal" (click)="setCurrentExercise(exercise)">Delete</a>
+        </li>
+      </ul>
+    </cdk-virtual-scroll-viewport>
     <button class="btn btn-primary" (click)="nextPage()">Next page</button>
   </div>
 </div>

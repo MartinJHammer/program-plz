@@ -28,7 +28,7 @@ export class ExercisesIndexComponent implements OnInit {
     }));
   }
 
-  public nextPage(): void {
+  public nextPage(index: number): void {
     // TODO: THIS IS BAD - TOO MANY REQUESTS ETC.
     // SEE https://angularfirebase.com/lessons/infinite-scroll-firestore-angular/ INSTEAD
     this.exercises = this.exercises.pipe(
