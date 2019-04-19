@@ -13,11 +13,14 @@ import { CrudService } from '../../crud.service';
 export class InfiniteListComponent implements OnInit {
 
   // #############################
-  // NEXT: REFACTOR! Make Exercise + ExerciseType index completely generic/reusable.
-  // -> make delete work
-  // -> make edit work
-  // -> make crud html reusable
-  // -> implement on exercise type
+  // NEXT:
+  // -> make crud index html reusable
+  // -> implement on exercises + execise types
+  // -> make crud delete generic
+  // -> make crud create generic (first exercises, then exercise types)
+  // -> make crud edit generic (first exercises, then exercise types)
+  // -> make cloud function with totalCount
+  // -> implement old program logic w. shuffle etc.
   // #############################
 
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
