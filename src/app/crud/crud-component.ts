@@ -1,6 +1,5 @@
 import { OnInit, ViewChild } from '@angular/core';
 import { CrudService } from './crud.service';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
