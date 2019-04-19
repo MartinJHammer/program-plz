@@ -13,7 +13,7 @@ import { CrudService } from '../../crud.service';
 export class InfiniteListComponent implements OnInit {
 
   // #############################
-  // NEXT: REFACTOR!
+  // NEXT: REFACTOR! Make Exercise + ExerciseType index completely generic/reusable.
   // -> make delete work
   // -> make edit work
   // -> make crud html reusable

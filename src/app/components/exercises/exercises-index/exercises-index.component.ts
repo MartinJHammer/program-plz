@@ -8,9 +8,6 @@ import { CrudService } from 'src/app/crud/crud.service';
   styleUrls: ['./exercises-index.component.scss']
 })
 export class ExercisesIndexComponent {
-
-
-
   constructor(
     public afs: AngularFirestore,
     public crudService: CrudService
