@@ -1,8 +1,9 @@
 import { Directive, EventEmitter, Output, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { SubscriptionHandler } from '../helpers/subscription-handler';
-import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
 
+
+/**
+ * NOT USED ANYMORE - KEPT FOR REFERENCE
+ */
 @Directive({
   selector: '[ppScrollable]'
 })

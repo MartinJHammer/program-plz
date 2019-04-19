@@ -8,7 +8,5 @@ export class CrudService {
     public init(): void {
     }
 
-    public scrollHandler(event: any): void {
-        console.log(event);
-    }
+
 }

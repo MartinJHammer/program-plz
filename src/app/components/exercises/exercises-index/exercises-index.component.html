@@ -14,7 +14,7 @@
 
 
 
-    <ng-container *ngIf="infinite$ | async as exercises">
+    <ng-container *ngIf=" entries$ | async as exercises">
       <cdk-virtual-scroll-viewport itemSize="100"
         (scrolledIndexChange)="nextBatch($event, (exercises[exercises.length - 1].name))">
         <ul>
