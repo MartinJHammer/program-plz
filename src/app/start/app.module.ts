@@ -12,6 +12,7 @@ import { pipes } from '../pipes/pipes';
 import { components } from '../components/components';
 import { directives } from '../directives/directives';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { crudComponents } from '../crud/components/crud-components';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   declarations: [
     ...components,
+    ...crudComponents,
     ...directives,
     ...pipes
   ],

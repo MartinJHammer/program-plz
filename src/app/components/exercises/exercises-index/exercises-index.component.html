@@ -11,27 +11,7 @@
     </div>
     <hr />
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
-
-
-
-    <ng-container *ngIf=" entries$ | async as exercises">
-      <cdk-virtual-scroll-viewport itemSize="100"
-        (scrolledIndexChange)="nextBatch($event, (exercises[exercises.length - 1].name))">
-        <ul>
-          <li *cdkVirtualFor="let exercise of exercises; let i = index; trackBy: trackByIndex">{{ exercise.name }} - <a
-              [routerLink]="['edit', exercise.id]">Edit</a> - <a style="color:red;cursor: pointer;" data-toggle="modal"
-              data-target="#deleteModal" (click)="setCurrentExercise(exercise)">Delete</a>
-          </li>
-        </ul>
-      </cdk-virtual-scroll-viewport>
-    </ng-container>
-
-
-
-
-
-
-    <button class="btn btn-primary" (click)="nextPage()">Next page</button>
+    <pp-infinite-list [collectionName]="'exercises'" [identifier]="'name'"></pp-infinite-list>
   </div>
 </div>
 
