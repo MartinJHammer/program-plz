@@ -4,7 +4,7 @@
     <ul>
       <li *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackByIndex">{{ entry[identifier] }} - <a
           [routerLink]="['edit', entry.id]">Edit</a> - <a style="color:red;cursor: pointer;"
-          (click)="setEntry(entry);deleteEntry(entry)">Delete</a>
+          (click)="deleteEntry(entry)">Delete</a>
       </li>
     </ul>
   </cdk-virtual-scroll-viewport>

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Entry } from 'src/app/models/entry';
+import { CrudService } from '../../crud.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 declare var $: any;
 
@@ -15,16 +17,15 @@ export class CrudIndexComponent implements OnInit {
 
   public currentEntry: Entry;
 
-  constructor() { }
+  constructor(
+    public crudService: CrudService,
+    public afs: AngularFirestore
+  ) { }
 
   ngOnInit() {
   }
 
-  public setCurrentEntry(currentEntry: Entry) {
-    this.currentEntry = currentEntry;
-  }
-
-  public deleteEntry(currentEntry: Entry): void {
+  public openDeleteModal(currentEntry: Entry): void {
     this.currentEntry = currentEntry;
     $(() => {
       $('#deleteModal').modal('show');
@@ -32,6 +33,11 @@ export class CrudIndexComponent implements OnInit {
   }
 
   public closeDeleteModal(): void {
+    $('#deleteModal').modal('hide');
+  }
+
+  public delete(currentEntry): void {
+    // this.afs.doc(`${this.collectionName}/${currentEntry.id}`).delete();
     $('#deleteModal').modal('hide');
   }
 }

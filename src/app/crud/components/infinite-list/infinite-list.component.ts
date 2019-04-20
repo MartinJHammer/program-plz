@@ -15,10 +15,9 @@ export class InfiniteListComponent implements OnInit {
 
   // #############################
   // NEXT:
-  // -> make crud index html reusable
-  // -> implement on exercises + execise types
+  // -> make crud create generic (exercises)
   // -> make crud delete generic
-  // -> make crud create generic (first exercises, then exercise types)
+  // -> make crud create generic (exercise types)
   // -> make crud edit generic (first exercises, then exercise types)
   // -> make cloud function with totalCount
   // -> implement old program logic w. shuffle etc.
@@ -29,10 +28,10 @@ export class InfiniteListComponent implements OnInit {
   @Input() public identifier: string;
   public collectionEnd = false;
   public offset = new BehaviorSubject(null);
-  public entries$: Observable<Entry[]>;
   public batchSize = 10;
+  public entries$: Observable<any>;
+  public entries: any;
 
-  @Output() public currentEntry = new EventEmitter<Entry>();
   @Output() public delete = new EventEmitter<Entry>();
 
   constructor(
@@ -51,15 +50,15 @@ export class InfiniteListComponent implements OnInit {
     this.entries$ = this.offset.pipe(
       throttleTime(500), // prevent sending redundant requests
       mergeMap(lastSeen => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(lastSeen).limit(this.batchSize)).snapshotChanges().pipe(
-        tap(arr => (arr.length ? null : (this.collectionEnd = true))),
-        map(arr => {
-          return arr.reduce((acc, cur) => {
+        tap(docs => (docs.length ? null : (this.collectionEnd = true))),
+        map(docs => {
+          return docs.reduce((acc, cur) => {
             const id = cur.payload.doc.id;
             const data = cur.payload.doc.data();
             return { ...acc, [id]: data };
           }, {});
         })
-      )), // Used over switchMap to keep real time
+      )),
       scan((acc, batch) => { // merge all batches together
         return { ...acc, ...batch };
       }, {}),
@@ -85,10 +84,6 @@ export class InfiniteListComponent implements OnInit {
 
   public trackByIndex(index: number): number {
     return index;
-  }
-
-  public setEntry(currentEntry: Entry): void {
-    this.currentEntry.emit(currentEntry);
   }
 
   public deleteEntry(currentEntry: Entry): void {

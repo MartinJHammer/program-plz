@@ -11,7 +11,7 @@
     </div>
     <hr />
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
-    <pp-infinite-list [collectionName]="collectionName" [identifier]="identifier" (delete)="deleteEntry($event)">
+    <pp-infinite-list [collectionName]="collectionName" [identifier]="identifier" (delete)="openDeleteModal($event)">
     </pp-infinite-list>
   </div>
 </div>
