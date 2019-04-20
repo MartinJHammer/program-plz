@@ -1,9 +1,10 @@
-import { OnInit, ViewChild, Component, Input } from '@angular/core';
+import { OnInit, ViewChild, Component, Input, EventEmitter, Output } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { CrudService } from '../../crud.service';
+import { Entry } from 'src/app/models/entry';
 
 @Component({
   selector: 'pp-infinite-list',
@@ -24,13 +25,15 @@ export class InfiniteListComponent implements OnInit {
   // #############################
 
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
-  public collectionEnd = false;
-  public offset = new BehaviorSubject(null);
-  public entries$: Observable<any>;
-  public batchSize = 10;
-
   @Input() public collectionName: string;
   @Input() public identifier: string;
+  public collectionEnd = false;
+  public offset = new BehaviorSubject(null);
+  public entries$: Observable<Entry[]>;
+  public batchSize = 10;
+
+  @Output() public currentEntry = new EventEmitter<Entry>();
+  @Output() public delete = new EventEmitter<Entry>();
 
   constructor(
     public crudService: CrudService,
@@ -64,7 +67,6 @@ export class InfiniteListComponent implements OnInit {
     );
   }
 
-
   /**
    * Used in the html to request next batch.
    */
@@ -85,4 +87,11 @@ export class InfiniteListComponent implements OnInit {
     return index;
   }
 
+  public setEntry(currentEntry: Entry): void {
+    this.currentEntry.emit(currentEntry);
+  }
+
+  public deleteEntry(currentEntry: Entry): void {
+    this.delete.emit(currentEntry);
+  }
 }

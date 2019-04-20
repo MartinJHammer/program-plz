@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col">
+    <div class="row">
+      <div class="col-9">
+        <ng-content select="h1"></ng-content>
+      </div>
+      <div class="col-3">
+        <a class="btn btn-secondary btn-sm mt-2" [routerLink]="['/manage']"><i class="icon arrow-round-back"></i>
+          Back</a>
+      </div>
+    </div>
+    <hr />
+    <a class="btn btn-success" [routerLink]="['create']">Create</a>
+    <pp-infinite-list [collectionName]="collectionName" [identifier]="identifier" (delete)="deleteEntry($event)">
+    </pp-infinite-list>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="currentEntry" class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EntryModalTitle">Are you sure you want to delete {{ currentEntry[identifier] }}
+        </h5>
+      </div>
+      <div class="modal-body">
+        This action cannot be undone. Srsly!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="delete(currentEntry)">Delete
+          it!</button>
+        <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
