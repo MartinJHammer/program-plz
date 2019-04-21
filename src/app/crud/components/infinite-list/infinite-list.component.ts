@@ -15,7 +15,10 @@ export class InfiniteListComponent implements OnInit {
 
   // #############################
   // NEXT:
-  // -> make crud delete generic (move entities stuff to crud service (redux is center of data))
+  // -> make crud delete generic
+  //    > move entities stuff to crud service (redux is center of data)
+  //    > ensure item isn't removed locally before delete is actually pressed
+  //    > Use filter instead of splice to remove item.
   // -> make crud create generic (exercises)
   // -> make crud create generic (exercise types)
   // -> make crud edit generic (first exercises, then exercise types)
