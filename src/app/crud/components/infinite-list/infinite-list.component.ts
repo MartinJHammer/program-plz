@@ -31,6 +31,7 @@ export class InfiniteListComponent implements OnInit {
   public batchSize = 10;
   public entries$: Observable<any>;
   public entries: any;
+  public deleted: any;
 
   @Output() public delete = new EventEmitter<Entry>();
 
@@ -40,6 +41,7 @@ export class InfiniteListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.offset = this.offset.pipe(tap(x => console.log('Current offset value: ', x))) as any;
     this.initList();
   }
 
@@ -49,20 +51,22 @@ export class InfiniteListComponent implements OnInit {
   public initList(): void {
     this.entries$ = this.offset.pipe(
       throttleTime(500), // prevent sending redundant requests
-      mergeMap(lastSeen => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(lastSeen).limit(this.batchSize)).snapshotChanges().pipe(
-        tap(docs => (docs.length ? null : (this.collectionEnd = true))),
-        map(docs => {
-          return docs.reduce((acc, cur) => {
-            const id = cur.payload.doc.id;
-            const data = cur.payload.doc.data();
-            return { ...acc, [id]: data };
-          }, {});
-        })
+      mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get().pipe(
+        tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
+        map(snapShot => snapShot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })))
       )),
-      scan((acc, batch) => { // merge all batches together
-        return { ...acc, ...batch };
-      }, {}),
-      map(x => Object.values(x)) // Turn into array of values
+      scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
+      map(entries => {
+        const foundIndex = entries.findIndex(x => x.id === (this.deleted && this.deleted.id));
+        if (foundIndex >= 0) {
+          this.deleted = undefined;
+          entries.splice(foundIndex, 1);
+        }
+        return entries;
+      })
     );
   }
 
@@ -87,6 +91,8 @@ export class InfiniteListComponent implements OnInit {
   }
 
   public deleteEntry(currentEntry: Entry): void {
+    this.deleted = currentEntry;
+    // this.afs.doc(`${this.collectionName}/${currentEntry.id}`).delete();
     this.delete.emit(currentEntry);
   }
 }

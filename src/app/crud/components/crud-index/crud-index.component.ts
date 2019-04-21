@@ -37,7 +37,7 @@ export class CrudIndexComponent implements OnInit {
   }
 
   public delete(currentEntry): void {
-    // this.afs.doc(`${this.collectionName}/${currentEntry.id}`).delete();
+    this.afs.doc(`${this.collectionName}/${currentEntry.id}`).delete();
     $('#deleteModal').modal('hide');
   }
 }
