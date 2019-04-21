@@ -1,6 +1,6 @@
 import { OnInit, ViewChild, Component, Input, EventEmitter, Output } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap, throttleTime, mergeMap, scan } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { CrudService } from '../../crud.service';
@@ -29,9 +29,9 @@ export class InfiniteListComponent implements OnInit {
   public collectionEnd = false;
   public offset = new BehaviorSubject(null);
   public batchSize = 10;
-  public entries$: Observable<any>;
+  public entries$ = new BehaviorSubject([]);
   public entries: any;
-  public deleted: any;
+  public deleting$ = new BehaviorSubject(undefined);
 
   @Output() public delete = new EventEmitter<Entry>();
 
@@ -41,7 +41,6 @@ export class InfiniteListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.offset = this.offset.pipe(tap(x => console.log('Current offset value: ', x))) as any;
     this.initList();
   }
 
@@ -49,7 +48,8 @@ export class InfiniteListComponent implements OnInit {
    * Initial stream that listens to offset, and merges in new values.
    */
   public initList(): void {
-    this.entries$ = this.offset.pipe(
+    this.entries$ = this.entries$.pipe(tap(data => console.log({ data }))) as any;
+    this.offset.pipe(
       throttleTime(500), // prevent sending redundant requests
       mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get().pipe(
         tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
@@ -59,15 +59,30 @@ export class InfiniteListComponent implements OnInit {
         })))
       )),
       scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
-      map(entries => {
-        const foundIndex = entries.findIndex(x => x.id === (this.deleted && this.deleted.id));
-        if (foundIndex >= 0) {
-          this.deleted = undefined;
-          entries.splice(foundIndex, 1);
-        }
-        return entries;
-      })
-    );
+      map(entries => this.entries$.next(entries))
+      // map(entries => {
+      //   const foundIndex = entries.findIndex(x => x.id === (this.deleted && this.deleted.id));
+      //   if (foundIndex >= 0) {
+      //     this.deleted = undefined;
+      //     entries.splice(foundIndex, 1);
+      //   }
+      //   return entries;
+      // })
+    ).subscribe();
+
+
+    this.deleting$.pipe(
+      switchMap(deleting => this.entries$.pipe(
+        map(entries => {
+          const foundIndex = entries.findIndex(x => x.id === (deleting && deleting.id));
+          if (foundIndex >= 0) {
+            entries.splice(foundIndex, 1);
+            this.entries$.next([...entries]);
+            this.deleting$.next(undefined);
+          }
+        })
+      ))
+    ).subscribe();
   }
 
   /**
@@ -86,12 +101,12 @@ export class InfiniteListComponent implements OnInit {
     }
   }
 
-  public trackByIndex(index: number): number {
-    return index;
+  public trackById(index: number, item: Entry): string {
+    return item.id;
   }
 
   public deleteEntry(currentEntry: Entry): void {
-    this.deleted = currentEntry;
+    this.deleting$.next(currentEntry);
     // this.afs.doc(`${this.collectionName}/${currentEntry.id}`).delete();
     this.delete.emit(currentEntry);
   }
