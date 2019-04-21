@@ -15,8 +15,8 @@ export class InfiniteListComponent implements OnInit {
 
   // #############################
   // NEXT:
+  // -> make crud delete generic (move entities stuff to crud service (redux is center of data))
   // -> make crud create generic (exercises)
-  // -> make crud delete generic
   // -> make crud create generic (exercise types)
   // -> make crud edit generic (first exercises, then exercise types)
   // -> make cloud function with totalCount
