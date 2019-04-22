@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Exercise } from 'src/app/models/exercise';
 import { Router } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database.service';
+import { Field } from 'src/app/models/field';
+import { FieldTypes } from 'src/app/models/field-types';
 
 @Component({
   selector: 'pp-exercises-create',
@@ -11,22 +13,19 @@ import { DatabaseService } from 'src/app/services/database.service';
 })
 export class ExercisesCreateComponent implements OnInit {
 
-  public form: FormGroup;
+  public fields: Field[] = [
+    { key: 'name', placeholder: 'Enter exercise name', type: FieldTypes.string },
+  ];
 
   constructor(
     public db: DatabaseService<Exercise>,
-    public fb: FormBuilder,
     public router: Router
   ) { }
 
   ngOnInit() {
-    this.form = this.fb.group({
-      name: ''
-    });
   }
 
-  onSubmit() {
-    const exercise: Exercise = this.form.value;
+  onSubmit(exercise: Exercise) {
     this.db.add('exercises', exercise);
     this.router.navigate(['exercises']);
   }

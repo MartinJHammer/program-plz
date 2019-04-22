@@ -1,0 +1,7 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <ng-container *ngFor="let field of fields">
+        <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
+    </ng-container>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<pre *ngIf="form"> {{ form.value | json }}</pre>

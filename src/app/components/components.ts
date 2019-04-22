@@ -8,7 +8,6 @@ import { ExerciseTypesCreateComponent } from './exercise-types/exercise-types-cr
 import { ExerciseTypesEditComponent } from './exercise-types/exercise-types-edit/exercise-types-edit.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { StartComponent } from './start/start.component';
-import { FormComponent } from './form/form/form.component';
 
 export const components = [
     StartComponent,
@@ -20,6 +19,5 @@ export const components = [
     ExercisesEditComponent,
     ExerciseTypesIndexComponent,
     ExerciseTypesCreateComponent,
-    ExerciseTypesEditComponent,
-    FormComponent
+    ExerciseTypesEditComponent
 ];
