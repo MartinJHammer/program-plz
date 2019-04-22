@@ -21,6 +21,7 @@ export class CrudIndexComponent implements OnInit {
   //    > move entities stuff to crud service (redux is center of data)
   //    > ensure item isn't removed locally before delete is actually pressed
   //    > Use filter instead of splice to remove item.
+  //    > Ensure to unsubscribe streams on destroy.
   // -> make crud create generic (exercises)
   // -> make crud create generic (exercise types)
   // -> make crud edit generic (first exercises, then exercise types)
@@ -65,14 +66,6 @@ export class CrudIndexComponent implements OnInit {
       )),
       scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
       map(entries => this.entries$.next(entries))
-      // map(entries => {
-      //   const foundIndex = entries.findIndex(x => x.id === (this.deleted && this.deleted.id));
-      //   if (foundIndex >= 0) {
-      //     this.deleted = undefined;
-      //     entries.splice(foundIndex, 1);
-      //   }
-      //   return entries;
-      // })
     ).subscribe();
 
 
