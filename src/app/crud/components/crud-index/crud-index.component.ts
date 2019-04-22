@@ -18,8 +18,6 @@ export class CrudIndexComponent implements OnInit {
   // #############################
   // NEXT:
   // -> make crud delete generic
-  //    > move entities stuff to crud service (redux is center of data)
-  //    > ensure item isn't removed locally before delete is actually pressed
   //    > Use filter instead of splice to remove item.
   //    > Ensure to unsubscribe streams on destroy.
   // -> make crud create generic (exercises)
