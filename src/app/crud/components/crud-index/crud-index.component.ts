@@ -17,15 +17,6 @@ declare var $: any;
 export class CrudIndexComponent implements OnInit, OnDestroy {
 
 
-  // #############################
-  // NEXT:
-  // -> make crud create generic (exercises)
-  // -> make crud create generic (exercise types)
-  // -> make crud edit generic (first exercises, then exercise types)
-  // -> make cloud function with totalCount
-  // -> implement old program logic w. shuffle etc.
-  // #############################
-
   // Infinite scroll
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
   public collectionEnd = false;
