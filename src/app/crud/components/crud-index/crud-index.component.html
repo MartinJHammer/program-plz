@@ -11,8 +11,17 @@
     </div>
     <hr />
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
-    <pp-infinite-list [collectionName]="collectionName" [identifier]="identifier" (delete)="openDeleteModal($event)">
-    </pp-infinite-list>
+    <ng-container *ngIf="entries$ | async as entries">
+      <cdk-virtual-scroll-viewport itemSize="100"
+        (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">
+        <ul>
+          <li *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">{{ entry[identifier] }} - <a
+              [routerLink]="['edit', entry.id]">Edit</a> - <a style="color:red;cursor: pointer;"
+              (click)="openDeleteModal(entry)">Delete</a>
+          </li>
+        </ul>
+      </cdk-virtual-scroll-viewport>
+    </ng-container>
   </div>
 </div>
 
