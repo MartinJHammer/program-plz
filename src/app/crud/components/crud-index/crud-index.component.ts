@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Entry } from 'src/app/models/entry';
 import { CrudService } from '../../crud.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 
 declare var $: any;
 
@@ -13,24 +14,17 @@ declare var $: any;
   templateUrl: './crud-index.component.html',
   styleUrls: ['./crud-index.component.scss']
 })
-export class CrudIndexComponent implements OnInit {
+export class CrudIndexComponent implements OnInit, OnDestroy {
+
 
   // #############################
   // NEXT:
-  // -> make crud delete generic
-  //    > Use filter instead of splice to remove item.
-  //    > Ensure to unsubscribe streams on destroy.
   // -> make crud create generic (exercises)
   // -> make crud create generic (exercise types)
   // -> make crud edit generic (first exercises, then exercise types)
   // -> make cloud function with totalCount
   // -> implement old program logic w. shuffle etc.
   // #############################
-
-  @Input() public collectionName: string;
-  @Input() public identifier: string;
-
-  public currentEntry: Entry;
 
   // Infinite scroll
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
@@ -39,6 +33,11 @@ export class CrudIndexComponent implements OnInit {
   public batchSize = 10;
   public entries$ = new BehaviorSubject([]);
   public deleting$ = new BehaviorSubject(undefined);
+
+  @Input() public collectionName: string;
+  @Input() public identifier: string;
+  public currentEntry: Entry;
+  public subscriptionHandler = new SubscriptionHandler();
 
   constructor(
     public crudService: CrudService,
@@ -49,11 +48,15 @@ export class CrudIndexComponent implements OnInit {
     this.initList();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptionHandler.unsubscribe();
+  }
+
   /**
    * Initial stream that listens to offset, and merges in new values.
    */
   public initList(): void {
-    this.offset.pipe(
+    this.subscriptionHandler.register(this.offset.pipe(
       throttleTime(500), // prevent sending redundant requests
       mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get().pipe(
         tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
@@ -64,21 +67,14 @@ export class CrudIndexComponent implements OnInit {
       )),
       scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
       map(entries => this.entries$.next(entries))
-    ).subscribe();
+    ).subscribe());
 
 
-    this.deleting$.pipe(
+    this.subscriptionHandler.register(this.deleting$.pipe(
       switchMap(deleting => this.entries$.pipe(
-        map(entries => {
-          const foundIndex = entries.findIndex(x => x.id === (deleting && deleting.id));
-          if (foundIndex >= 0) {
-            entries.splice(foundIndex, 1);
-            this.entries$.next([...entries]);
-            this.deleting$.next(undefined);
-          }
-        })
+        map(entries => this.entries$.next(entries.filter(x => x.id !== (deleting && deleting.id))))
       ))
-    ).subscribe();
+    ).subscribe());
   }
 
   /**
