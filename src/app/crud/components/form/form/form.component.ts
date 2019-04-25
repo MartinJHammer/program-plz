@@ -2,6 +2,9 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Field } from 'src/app/models/field';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FieldTypes } from 'src/app/models/field-types';
+import { DatabaseService } from 'src/app/services/database.service';
+import { Router } from '@angular/router';
+import { Entry } from 'src/app/models/entry';
 
 @Component({
   selector: 'pp-form',
@@ -11,12 +14,17 @@ import { FieldTypes } from 'src/app/models/field-types';
 export class FormComponent implements OnInit {
 
   @Input() public fields: Field[];
+  @Input() public area: string;
   public form: FormGroup;
   public types = FieldTypes;
 
   @Output() public submitted = new EventEmitter();
 
-  constructor(public fb: FormBuilder, ) { }
+  constructor(
+    public fb: FormBuilder,
+    public db: DatabaseService<any>,
+    public router: Router
+  ) { }
 
   ngOnInit() {
     const fields = {};
@@ -28,6 +36,7 @@ export class FormComponent implements OnInit {
   }
 
   public onSubmit() {
-    this.submitted.next(this.form.value);
+    this.db.add(this.area, this.form.value);
+    this.router.navigate([this.area]);
   }
 }

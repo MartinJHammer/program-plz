@@ -12,21 +12,11 @@ import { FieldTypes } from 'src/app/models/field-types';
   styleUrls: ['./exercises-create.component.scss']
 })
 export class ExercisesCreateComponent implements OnInit {
-
   public fields: Field[] = [
     { key: 'name', placeholder: 'Enter exercise name', type: FieldTypes.string },
   ];
 
-  constructor(
-    public db: DatabaseService<Exercise>,
-    public router: Router
-  ) { }
+  constructor() { }
 
-  ngOnInit() {
-  }
-
-  onSubmit(exercise: Exercise) {
-    this.db.add('exercises', exercise);
-    this.router.navigate(['exercises']);
-  }
+  ngOnInit() { }
 }

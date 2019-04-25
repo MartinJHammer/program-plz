@@ -1,7 +1,22 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ng-container *ngFor="let field of fields">
-        <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
-    </ng-container>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-<pre *ngIf="form"> {{ form.value | json }}</pre>
+<div class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col-9">
+                <ng-content select="h1"></ng-content>
+            </div>
+            <div class="col-3">
+                <a class="btn btn-secondary btn-sm mt-2" [routerLink]="['/' + area]"><i
+                        class="icon arrow-round-back"></i>
+                    Back</a>
+            </div>
+        </div>
+        <hr />
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <ng-container *ngFor="let field of fields">
+                <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
+            </ng-container>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <pre *ngIf="form"> {{ form.value | json }}</pre>
+    </div>
+</div>
