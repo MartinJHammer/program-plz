@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { DatabaseService } from 'src/app/services/database.service';
-import { ExerciseType } from 'src/app/models/exercise-type';
+import { Field } from 'src/app/models/field';
+import { FieldTypes } from 'src/app/models/field-types';
 
 @Component({
   selector: 'pp-exercise-types-create',
@@ -11,23 +9,11 @@ import { ExerciseType } from 'src/app/models/exercise-type';
 })
 export class ExerciseTypesCreateComponent implements OnInit {
 
-  public form: FormGroup;
+  public fields: Field[] = [
+    { key: 'name', placeholder: 'Enter type name', type: FieldTypes.string },
+  ];
 
-  constructor(
-    public db: DatabaseService<ExerciseType>,
-    public fb: FormBuilder,
-    public router: Router
-  ) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.form = this.fb.group({
-      name: ''
-    });
-  }
-
-  onSubmit() {
-    const exerciseType: ExerciseType = this.form.value;
-    this.db.add('exercise-types', exerciseType);
-    this.router.navigate(['exercise-types']);
-  }
+  ngOnInit() { }
 }
