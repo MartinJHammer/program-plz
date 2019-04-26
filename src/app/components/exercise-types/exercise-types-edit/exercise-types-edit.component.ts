@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { map, take, switchMap } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/models/exercise-type';
 import { DatabaseService } from 'src/app/services/database.service';
+import { Field } from 'src/app/models/field';
+import { FieldTypes } from 'src/app/models/field-types';
 
 @Component({
   selector: 'pp-exercise-types-edit',
@@ -12,28 +14,11 @@ import { DatabaseService } from 'src/app/services/database.service';
 })
 export class ExerciseTypesEditComponent implements OnInit {
 
-  public form: FormGroup;
+  public fields: Field[] = [
+    { key: 'name', placeholder: 'Enter type name', type: FieldTypes.string },
+  ];
 
-  constructor(
-    public db: DatabaseService<ExerciseType>,
-    public fb: FormBuilder,
-    public router: Router,
-    public activatedRoute: ActivatedRoute
-  ) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.activatedRoute.params.pipe(switchMap(params => this.db.getSingle('exercise-types', params.id))).pipe(
-      map(exerciseType => this.form = this.fb.group({
-        id: exerciseType.id,
-        name: exerciseType.name
-      })),
-      take(1)
-    ).subscribe();
-  }
-
-  onSubmit() {
-    const exerciseType: ExerciseType = this.form.value;
-    this.db.update(`exercise-types/${exerciseType.id}`, exerciseType);
-    this.router.navigate(['exercise-types']);
-  }
+  ngOnInit() { }
 }

@@ -11,7 +11,7 @@
             </div>
         </div>
         <hr />
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form *ngIf="form$ | async as form" [formGroup]="form" (ngSubmit)="onSubmit()">
             <ng-container *ngFor="let field of fields">
                 <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
             </ng-container>
