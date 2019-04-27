@@ -56,7 +56,7 @@ export class FormComponent implements OnInit {
     if (form.value.id) {
       this.db.update(`${this.area}/${form.value.id}`, form.value);
     } else {
-      this.db.add(this.area, form.value)
+      this.db.add(this.area, form.value);
     }
 
     this.router.navigate([this.area]);
