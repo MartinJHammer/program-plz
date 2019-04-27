@@ -15,6 +15,7 @@ import { FieldTypes } from 'src/app/models/field-types';
 export class ExerciseTypesEditComponent implements OnInit {
 
   public fields: Field[] = [
+    { key: 'id', type: FieldTypes.hidden },
     { key: 'name', placeholder: 'Enter type name', type: FieldTypes.string },
   ];
 

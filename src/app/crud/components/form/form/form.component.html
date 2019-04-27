@@ -11,12 +11,13 @@
             </div>
         </div>
         <hr />
-        <form *ngIf="form$ | async as form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form *ngIf="form$ | async as form" [formGroup]="form" (ngSubmit)="onSubmit(form)">
             <ng-container *ngFor="let field of fields">
+                <pp-hidden-field *ngIf="field.type === types.hidden" [field]="field" [form]="form"></pp-hidden-field>
                 <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
             </ng-container>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <pre> {{ form.value | json }}</pre>
         </form>
-        <pre *ngIf="form"> {{ form.value | json }}</pre>
     </div>
 </div>
