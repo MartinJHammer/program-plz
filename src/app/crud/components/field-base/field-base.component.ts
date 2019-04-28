@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Field } from 'src/app/models/field';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 
@@ -8,12 +7,11 @@ import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
   templateUrl: './field-base.component.html',
   styleUrls: ['./field-base.component.scss']
 })
-export class FieldBaseComponent implements OnInit, OnDestroy {
+export class FieldBaseComponent<FieldType> implements OnInit, OnDestroy {
 
-  @Input() public field: Field;
+  @Input() public field: FieldType;
   @Input() public form: FormGroup;
   public subscriptionHandler = new SubscriptionHandler();
-
 
   constructor() { }
 
