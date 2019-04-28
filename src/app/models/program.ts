@@ -15,12 +15,14 @@ export class Program {
         public afs: AngularFirestore,
         public db: DatabaseService<any>
     ) {
+        this.exercises$ = this.db.getAll('exercises').pipe(shareReplay(1));
+        this.exerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
     }
 
     public createProgram(): Observable<Exercise[]> {
         return combineLatest(
-            this.db.getAll('exercises').pipe(shareReplay(1)),
-            this.db.getAll('exercise-types').pipe(shareReplay(1))
+            this.exercises$,
+            this.exerciseTypes$
         ).pipe(
             map(values => {
                 const exercises: Exercise[] = values[0];
@@ -53,12 +55,21 @@ export class Program {
      * Exercise is of same difficulty and targets same muscles (roughly)
      */
     public differentVersion(exercise: Exercise) {
-        // const otherExercises = this.db.exercises
-        //     .getAll()
-        //     .filter(ex => exercise.exerciseTypes.some(condition => ex.types.includes(condition)))
-        //     .filter(ex => ex.id !== exercise.id);
-        // const newExercise = shuffle(otherExercises).slice(0, 1)[0];
-        // this.replaceExercise(exercise, newExercise);
+        const otherExercises = combineLatest(
+            this.exercises$,
+            this.exerciseTypes$
+        ).pipe(
+            map(values => {
+                const exercises: Exercise[] = values[0];
+                const exerciseTypes: ExerciseType[] = values[1];
+
+                exercises
+                    .filter(ex => exercise.exerciseTypes.some(condition => ex.exerciseTypes.includes(condition)))
+                    .filter(ex => ex.id !== exercise.id);
+                const newExercise = shuffle(otherExercises).slice(0, 1)[0];
+                this.replaceExercise(exercise, newExercise);
+            })
+        );
     }
 
     /**
