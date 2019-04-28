@@ -1,5 +1,8 @@
 <div [formGroup]="form">
-  <div class="form-group">
-    <input type="text" [formControlName]="field.key" class="form-control" [placeholder]="field.placeholder">
-  </div>
+  <label class="checkbox-container" *ngFor="let exerciseType of exerciseTypes$ | async" [for]="exerciseType.id">
+    <input type="checkbox" (change)="setCheckboxValue($event)" [value]="exerciseType.id" [id]="exerciseType.id"
+      [checked]="exerciseType.id | checked: form.get('exerciseTypes').value">
+    <span class="checkmark"></span>
+    {{ exerciseType.name }}
+  </label>
 </div>

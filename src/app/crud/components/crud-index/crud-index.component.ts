@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Entry } from 'src/app/models/entry';
-import { CrudService } from '../../crud.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
@@ -31,7 +30,6 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   public subscriptionHandler = new SubscriptionHandler();
 
   constructor(
-    public crudService: CrudService,
     public afs: AngularFirestore
   ) { }
 

@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Exercise } from 'src/app/models/exercise';
-import { Router } from '@angular/router';
-import { DatabaseService } from 'src/app/services/database.service';
 import { Field } from 'src/app/models/field';
 import { FieldTypes } from 'src/app/models/field-types';
 
@@ -14,6 +10,7 @@ import { FieldTypes } from 'src/app/models/field-types';
 export class ExercisesCreateComponent implements OnInit {
   public fields: Field[] = [
     { key: 'name', placeholder: 'Enter exercise name', type: FieldTypes.string },
+    { key: 'exerciseTypes', value: [[]], type: FieldTypes.multiSelectField }
   ];
 
   constructor() { }
