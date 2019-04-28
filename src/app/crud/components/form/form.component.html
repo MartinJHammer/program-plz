@@ -15,6 +15,8 @@
             <ng-container *ngFor="let field of fields">
                 <pp-hidden-field *ngIf="field.type === types.hidden" [field]="field" [form]="form"></pp-hidden-field>
                 <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
+                <pp-multi-select-field *ngIf="field.type === types.multiSelectField" [field]="field" [form]="form">
+                </pp-multi-select-field>
             </ng-container>
             <button type="submit" class="btn btn-primary">Submit</button>
             <pre> {{ form.value | json }}</pre>

@@ -3,14 +3,15 @@ import { Field } from 'src/app/models/field';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'pp-hidden-field',
-  templateUrl: './hidden-field.component.html',
-  styleUrls: ['./hidden-field.component.scss']
+  selector: 'pp-field-base',
+  templateUrl: './field-base.component.html',
+  styleUrls: ['./field-base.component.scss']
 })
-export class HiddenFieldComponent implements OnInit {
+export class FieldBaseComponent implements OnInit {
 
   @Input() public field: Field;
   @Input() public form: FormGroup;
+
 
   constructor() { }
 

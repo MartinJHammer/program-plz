@@ -1,4 +1,5 @@
 export enum FieldTypes {
     hidden,
-    string
+    string,
+    multiSelectField
 }

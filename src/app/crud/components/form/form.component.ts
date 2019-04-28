@@ -4,8 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { FieldTypes } from 'src/app/models/field-types';
 import { DatabaseService } from 'src/app/services/database.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Entry } from 'src/app/models/entry';
-import { map, filter, switchMap, take, tap } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
 import { merge, Observable } from 'rxjs';
 
 @Component({
@@ -35,7 +34,7 @@ export class FormComponent implements OnInit {
     const create$ = id$.pipe(
       filter(id => !id),
       map(() => this.fields.reduce((fields, field) => {
-        fields[field.key] = '';
+        fields[field.key] = null;
         return fields;
       }, {}))
     );
