@@ -2,8 +2,9 @@ import { Exercise } from './exercise';
 import { Injectable } from '@angular/core';
 import { ExerciseType } from './exercise-type';
 import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ExerciseService } from '../services/exercise.service';
+import { map, shareReplay } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { DatabaseService } from '../services/database.service';
 
 @Injectable({ providedIn: 'root' })
 export class Program {
@@ -11,41 +12,40 @@ export class Program {
     public exerciseTypes$: Observable<ExerciseType[]>;
 
     constructor(
-        public exerciseService: ExerciseService,
-        public exerciseTypeService: ExerciseService
+        public afs: AngularFirestore,
+        public db: DatabaseService<any>
     ) {
-        this.exercises$ = this.exerciseService.getAll();
-        this.exerciseTypes$ = this.exerciseTypeService.getAll();
     }
 
     public createProgram(): Observable<Exercise[]> {
         return combineLatest(
-            this.exercises$,
-            this.exerciseTypes$
+            this.db.getAll('exercises').pipe(shareReplay(1)),
+            this.db.getAll('exercise-types').pipe(shareReplay(1))
         ).pipe(
             map(values => {
-                const [exercises, exerciseTypes] = values;
-                const finalExercises = [];
-                // const hPull = exercises.filter(exercise => exercise.exerciseTypes.includes(ExerciseType.horizontalPull));
-                // const hPush = exercises.filter(exercise => exercise.exerciseTypes.includes(ExerciseType.horizontalPush));
-                // const vPull = exercises.filter(exercise => exercise.exerciseTypes.includes(ExerciseType.verticalPull));
-                // const vPush = exercises.filter(exercise => exercise.exerciseTypes.includes(ExerciseType.verticalPush));
-                // const legs = exercises.filter(exercise => [ExerciseType.lift, ExerciseType.lunge, ExerciseType.squat].some(condition => exercise.exerciseTypes.includes(condition)));
-                // const core = exercises.filter(exercise => exercise.exerciseTypes.includes());
+                const exercises: Exercise[] = values[0];
+                const exerciseTypes: ExerciseType[] = values[1];
+                const vPull = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Vertical pull').id));
+                const vPush = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Vertical push').id));
+                const hPull = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Horizontal pull').id));
+                const hPush = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Horizontal push').id));
+                const legs = exercises.filter(exercise => [
+                    exerciseTypes.find(et => et.name === 'Squat').id,
+                    exerciseTypes.find(et => et.name === 'Lunge').id,
+                    exerciseTypes.find(et => et.name === 'Lift').id,
+                ].some(condition => exercise.exerciseTypes.includes(condition)));
+                const core = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Core').id));
 
-                // this.exercises = this.exercises.concat([
-                //     ...shuffle(hPull).slice(0, 1),
-                //     ...shuffle(hPush).slice(0, 1),
-                //     ...shuffle(vPull).slice(0, 1),
-                //     ...shuffle(vPush).slice(0, 1),
-                //     ...shuffle(legs).slice(0, 2),
-                //     ...shuffle(core).slice(0, 2)
-                // ]);
-
-                return exercises;
+                return [
+                    ...shuffle(vPull).slice(0, 1),
+                    ...shuffle(vPush).slice(0, 1),
+                    ...shuffle(hPull).slice(0, 1),
+                    ...shuffle(hPush).slice(0, 1),
+                    ...shuffle(legs).slice(0, 2),
+                    ...shuffle(core).slice(0, 2)
+                ];
             })
         );
-
     }
 
     /**
