@@ -33,10 +33,11 @@ export class FormComponent implements OnInit {
 
     const create$ = id$.pipe(
       filter(id => !id),
+      map(() => this.fields = this.fields.filter(field => field.key !== 'id')),
       map(() => this.fields.reduce((fields, field) => {
         fields[field.key] = field.value;
         return fields;
-      }, {}))
+      }, {})),
     );
 
     const edit$ = id$.pipe(
