@@ -8,7 +8,7 @@
 </div>
 
 <!-- Program -->
-<ng-container *ngFor="let exercise of exercises$ | async; trackBy: trackById">
+<ng-container *ngFor="let exercise of exercises$ | async as exercises; trackBy: trackById">
   <div class="card my-2" style="width: 18rem;">
     <div class="card-body">
       <div class="row">
@@ -23,7 +23,7 @@
       </div>
       <div class="row">
         <div class="col-4">
-          <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercise);">Replace</a>
+          <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercises, exercise);">Replace</a>
         </div>
         <div class="col-4">
           <a href="javascript:void(0)" class=" card-link">Easier</a>

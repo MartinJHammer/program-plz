@@ -1,8 +1,8 @@
 import { Exercise } from './exercise';
 import { Injectable } from '@angular/core';
 import { ExerciseType } from './exercise-type';
-import { Observable, combineLatest } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { map, shareReplay, take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { DatabaseService } from '../services/database.service';
 
@@ -19,8 +19,9 @@ export class Program {
         this.exerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
     }
 
-    public createProgram(): Observable<Exercise[]> {
-        return combineLatest(
+    public createProgram(): BehaviorSubject<Exercise[]> {
+        const programExercises = new BehaviorSubject<Exercise[]>([]);
+        combineLatest(
             this.exercises$,
             this.exerciseTypes$
         ).pipe(
@@ -38,38 +39,40 @@ export class Program {
                 ].some(condition => exercise.exerciseTypes.includes(condition)));
                 const core = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Core').id));
 
-                return [
+                programExercises.next([
                     ...shuffle(vPull).slice(0, 1),
                     ...shuffle(vPush).slice(0, 1),
                     ...shuffle(hPull).slice(0, 1),
                     ...shuffle(hPush).slice(0, 1),
                     ...shuffle(legs).slice(0, 2),
                     ...shuffle(core).slice(0, 2)
-                ];
+                ]);
             })
-        );
+        ).subscribe();
+
+        return programExercises;
     }
 
     /**
      * Replaces an exercise in the program with another exercise.
      * Exercise is of same difficulty and targets same muscles (roughly)
      */
-    public differentVersion(exercise: Exercise) {
-        const otherExercises = combineLatest(
-            this.exercises$,
-            this.exerciseTypes$
-        ).pipe(
-            map(values => {
-                const exercises: Exercise[] = values[0];
-                const exerciseTypes: ExerciseType[] = values[1];
-
+    public differentVersion(currentExercises$: BehaviorSubject<Exercise[]>, currentExercises: Exercise[], exercise: Exercise) {
+        this.exercises$.pipe(
+            map(exercises => {
                 exercises
                     .filter(ex => exercise.exerciseTypes.some(condition => ex.exerciseTypes.includes(condition)))
                     .filter(ex => ex.id !== exercise.id);
-                const newExercise = shuffle(otherExercises).slice(0, 1)[0];
-                this.replaceExercise(exercise, newExercise);
-            })
-        );
+                const newExercise = shuffle(exercises).slice(0, 1)[0];
+                currentExercises.forEach((ex, index) => {
+                    if (ex.id === exercise.id) {
+                        currentExercises[index] = newExercise;
+                    }
+                });
+                currentExercises$.next(currentExercises);
+            }),
+            take(1)
+        ).subscribe();
     }
 
     /**

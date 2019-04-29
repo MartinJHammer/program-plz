@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Program } from 'src/app/models/program';
 import { Exercise } from 'src/app/models/exercise';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'program-plz-program',
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class ProgramComponent implements OnInit {
 
   public currentExercise: Exercise;
-  public exercises$: Observable<Exercise[]>;
+  public exercises$: BehaviorSubject<Exercise[]>;
 
   constructor(
     public program: Program
@@ -24,8 +24,8 @@ export class ProgramComponent implements OnInit {
     this.exercises$ = this.program.createProgram();
   }
 
-  public differentVersion(exercise?: Exercise) {
-    exercise ? this.program.differentVersion(exercise) : this.program.differentVersion(this.currentExercise);
+  public differentVersion(currentExercises: Exercise[], exercise: Exercise) {
+    this.program.differentVersion(this.exercises$, currentExercises, exercise);
   }
 
   public setCurrentExercise(exercise: Exercise) {
