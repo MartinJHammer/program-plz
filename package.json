@@ -2,8 +2,9 @@
   "name": "program-plz",
   "version": "0.0.0",
   "scripts": {
-    "build": "ng build --prod --base-href https://martinjhammer.github.io/program-plz/ --output-path docs",
-    "pp:deploy": "npm run build && ngh --dir docs && git add . && git commit -m \"Committing build files\" && git push && ngh --dir docs"
+    "build": "ng build --prod",
+    "pp:deploy": "npm run build && cd firebase && firebase deploy",
+    "test": "cd firebase && firebase deploy"
   },
   "private": true,
   "dependencies": {
