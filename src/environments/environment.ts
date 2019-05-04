@@ -1,17 +1,12 @@
+import { firebaseCredentials } from './firebase-credentials';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
   production: false,
-  firebase: {
-    apiKey: 'AIzaSyDdKCPEIpEDzqIz5Ihci9lJEkZ2VyEMwI8',
-    authDomain: 'program-plz.firebaseapp.com',
-    databaseURL: 'https://program-plz.firebaseio.com',
-    projectId: 'program-plz',
-    storageBucket: 'program-plz.appspot.com',
-    messagingSenderId: '225438877532'
-  }
+  firebase: firebaseCredentials
 };
 
 /*
