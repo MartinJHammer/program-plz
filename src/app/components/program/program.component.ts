@@ -14,9 +14,10 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class ProgramComponent implements OnInit {
 
   public allExercises$: Observable<Exercise[]>;
-  public exerciseTypes$: Observable<ExerciseType[]>;
+  public allExerciseTypes$: Observable<ExerciseType[]>;
   public currentExercise: Exercise;
   public exercises$: BehaviorSubject<Exercise[]>;
+  public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
 
   constructor(
     public afs: AngularFirestore,
@@ -25,37 +26,31 @@ export class ProgramComponent implements OnInit {
 
   ngOnInit() {
     this.allExercises$ = this.db.getAll('exercises').pipe(shareReplay(1));
-    this.exerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
+    this.allExerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
+    const setInitialExerciseTypes = this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1));
+    setInitialExerciseTypes.subscribe();
   }
 
   public createProgram(): void {
-    this.exercises$ = new BehaviorSubject<Exercise[]>([])
+    this.exercises$ = new BehaviorSubject<Exercise[]>([]);
     combineLatest(
       this.allExercises$,
-      this.exerciseTypes$
+      this.selectedExerciseTypes$
     ).pipe(
       map(values => {
         const exercises: Exercise[] = values[0];
         const exerciseTypes: ExerciseType[] = values[1];
-        const vPull = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Vertical pull').id));
-        const vPush = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Vertical push').id));
-        const hPull = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Horizontal pull').id));
-        const hPush = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Horizontal push').id));
-        const legs = exercises.filter(exercise => [
-          exerciseTypes.find(et => et.name === 'Squat').id,
-          exerciseTypes.find(et => et.name === 'Lunge').id,
-          exerciseTypes.find(et => et.name === 'Lift').id,
-        ].some(condition => exercise.exerciseTypes.includes(condition)));
-        const core = exercises.filter(exercise => exercise.exerciseTypes.includes(exerciseTypes.find(et => et.name === 'Core').id));
 
-        this.exercises$.next([
-          ...shuffle(vPull).slice(0, 1),
-          ...shuffle(vPush).slice(0, 1),
-          ...shuffle(hPull).slice(0, 1),
-          ...shuffle(hPush).slice(0, 1),
-          ...shuffle(legs).slice(0, 2),
-          ...shuffle(core).slice(0, 2)
-        ]);
+        let allExercises = [];
+
+        exerciseTypes.forEach(et => {
+          const found = exercises.filter(exercise => exercise.exerciseTypes.includes(et.id));
+          if (found) {
+            allExercises = allExercises.concat(shuffle(found).slice(0, 1));
+          }
+        });
+
+        this.exercises$.next(allExercises);
       })
     ).subscribe();
   }

@@ -1,5 +1,17 @@
 <div class="row mt-2">
   <div class="col-8">
+    <!-- Select exercise type -->
+    <mat-form-field *ngIf="allExerciseTypes$ | async as exerciseTypes">
+      <mat-label>Exercise types</mat-label>
+      <mat-select (selectionChange)="selectedExerciseTypes$.next($event.value)" [value]="exerciseTypes" multiple>
+        <mat-option *ngFor="let exerciseType of exerciseTypes" [value]="exerciseType">
+          {{ exerciseType.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <br />
+
+    <!-- Create program -->
     <button class="btn btn-primary btn-lg" (click)="createProgram()">Program plz!</button>
   </div>
   <div class="col-4">
