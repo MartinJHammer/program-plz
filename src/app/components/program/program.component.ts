@@ -52,6 +52,7 @@ export class ProgramComponent implements OnInit {
       })
     );
 
+    // START HERE: HOW TO MAKE THE REQUEST RECURSIVE UNTIL VALUE IS RETRIEVED???
     // const retryRequest$ = random$.pipe(
     //   expand(values => (values === undefined && values[0] === undefined) ? random$ : empty()),
     //   tap(x => console.log(x)),
