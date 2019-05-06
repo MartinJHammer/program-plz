@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
-import { Observable, BehaviorSubject, combineLatest, merge, empty, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, merge, pipe } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
-import { map, shareReplay, take, tap, switchMap, scan, filter, expand } from 'rxjs/operators';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { map, shareReplay, take, tap, switchMap, filter } from 'rxjs/operators';
+import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
+import { getRandomNumber } from 'src/app/helpers/random-number';
 
 @Component({
   selector: 'program-plz-program',
@@ -34,15 +35,21 @@ export class ProgramComponent implements OnInit {
       switchMap(exerciseTypes => {
         return combineLatest(exerciseTypes.map(exerciseType => this.getRandom(exerciseType.id)));
       }),
-      map(exercises => this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []))),
+      map(exercises => {
+
+        this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []));
+        console.log(exercises.reduce((a, b) => a.concat(b), []).length);
+      }),
       take(1)
     ).subscribe();
   }
 
   public getRandom(id: string): Observable<any[]> {
-    const randomId = this.afs.createId();
-    const random$ = this.afs.collection('exercises', ref => ref.where('id', '>=', randomId).where('exerciseTypes', 'array-contains', id).orderBy('id').limit(1)).get().pipe(
-      map(docs => {
+    const randomNumber = getRandomNumber();
+    const query$ = this.afs.collection('exercises', ref => ref.where('random', '>=', randomNumber).orderBy('random').where('exerciseTypes', 'array-contains', id).orderBy('id').limit(1)).get();
+    const retryQuery$ = this.afs.collection('exercises', ref => ref.where('random', '<=', randomNumber).orderBy('random', 'desc').where('exerciseTypes', 'array-contains', id).orderBy('id').limit(1)).get();
+    const docMap = pipe(
+      map((docs: QuerySnapshot<any>) => {
         return docs.docs.map(e => {
           return {
             id: e.id,
@@ -52,28 +59,23 @@ export class ProgramComponent implements OnInit {
       })
     );
 
-    // START HERE: HOW TO MAKE THE REQUEST RECURSIVE UNTIL VALUE IS RETRIEVED???
-    // const retryRequest$ = random$.pipe(
-    //   expand(values => (values === undefined && values[0] === undefined) ? random$ : empty()),
-    //   tap(x => console.log(x)),
-    //   tap(() => randomId = this.afs.createId())
-    // ).subscribe();
-
-    // return of([]);
+    const random$ = query$.pipe(docMap);
 
     const retry$ = random$.pipe(
       filter(x => x === undefined || x[0] === undefined),
+      switchMap(() => retryQuery$),
+      docMap
     );
 
     const randomRetrieved$ = random$.pipe(filter(x => x !== undefined && x[0] !== undefined));
-    return merge(randomRetrieved$, retry$).pipe(tap(x => console.log('RESULT', x, x.length)));
+    return merge(randomRetrieved$, retry$);
   }
 
   public setCurrentExercise(exercise: Exercise) {
     this.currentExercise = exercise;
   }
 
-  public trackById(index, item) {
+  public trackById(item) {
     return item.id;
   }
 
@@ -81,7 +83,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles (roughly)
    */
-  public differentVersion(currentExercises: Exercise[], exercise: Exercise) {
+  public differentVersion() {
     // this.allExercises$.pipe(
     //   map(exercises => {
     //     exercises
@@ -103,7 +105,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of lower difficulty, but still targets the same muscles (roughly)
    */
-  public easierVersion(exercise: Exercise) {
+  public easierVersion() {
 
   }
 
@@ -111,20 +113,11 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of higher difficulty, but still targets the same muscles (roughly)
    */
-  public harderVersion(exercise: Exercise) {
+  public harderVersion() {
 
   }
 }
 
-// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-// TODO: Replace with _.sample()
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
 
 // Kept for reference if I have to do offline shuffles. P.T. not used since I shuffle on db level.
 // exerciseTypes.forEach(et => {
@@ -133,3 +126,16 @@ function shuffle(array) {
 //     allExercises = allExercises.concat(shuffle(found).slice(0, 1));
 //   }
 // });
+
+    // const t1 = this.db.getAll('exercises').pipe();
+
+    // const update = t1.pipe(
+    //   map(x => {
+    //     const t = x.map(y => {
+    //       y.random = getRandomNumber();
+    //       return y;
+    //     });
+    //     t.forEach(a => this.db.update('exercises' + '/' + a.id, a))
+    //   }),
+    //   take(1),
+    // ).subscribe();

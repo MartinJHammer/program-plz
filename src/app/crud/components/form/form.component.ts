@@ -6,6 +6,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map, filter, switchMap, tap } from 'rxjs/operators';
 import { merge, Observable } from 'rxjs';
+import { getRandomNumber } from 'src/app/helpers/random-number';
 
 @Component({
   selector: 'pp-form',
@@ -56,6 +57,8 @@ export class FormComponent implements OnInit {
     if (form.value.id) {
       this.db.update(`${this.area}/${form.value.id}`, form.value);
     } else {
+      const values = form.value;
+      values.random = getRandomNumber();
       this.db.add(this.area, form.value);
     }
 
