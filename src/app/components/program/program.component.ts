@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
-import { Observable, BehaviorSubject, combineLatest, merge, pipe } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, merge, pipe, of } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
-import { map, shareReplay, take, tap, switchMap, filter } from 'rxjs/operators';
+import { map, shareReplay, take, tap, switchMap, filter, mergeMap } from 'rxjs/operators';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
@@ -32,22 +32,17 @@ export class ProgramComponent implements OnInit {
 
   public createProgram(): void {
     this.selectedExerciseTypes$.pipe(
-      switchMap(exerciseTypes => {
-        return combineLatest(exerciseTypes.map(exerciseType => this.getRandom(exerciseType.id)));
-      }),
-      map(exercises => {
-
-        this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []));
-        console.log(exercises.reduce((a, b) => a.concat(b), []).length);
-      }),
+      switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandom(exerciseType.id)))),
+      map(exercises => this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []))),
       take(1)
     ).subscribe();
   }
 
-  public getRandom(id: string): Observable<any[]> {
+  public getRandom(exerciseTypeId: string): Observable<Exercise[]> {
     const randomNumber = getRandomNumber();
-    const query$ = this.afs.collection('exercises', ref => ref.where('random', '>=', randomNumber).orderBy('random').where('exerciseTypes', 'array-contains', id).orderBy('id').limit(1)).get();
-    const retryQuery$ = this.afs.collection('exercises', ref => ref.where('random', '<=', randomNumber).orderBy('random', 'desc').where('exerciseTypes', 'array-contains', id).orderBy('id').limit(1)).get();
+    const request$ = this.afs.collection('exercises', ref => ref.where('random', '>=', randomNumber).orderBy('random').where('exerciseTypes', 'array-contains', exerciseTypeId).orderBy('id').limit(1)).get();
+    const retryRequest$ = this.afs.collection('exercises', ref => ref.where('random', '<=', randomNumber).orderBy('random', 'desc').where('exerciseTypes', 'array-contains', exerciseTypeId).orderBy('id').limit(1)).get();
+
     const docMap = pipe(
       map((docs: QuerySnapshot<any>) => {
         return docs.docs.map(e => {
@@ -59,16 +54,15 @@ export class ProgramComponent implements OnInit {
       })
     );
 
-    const random$ = query$.pipe(docMap);
+    const random$ = request$.pipe(docMap).pipe(filter(x => x !== undefined && x[0] !== undefined));
 
-    const retry$ = random$.pipe(
+    const retry$ = request$.pipe(docMap).pipe(
       filter(x => x === undefined || x[0] === undefined),
-      switchMap(() => retryQuery$),
+      switchMap(() => retryRequest$),
       docMap
     );
 
-    const randomRetrieved$ = random$.pipe(filter(x => x !== undefined && x[0] !== undefined));
-    return merge(randomRetrieved$, retry$);
+    return merge(random$, retry$);
   }
 
   public setCurrentExercise(exercise: Exercise) {
@@ -83,22 +77,18 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles (roughly)
    */
-  public differentVersion() {
-    // this.allExercises$.pipe(
-    //   map(exercises => {
-    //     exercises
-    //       .filter(ex => exercise.exerciseTypes.some(condition => ex.exerciseTypes.includes(condition)))
-    //       .filter(ex => ex.id !== exercise.id);
-    //     const newExercise = shuffle(exercises).slice(0, 1)[0];
-    //     currentExercises.forEach((ex, index) => {
-    //       if (ex.id === exercise.id) {
-    //         currentExercises[index] = newExercise;
-    //       }
-    //     });
-    //     this.exercises$.next(currentExercises);
-    //   }),
-    //   take(1)
-    // ).subscribe();
+  public differentVersion(exercises: Exercise[], exercise: Exercise) {
+    of(exercise.exerciseTypes).pipe(
+      switchMap(exerciseTypeIds => combineLatest(exerciseTypeIds.map(exerciseTypeId => this.getRandom(exerciseTypeId)))),
+      map(newExercises => newExercises.reduce((a, b) => a.concat(b), [])),
+      mergeMap(x => x),
+      switchMap(newExercise => this.exercises$.pipe(
+        map(currentExercises => currentExercises.map(currentExercise => currentExercise.id !== exercise.id ? currentExercise : newExercise)),
+        take(1)
+      )),
+      map(newExercises => this.exercises$.next(newExercises)),
+      take(1)
+    ).subscribe();
   }
 
   /**
