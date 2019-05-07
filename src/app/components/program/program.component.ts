@@ -8,7 +8,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
 
 @Component({
-  selector: 'program-plz-program',
+  selector: 'pp-program',
   templateUrl: './program.component.html',
   styleUrls: ['./program.component.scss']
 })
