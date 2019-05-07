@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable, BehaviorSubject, combineLatest, merge, pipe, of } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
-import { map, shareReplay, take, tap, switchMap, filter, mergeMap } from 'rxjs/operators';
+import { map, shareReplay, take, switchMap, filter, mergeMap } from 'rxjs/operators';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
@@ -107,25 +107,3 @@ export class ProgramComponent implements OnInit {
 
   }
 }
-
-
-// Kept for reference if I have to do offline shuffles. P.T. not used since I shuffle on db level.
-// exerciseTypes.forEach(et => {
-//   const found = exercises.filter(exercise => exercise.exerciseTypes.includes(et.id));
-//   if (found) {
-//     allExercises = allExercises.concat(shuffle(found).slice(0, 1));
-//   }
-// });
-
-    // const t1 = this.db.getAll('exercises').pipe();
-
-    // const update = t1.pipe(
-    //   map(x => {
-    //     const t = x.map(y => {
-    //       y.random = getRandomNumber();
-    //       return y;
-    //     });
-    //     t.forEach(a => this.db.update('exercises' + '/' + a.id, a))
-    //   }),
-    //   take(1),
-    // ).subscribe();
