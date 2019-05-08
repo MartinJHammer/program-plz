@@ -8,7 +8,12 @@
           {{ exerciseType.name }}</mat-option>
       </mat-select>
     </mat-form-field>
+    <br />
 
+
+    <!-- Shuffle -->
+    <button class="btn btn-sm btn-info" (click)="shuffle()">Shuffle order of exercises</button>
+    <br />
     <br />
 
     <!-- Create program -->
@@ -29,11 +34,13 @@
             <h6 class="card-title">{{ exercise.name }}</h6>
             <p class="card-text">3s x failure</p>
           </div>
+          <!-- Card info -->
           <div class="col-2">
             <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
               data-target="#exerciseModal"></i>
           </div>
         </div>
+        <!-- Card actions -->
         <div class="row">
           <div class="col-4">
             <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercises, exercise);">Replace</a>
@@ -50,7 +57,7 @@
   </ng-container>
 </div>
 
-<!-- Modal -->
+<!-- Card info modal -->
 <div *ngIf="currentExercise" class="modal" id="exerciseModal" tabindex="-1" role="dialog"
   aria-labelledby="exerciseModalTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">

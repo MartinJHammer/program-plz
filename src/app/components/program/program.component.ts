@@ -7,6 +7,7 @@ import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { shuffle } from 'src/app/helpers/shuffle';
 
 @Component({
   selector: 'pp-program',
@@ -68,6 +69,13 @@ export class ProgramComponent implements OnInit {
 
   public setCurrentExercise(exercise: Exercise) {
     this.currentExercise = exercise;
+  }
+
+  public shuffle() {
+    const ex = this.exercises$.pipe(
+      take(1),
+      map(exercises => shuffle(exercises)),
+    ).subscribe();
   }
 
   public trackById(item) {
