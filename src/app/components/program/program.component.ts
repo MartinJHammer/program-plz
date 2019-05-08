@@ -20,6 +20,7 @@ export class ProgramComponent implements OnInit {
   public currentExercise: Exercise;
   public exercises$ = new BehaviorSubject<Exercise[]>([]);
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
+  public dragExercises = false;
 
   constructor(
     public afs: AngularFirestore,
@@ -65,6 +66,10 @@ export class ProgramComponent implements OnInit {
     );
 
     return merge(random$, retry$);
+  }
+
+  public toggleDragExercises() {
+    this.dragExercises = !this.dragExercises;
   }
 
   public setCurrentExercise(exercise: Exercise) {

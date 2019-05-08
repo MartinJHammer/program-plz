@@ -26,34 +26,60 @@
 
 <!-- Program -->
 <div cdkDropList (cdkDropListDropped)="drop($event)">
-  <ng-container *ngFor="let exercise of exercises$ | async as exercises; trackBy: trackById">
-    <div class="card my-2" style="width: 18rem;" cdkDrag>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-10 mb-2">
-            <h6 class="card-title">{{ exercise.name }}</h6>
-            <p class="card-text">3s x failure</p>
+  <ng-container *ngIf="exercises$ | async as exercises">
+    <!-- Toggle drag and drop -->
+    <ng-container *ngIf="exercises.length > 1">
+      <br />
+      <button class="btn btn-sm btn-info" (click)="toggleDragExercises()">
+        <span *ngIf="dragExercises">Disable drag and drop</span>
+        <span *ngIf="!dragExercises">Enable exercise drag and drop</span>
+      </button>
+      <br />
+      <br />
+    </ng-container>
+
+    <!-- Exercises -->
+    <ng-container *ngFor="let exercise of exercises; trackBy: trackById">
+      <div class="card my-2" style="width: 18rem;" cdkDrag>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-10 mb-2">
+              <h6 class="card-title">{{ exercise.name }}</h6>
+              <p class="card-text">3s x failure</p>
+            </div>
+            <!-- Card info -->
+            <div class="col-2">
+              <!-- Drag handle -->
+              <div cdkDragHandle>
+                <svg *ngIf="dragExercises" width="24px" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z">
+                  </path>
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                </svg>
+              </div>
+              <!-- Info button -->
+              <i *ngIf="!dragExercises" class="icon ion-md-cog" (click)="setCurrentExercise(exercise)"
+                data-toggle="modal" data-target="#exerciseModal"></i>
+            </div>
           </div>
-          <!-- Card info -->
-          <div class="col-2">
-            <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
-              data-target="#exerciseModal"></i>
-          </div>
-        </div>
-        <!-- Card actions -->
-        <div class="row">
-          <div class="col-4">
-            <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercises, exercise);">Replace</a>
-          </div>
-          <div class="col-4">
-            <a href="javascript:void(0)" class=" card-link">Easier</a>
-          </div>
-          <div class="col-4">
-            <a href="javascript:void(0)" class=" card-link">Harder</a>
+          <!-- Card actions -->
+          <div class="row">
+            <div class="col-4">
+              <a href="javascript:void(0)" class="card-link"
+                (click)="differentVersion(exercises, exercise);">Replace</a>
+            </div>
+            <div class="col-4">
+              <a href="javascript:void(0)" class=" card-link">Easier</a>
+            </div>
+            <div class="col-4">
+              <a href="javascript:void(0)" class=" card-link">Harder</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
+
   </ng-container>
 </div>
 
