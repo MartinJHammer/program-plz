@@ -6,6 +6,7 @@ import { map, shareReplay, take, switchMap, filter, mergeMap } from 'rxjs/operat
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'pp-program',
@@ -71,6 +72,10 @@ export class ProgramComponent implements OnInit {
 
   public trackById(item) {
     return item.id;
+  }
+
+  public drop(event: CdkDragDrop<string[]>) {
+    this.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
   /**

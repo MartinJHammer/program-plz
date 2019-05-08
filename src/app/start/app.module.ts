@@ -6,6 +6,8 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MatSelectModule } from '@angular/material/select';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { StartComponent } from './../components/start/start.component';
@@ -25,6 +27,7 @@ import { crudComponents } from '../crud/components/crud-components';
     AngularFirestoreModule,
     BrowserAnimationsModule,
     ScrollDispatchModule,
+    DragDropModule,
     MatSelectModule
   ],
   declarations: [

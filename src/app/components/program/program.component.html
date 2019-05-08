@@ -20,33 +20,35 @@
 </div>
 
 <!-- Program -->
-<ng-container *ngFor="let exercise of exercises$ | async as exercises; trackBy: trackById">
-  <div class="card my-2" style="width: 18rem;">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-10 mb-2">
-          <h6 class="card-title">{{ exercise.name }}</h6>
-          <p class="card-text">3s x failure</p>
+<div cdkDropList (cdkDropListDropped)="drop($event)">
+  <ng-container *ngFor="let exercise of exercises$ | async as exercises; trackBy: trackById">
+    <div class="card my-2" style="width: 18rem;" cdkDrag>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10 mb-2">
+            <h6 class="card-title">{{ exercise.name }}</h6>
+            <p class="card-text">3s x failure</p>
+          </div>
+          <div class="col-2">
+            <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
+              data-target="#exerciseModal"></i>
+          </div>
         </div>
-        <div class="col-2">
-          <i class="icon ion-md-cog" (click)="setCurrentExercise(exercise)" data-toggle="modal"
-            data-target="#exerciseModal"></i>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4">
-          <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercises, exercise);">Replace</a>
-        </div>
-        <div class="col-4">
-          <a href="javascript:void(0)" class=" card-link">Easier</a>
-        </div>
-        <div class="col-4">
-          <a href="javascript:void(0)" class=" card-link">Harder</a>
+        <div class="row">
+          <div class="col-4">
+            <a href="javascript:void(0)" class="card-link" (click)="differentVersion(exercises, exercise);">Replace</a>
+          </div>
+          <div class="col-4">
+            <a href="javascript:void(0)" class=" card-link">Easier</a>
+          </div>
+          <div class="col-4">
+            <a href="javascript:void(0)" class=" card-link">Harder</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</ng-container>
+  </ng-container>
+</div>
 
 <!-- Modal -->
 <div *ngIf="currentExercise" class="modal" id="exerciseModal" tabindex="-1" role="dialog"
