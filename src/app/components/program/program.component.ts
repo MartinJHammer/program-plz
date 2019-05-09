@@ -83,12 +83,28 @@ export class ProgramComponent implements OnInit {
     ).subscribe();
   }
 
+  public applyExerciseTypeOrder(): void {
+    combineLatest(
+      this.selectedExerciseTypes$,
+      this.exercises$.pipe(take(1))
+    ).pipe(
+      map(([selectedExercises, exercises]) => {
+        this.exercises$.next(getNewOrder(selectedExercises, exercises));
+      }),
+      take(1)
+    ).subscribe();
+  }
+
   public trackById(item) {
     return item.id;
   }
 
-  public drop(event: CdkDragDrop<string[]>) {
+  public exerciseDrop(event: CdkDragDrop<string[]>) {
     this.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+  }
+
+  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>) {
+    this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
   /**
@@ -124,4 +140,40 @@ export class ProgramComponent implements OnInit {
   public harderVersion() {
 
   }
+}
+
+
+
+function getNewOrder(arrayWithOrder, targetArray) {
+  // Get an identifier from the array you want to base the order on
+  const newIds = arrayWithOrder.map(x => x.id);
+
+  // Get an identifier from the array you want to update
+  const ids = targetArray.map(x => x.id);
+
+  // placeholder for order
+  const order = [];
+
+  // loop through the ids, pushing the arrayToOrder's index of the new order ids
+  // We end up with an array of indexes
+  for (let i = 0; i < ids.length; i++) {
+    order.push(ids.indexOf(newIds[i]));
+  }
+
+  // reorder the array
+  return reorderIds(order, targetArray);
+}
+
+// Preform the reordering
+function reorderIds(order, arrayToOrder) {
+  // Get a copy of the array we want to change
+  const temp = arrayToOrder.slice(0);
+
+  // loop through the indexes
+  // use the indexes to place the items in the right place from the copy into the original
+  for (let i = 0; i < arrayToOrder.length; i++) {
+    arrayToOrder[order[i]] = temp[i];
+  }
+
+  return arrayToOrder;
 }

@@ -10,6 +10,17 @@
     </mat-form-field>
     <br />
 
+    <!-- Exercise type order -->
+    <button class="btn btn-sm btn-info" (click)="applyExerciseTypeOrder()">Apply order</button>
+    <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
+      <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
+        <p cdkDrag>{{ exerciseType.name }}</p>
+      </ng-container>
+    </div>
+
+
+
+
 
     <!-- Shuffle -->
     <button class="btn btn-sm btn-info" (click)="shuffle()">Shuffle order of exercises</button>
@@ -25,7 +36,7 @@
 </div>
 
 <!-- Program -->
-<div cdkDropList (cdkDropListDropped)="drop($event)">
+<div cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
   <ng-container *ngIf="exercises$ | async as exercises">
     <!-- Toggle drag and drop -->
     <ng-container *ngIf="exercises.length > 1">
