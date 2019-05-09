@@ -83,6 +83,7 @@ export class ProgramComponent implements OnInit {
     ).subscribe();
   }
 
+  // START HERE
   public applyExerciseTypeOrder(): void {
     combineLatest(
       this.selectedExerciseTypes$,
