@@ -1,3 +1,4 @@
+<!-- Configuration -->
 <div class="row mt-2">
   <div class="col-8">
     <!-- Select exercise type -->
@@ -18,10 +19,6 @@
       </ng-container>
     </div>
 
-
-
-
-
     <!-- Shuffle -->
     <button class="btn btn-sm btn-info" (click)="shuffle()">Shuffle order of exercises</button>
     <br />
@@ -36,7 +33,8 @@
 </div>
 
 <!-- Program -->
-<div cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
+<pp-spinner *ngIf="loading"></pp-spinner>
+<div *ngIf="!loading" cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
   <ng-container *ngIf="exercises$ | async as exercises">
     <!-- Toggle drag and drop -->
     <ng-container *ngIf="exercises.length > 1">

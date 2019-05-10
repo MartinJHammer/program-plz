@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable, BehaviorSubject, combineLatest, merge, pipe, of } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
-import { map, shareReplay, take, switchMap, filter, mergeMap } from 'rxjs/operators';
+import { map, shareReplay, take, switchMap, filter, mergeMap, tap, debounceTime } from 'rxjs/operators';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
@@ -21,6 +21,7 @@ export class ProgramComponent implements OnInit {
   public exercises$ = new BehaviorSubject<Exercise[]>([]);
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
   public dragExercises = false;
+  public loading = false;
 
   constructor(
     public afs: AngularFirestore,
@@ -34,9 +35,11 @@ export class ProgramComponent implements OnInit {
   }
 
   public createProgram(): void {
+    this.toggleLoading();
     this.selectedExerciseTypes$.pipe(
       switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandom(exerciseType.id)))),
       map(exercises => this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []))),
+      tap(() => this.toggleLoading()),
       take(1)
     ).subscribe();
   }
@@ -68,22 +71,25 @@ export class ProgramComponent implements OnInit {
     return merge(random$, retry$);
   }
 
-  public toggleDragExercises() {
+  public toggleDragExercises(): void {
     this.dragExercises = !this.dragExercises;
   }
 
-  public setCurrentExercise(exercise: Exercise) {
+  public setCurrentExercise(exercise: Exercise): void {
     this.currentExercise = exercise;
   }
 
-  public shuffle() {
+  public shuffle(): void {
     const ex = this.exercises$.pipe(
       take(1),
       map(exercises => shuffle(exercises)),
     ).subscribe();
   }
 
-  // START HERE
+  public toggleLoading(): void {
+    this.loading = !this.loading;
+  }
+
   public applyExerciseTypeOrder(): void {
     combineLatest(
       this.selectedExerciseTypes$,
@@ -100,15 +106,15 @@ export class ProgramComponent implements OnInit {
     ).subscribe();
   }
 
-  public trackById(item) {
+  public trackById(item): string {
     return item.id;
   }
 
-  public exerciseDrop(event: CdkDragDrop<string[]>) {
+  public exerciseDrop(event: CdkDragDrop<string[]>): void {
     this.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
-  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>) {
+  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
@@ -116,7 +122,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles (roughly)
    */
-  public differentVersion(exercises: Exercise[], exercise: Exercise) {
+  public differentVersion(exercises: Exercise[], exercise: Exercise): void {
     of(exercise.exerciseTypes).pipe(
       switchMap(exerciseTypeIds => combineLatest(exerciseTypeIds.map(exerciseTypeId => this.getRandom(exerciseTypeId)))),
       map(newExercises => newExercises.reduce((a, b) => a.concat(b), [])),
@@ -134,7 +140,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of lower difficulty, but still targets the same muscles (roughly)
    */
-  public easierVersion() {
+  public easierVersion(): void {
 
   }
 
@@ -142,7 +148,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of higher difficulty, but still targets the same muscles (roughly)
    */
-  public harderVersion() {
+  public harderVersion(): void {
 
   }
 }
