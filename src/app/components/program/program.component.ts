@@ -94,9 +94,7 @@ export class ProgramComponent implements OnInit {
           return exercises.filter(exercise => exercise.exerciseTypes.includes(selectedExercise.id));
         }).reduce((a, b) => a.concat(b), []);
 
-        console.log(orderedExercises);
-
-        this.exercises$.next(orderedExercises);
+        this.exercises$.next(Array.from(new Set(orderedExercises)));
       }),
       take(1)
     ).subscribe();
