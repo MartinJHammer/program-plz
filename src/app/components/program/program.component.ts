@@ -90,7 +90,13 @@ export class ProgramComponent implements OnInit {
       this.exercises$.pipe(take(1))
     ).pipe(
       map(([selectedExercises, exercises]) => {
-        this.exercises$.next(getNewOrder(selectedExercises, exercises));
+        const orderedExercises: Exercise[] = selectedExercises.map(selectedExercise => {
+          return exercises.filter(exercise => exercise.exerciseTypes.includes(selectedExercise.id));
+        }).reduce((a, b) => a.concat(b), []);
+
+        console.log(orderedExercises);
+
+        this.exercises$.next(orderedExercises);
       }),
       take(1)
     ).subscribe();
@@ -141,40 +147,4 @@ export class ProgramComponent implements OnInit {
   public harderVersion() {
 
   }
-}
-
-
-
-function getNewOrder(arrayWithOrder, targetArray) {
-  // Get an identifier from the array you want to base the order on
-  const newIds = arrayWithOrder.map(x => x.id);
-
-  // Get an identifier from the array you want to update
-  const ids = targetArray.map(x => x.id);
-
-  // placeholder for order
-  const order = [];
-
-  // loop through the ids, pushing the arrayToOrder's index of the new order ids
-  // We end up with an array of indexes
-  for (let i = 0; i < ids.length; i++) {
-    order.push(ids.indexOf(newIds[i]));
-  }
-
-  // reorder the array
-  return reorderIds(order, targetArray);
-}
-
-// Preform the reordering
-function reorderIds(order, arrayToOrder) {
-  // Get a copy of the array we want to change
-  const temp = arrayToOrder.slice(0);
-
-  // loop through the indexes
-  // use the indexes to place the items in the right place from the copy into the original
-  for (let i = 0; i < arrayToOrder.length; i++) {
-    arrayToOrder[order[i]] = temp[i];
-  }
-
-  return arrayToOrder;
 }
