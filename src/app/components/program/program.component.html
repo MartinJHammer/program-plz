@@ -53,7 +53,11 @@
         <div class="card-body">
           <div class="row">
             <div class="col-10 mb-2">
+              <!-- START HERE: Currently ALL titles are shown and hidden. The differentVersionLoading boolean must be used via an dictionary or something...  -->
               <h6 class="card-title">{{ exercise.name }}</h6>
+              <!-- *ngIf="!differentVersionLoading" -->
+              <!-- <pp-spinner *ngIf="differentVersionLoading" [spinner]='dot'></pp-spinner> -->
+
               <p class="card-text">3s x failure</p>
             </div>
             <!-- Card info -->

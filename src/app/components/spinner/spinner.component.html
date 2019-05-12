@@ -1,5 +1,13 @@
 <!-- RIPPLING SPINNER -->
-<div class="lds-ripple">
+<div *ngIf="spinner === 'ripple'" class="lds-ripple">
+  <div></div>
+  <div></div>
+</div>
+
+<!-- DOT DOT DOT -->
+<div *ngIf="spinner === 'dot'" class="lds-ellipsis">
+  <div></div>
+  <div></div>
   <div></div>
   <div></div>
 </div>

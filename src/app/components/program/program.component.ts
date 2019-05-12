@@ -22,6 +22,7 @@ export class ProgramComponent implements OnInit {
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
   public dragExercises = false;
   public loading = false;
+  public differentVersionLoading = false;
 
   constructor(
     public afs: AngularFirestore,
@@ -124,6 +125,7 @@ export class ProgramComponent implements OnInit {
    */
   public differentVersion(exercises: Exercise[], exercise: Exercise): void {
     const newExercise$ = of(exercise.exerciseTypes).pipe(
+      tap(() => this.differentVersionLoading = !this.differentVersionLoading),
       switchMap(exerciseTypeIds => combineLatest(exerciseTypeIds.map(exerciseTypeId => this.getRandom(exerciseTypeId)))),
       map(newExercises => newExercises.reduce((a, b) => a.concat(b), [])),
       mergeMap(x => x)
@@ -137,6 +139,7 @@ export class ProgramComponent implements OnInit {
         take(1)
       )),
       map(newExercises => this.exercises$.next(newExercises)),
+      tap(() => this.differentVersionLoading = !this.differentVersionLoading),
       take(5)
     ).subscribe();
   }
