@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
-import { Observable, BehaviorSubject, combineLatest, merge, pipe, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, merge, pipe, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
-import { map, shareReplay, take, switchMap, filter, mergeMap, tap } from 'rxjs/operators';
+import { map, shareReplay, take, switchMap, filter, mergeMap, tap, expand } from 'rxjs/operators';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
@@ -123,23 +123,21 @@ export class ProgramComponent implements OnInit {
    * Exercise is of same difficulty and targets same muscles (roughly)
    */
   public differentVersion(exercises: Exercise[], exercise: Exercise): void {
-    // START HERE: RETRY ON GETTING SAME EXERCISE
-    const exerciseTypeIds$ = of(exercise.exerciseTypes);
-
-    const newExercise$ = exerciseTypeIds$.pipe(
+    const newExercise$ = of(exercise.exerciseTypes).pipe(
       switchMap(exerciseTypeIds => combineLatest(exerciseTypeIds.map(exerciseTypeId => this.getRandom(exerciseTypeId)))),
       map(newExercises => newExercises.reduce((a, b) => a.concat(b), [])),
       mergeMap(x => x)
     );
 
+    const retry$ = newExercise$.pipe(expand(newExercise => newExercise.id === exercise.id ? newExercise$ : EMPTY));
 
-    newExercise$.pipe(
+    retry$.pipe(
       switchMap(newExercise => this.exercises$.pipe(
         map(currentExercises => currentExercises.map(currentExercise => currentExercise.id !== exercise.id ? currentExercise : newExercise)),
         take(1)
       )),
       map(newExercises => this.exercises$.next(newExercises)),
-      take(1)
+      take(5)
     ).subscribe();
   }
 
