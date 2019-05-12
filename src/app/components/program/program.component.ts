@@ -140,7 +140,7 @@ export class ProgramComponent implements OnInit {
       )),
       map(newExercises => this.exercises$.next(newExercises)),
       tap(() => this.differentVersionLoading = !this.differentVersionLoading),
-      take(5)
+      take(10)
     ).subscribe();
   }
 
