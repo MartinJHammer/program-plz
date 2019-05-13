@@ -35,6 +35,8 @@ export class ProgramComponent implements OnInit {
     setInitialExerciseTypes.subscribe();
   }
 
+  // START HERE: Remove exercise!
+
   public createProgram(): void {
     this.toggleLoading();
     this.selectedExerciseTypes$.pipe(
