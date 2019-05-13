@@ -8,6 +8,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
+import { Utilities } from 'src/app/models/utilities';
 
 @Component({
   selector: 'pp-program',
@@ -22,7 +23,6 @@ export class ProgramComponent implements OnInit {
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
   public dragExercises = false;
   public loading = false;
-  public differentVersionLoading = false;
 
   constructor(
     public afs: AngularFirestore,
@@ -55,7 +55,8 @@ export class ProgramComponent implements OnInit {
         return docs.docs.map(e => {
           return {
             id: e.id,
-            ...e.data()
+            ...e.data(),
+            util: new Utilities()
           } as any;
         });
       })
@@ -125,7 +126,7 @@ export class ProgramComponent implements OnInit {
    */
   public differentVersion(exercises: Exercise[], exercise: Exercise): void {
     const newExercise$ = of(exercise.exerciseTypes).pipe(
-      tap(() => this.differentVersionLoading = !this.differentVersionLoading),
+      tap(() => exercise.util.loading = true),
       switchMap(exerciseTypeIds => combineLatest(exerciseTypeIds.map(exerciseTypeId => this.getRandom(exerciseTypeId)))),
       map(newExercises => newExercises.reduce((a, b) => a.concat(b), [])),
       mergeMap(x => x)
@@ -134,12 +135,12 @@ export class ProgramComponent implements OnInit {
     const retry$ = newExercise$.pipe(expand(newExercise => newExercise.id === exercise.id ? newExercise$ : EMPTY));
 
     retry$.pipe(
+      tap(newExercise => newExercise.util.loading = false),
       switchMap(newExercise => this.exercises$.pipe(
         map(currentExercises => currentExercises.map(currentExercise => currentExercise.id !== exercise.id ? currentExercise : newExercise)),
         take(1)
       )),
       map(newExercises => this.exercises$.next(newExercises)),
-      tap(() => this.differentVersionLoading = !this.differentVersionLoading),
       take(10)
     ).subscribe();
   }

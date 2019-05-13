@@ -33,7 +33,7 @@
 </div>
 
 <!-- Program -->
-<pp-spinner *ngIf="loading"></pp-spinner>
+<pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>
 <div *ngIf="!loading" cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
   <ng-container *ngIf="exercises$ | async as exercises">
     <!-- Toggle drag and drop -->
@@ -53,10 +53,9 @@
         <div class="card-body">
           <div class="row">
             <div class="col-10 mb-2">
-              <!-- START HERE: Currently ALL titles are shown and hidden. The differentVersionLoading boolean must be used via an dictionary or something...  -->
-              <h6 class="card-title">{{ exercise.name }}</h6>
-              <!-- *ngIf="!differentVersionLoading" -->
-              <!-- <pp-spinner *ngIf="differentVersionLoading" [spinner]='dot'></pp-spinner> -->
+
+              <h6 *ngIf="!exercise.util.loading" class="card-title">{{ exercise.name }}</h6>
+              <pp-spinner class="exercise-spinner" *ngIf="exercise.util.loading" [spinner]="'dot'"></pp-spinner>
 
               <p class="card-text">3s x failure</p>
             </div>
