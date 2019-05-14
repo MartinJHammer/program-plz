@@ -10,6 +10,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
 import { Utilities } from 'src/app/models/utilities';
 
+declare var $: any;
+
 @Component({
   selector: 'pp-program',
   templateUrl: './program.component.html',
@@ -34,8 +36,6 @@ export class ProgramComponent implements OnInit {
     const setInitialExerciseTypes = this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1));
     setInitialExerciseTypes.subscribe();
   }
-
-  // START HERE: Remove exercise!
 
   public createProgram(): void {
     this.toggleLoading();
@@ -161,5 +161,26 @@ export class ProgramComponent implements OnInit {
    */
   public harderVersion(): void {
 
+  }
+
+  public openRemoveModal(currentExercise: Exercise): void {
+    this.currentExercise = currentExercise;
+    $(() => {
+      $('#removeModal').modal('show');
+    });
+  }
+
+  public closeRemoveModal(): void {
+    $('#removeModal').modal('hide');
+  }
+
+  public removeExercise() {
+    this.exercises$.pipe(
+      take(1),
+      map(exercises => {
+        this.exercises$.next(exercises.filter(exercise => exercise.id !== this.currentExercise.id));
+        this.closeRemoveModal();
+      }),
+    ).subscribe();
   }
 }

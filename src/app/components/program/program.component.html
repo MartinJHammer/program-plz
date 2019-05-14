@@ -77,15 +77,18 @@
           </div>
           <!-- Card actions -->
           <div class="row">
-            <div class="col-4">
+            <div class="col-3">
               <a href="javascript:void(0)" class="card-link"
                 (click)="differentVersion(exercises, exercise);">Replace</a>
             </div>
-            <div class="col-4">
+            <div class="col-3">
               <a href="javascript:void(0)" class=" card-link">Easier</a>
             </div>
-            <div class="col-4">
+            <div class="col-3">
               <a href="javascript:void(0)" class=" card-link">Harder</a>
+            </div>
+            <div class="col-3">
+              <a style="color:red;cursor: pointer;" (click)="openRemoveModal(exercise)">Remove</a>
             </div>
           </div>
         </div>
@@ -111,6 +114,26 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Remove exercise modal -->
+<div *ngIf="currentExercise" class="modal" id="removeModal" tabindex="-1" role="dialog"
+  aria-labelledby="removeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EntryModalTitle">Are you sure you want to remove {{ currentExercise.name }}?
+        </h5>
+      </div>
+      <div class="modal-body">
+        Note: You can add it again via the "Add" option.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="removeExercise(exercise)">Remove</button>
+        <button type="button" class="btn btn-secondary" (click)="closeRemoveModal()">Close</button>
       </div>
     </div>
   </div>
