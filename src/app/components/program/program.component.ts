@@ -122,6 +122,10 @@ export class ProgramComponent implements OnInit {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
+  public addExercise(): void {
+
+  }
+
   /**
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles (roughly)
