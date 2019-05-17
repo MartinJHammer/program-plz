@@ -1,12 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as algoliasearch from 'algoliasearch';
 
-// START HERE: 
-// Install algolia deps in firebase package.json and remove from root package.json
-// Ensure algolia vars are initiated corrected.
-// Update all exercises by writing to them once.
-// Make a test search via this guide (+ another more detaield guide): https://firebase.google.com/docs/functions/config-env
-
 const ALGOLIA_ID = functions.config().algolia.app_id;
 const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
