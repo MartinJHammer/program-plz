@@ -2,23 +2,14 @@
 
 Have a program :)
 
+### Firebase stuff
+*Store env vars*
+firebase functions:config:set  someservice.some_key="123" --project program-plz
+firebase functions:config:get program-plz
 
-10 documents available
+*Update tools - run from functions folder*
+npm install firebase-functions@latest firebase-admin@latest --save
+npm install -g firebase-tools
 
-Need 2 documents
-
-pick random number between 1 and 10 twice
-
-Ensure the two numbers aren't equal
-
-Get stuff
-
----
-
-Get all by type
-Shuffle, etc.
-
-
-
-
-
+*Deploy functions only*
+firebase deploy --only functions
