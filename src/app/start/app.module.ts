@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MatSelectModule } from '@angular/material/select';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
@@ -25,6 +26,7 @@ import { crudComponents } from '../crud/components/crud-components';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFireAuthModule,
     BrowserAnimationsModule,
     ScrollDispatchModule,
     DragDropModule,
