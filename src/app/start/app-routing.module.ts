@@ -9,31 +9,36 @@ import { ExerciseTypesCreateComponent } from '../components/exercise-types/exerc
 import { ExerciseTypesEditComponent } from '../components/exercise-types/exercise-types-edit/exercise-types-edit.component';
 import { ManageComponent } from '../components/manage/manage.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
+import { AuthGuard } from '../route-guards/auth.guard';
+import { UserProfileComponent } from '../components/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
     path: '', component: ProgramComponent
   },
   {
-    path: 'manage', component: ManageComponent
+    path: 'login', component: UserProfileComponent
   },
   {
-    path: 'exercises', component: ExercisesIndexComponent
+    path: 'manage', component: ManageComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'exercises/create', component: ExercisesCreateComponent
+    path: 'exercises', component: ExercisesIndexComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'exercises/edit/:id', component: ExercisesEditComponent
+    path: 'exercises/create', component: ExercisesCreateComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'exercise-types', component: ExerciseTypesIndexComponent
+    path: 'exercises/edit/:id', component: ExercisesEditComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'exercise-types/create', component: ExerciseTypesCreateComponent
+    path: 'exercise-types', component: ExerciseTypesIndexComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'exercise-types/edit/:id', component: ExerciseTypesEditComponent
+    path: 'exercise-types/create', component: ExerciseTypesCreateComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'exercise-types/edit/:id', component: ExerciseTypesEditComponent, canActivate: [AuthGuard]
   },
   { path: '**', component: NotFoundComponent }
 ];

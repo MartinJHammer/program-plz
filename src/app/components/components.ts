@@ -9,6 +9,7 @@ import { ExerciseTypesEditComponent } from './exercise-types/exercise-types-edit
 import { NotFoundComponent } from './not-found/not-found.component';
 import { StartComponent } from './start/start.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const components = [
     StartComponent,
@@ -16,6 +17,7 @@ export const components = [
     ManageComponent,
     NotFoundComponent,
     SpinnerComponent,
+    UserProfileComponent,
     ExercisesIndexComponent,
     ExercisesCreateComponent,
     ExercisesEditComponent,

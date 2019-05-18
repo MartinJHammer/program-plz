@@ -13,3 +13,4 @@ npm install -g firebase-tools
 
 *Deploy functions only*
 firebase deploy --only functions
+firebase deploy --only firestore:rules
