@@ -15,9 +15,9 @@ service cloud.firestore {
       allow read;
     }
 
-    // Only let users edit their own user profile
+    // Only let users read and edit their own user profile
     match /users/{userId} {
-        allow write: if isOwner(userId);
+        allow read, write: if isOwner(userId);
     }
 
     // Reusable function to determine document ownership
