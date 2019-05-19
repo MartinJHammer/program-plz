@@ -1,28 +1,28 @@
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // match /{document=**} {
-    //   allow read, write: if false;
-    // }
-    
-    // Allow anon to read
     match /exercises/{id} {
       allow read;
+      allow write: if getRole('admin') == true;
     }
 
-    // Allow anon to read 
     match /exercise-types/{id} {
       allow read;
+      allow write: if getRole('admin') == true;
     }
 
-    // Only let users read and edit their own user profile
     match /users/{userId} {
-        allow read, write: if isOwner(userId);
+      allow read: if isOwner(userId);
+      allow create: if request.resource.data.roles.keys().hasAny(['admin']) == false;
+      allow update: if getRole('admin') == true;
     }
 
-    // Reusable function to determine document ownership
     function isOwner(userId) {
-        return request.auth.uid == userId
+      return request.auth.uid == userId;
+    }
+
+    function getRole(role) {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role]
     }
   }
 }

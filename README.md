@@ -8,7 +8,7 @@ firebase functions:config:set  someservice.some_key="123" --project program-plz
 firebase functions:config:get program-plz
 
 *Update tools - run from functions folder*
-npm install firebase-functions@latest firebase-admin@latest --save
+npm install firebase-functions@latest --save firebase-admin@latest --save
 npm install -g firebase-tools
 
 *Deploy functions only*

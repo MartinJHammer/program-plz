@@ -2,6 +2,7 @@
   <h3>Howdy, {{ user.displayName }}</h3>
   <!-- <img [src]="user.photoURL"> -->
   <p>UID: {{ user.uid }}</p>
+  <p *ngIf="user.roles">Admin: {{ user.roles.admin }}</p>
   <button class="btn btn-secondary btn-sm" (click)="auth.signOut()">Logout</button>
   <a class="btn btn-primary btn-sm" [routerLink]="['/']">Home</a>
 </div>
