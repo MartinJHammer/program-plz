@@ -1,4 +1,5 @@
 import { firebaseCredentials } from './firebase-credentials';
+import { algoliaCredentials } from './algolia-credentials';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -6,7 +7,8 @@ import { firebaseCredentials } from './firebase-credentials';
 
 export const environment = {
   production: false,
-  firebase: firebaseCredentials
+  firebase: firebaseCredentials,
+  algolia: algoliaCredentials
 };
 
 /*

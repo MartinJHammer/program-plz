@@ -18,12 +18,15 @@ import { pipes } from '../pipes/pipes';
 import { components } from '../components/components';
 import { directives } from '../directives/directives';
 import { crudComponents } from '../crud/components/crud-components';
+import { NgAisModule } from 'angular-instantsearch';
+
 
 @NgModule({
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgAisModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,

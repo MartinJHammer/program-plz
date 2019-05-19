@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
+import { environment } from 'src/environments/environment';
 
 declare var $: any;
 
@@ -29,6 +30,15 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   public currentEntry: Entry;
   public subscriptionHandler = new SubscriptionHandler();
 
+
+  // Search
+  public searchConfig = {
+    ...environment.algolia,
+    indexName: 'exercises'
+  };
+
+  public showResults = false;
+
   constructor(
     public afs: AngularFirestore
   ) { }
@@ -39,6 +49,14 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionHandler.unsubscribe();
+  }
+
+  public searchChanged(query) {
+    if (query.length) {
+      this.showResults = true;
+    } else {
+      this.showResults = false;
+    }
   }
 
   /**

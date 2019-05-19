@@ -1,44 +1,32 @@
 import * as functions from 'firebase-functions';
-// import * as algoliasearch from 'algoliasearch';
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+const env = functions.config();
 
-// const ALGOLIA_ID = functions.config().algolia.app_id;
-// const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
-// const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
-// const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+import * as algoliasearch from 'algoliasearch';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions.https.onRequest((request, response) => {
-    response.send("Hello from Firebase!");
-});
+// Initialize the Algolia Client
+const client = algoliasearch(env.algolia.app_id, env.algolia.api_key);
+const exercisesIndex = client.initIndex('exercises');
 
+exports.indexExercise = functions.firestore
+    .document('exercises/{id}')
+    .onCreate((snap, context) => {
+        const data = snap.data();
+        const objectID = snap.id;
 
-// // Update the search index every time a blog post is written.
-// exports.onExerciseCreated = functions.firestore.document('exercises/{id}').onCreate((snap, context) => {
-//     // Get the exercise document
-//     const exercise = snap.data();
+        // Add the data to the algolia index
+        return exercisesIndex.addObject({
+            objectID,
+            ...data
+        });
+    });
 
-//     // Add an 'objectID' field which Algolia requires
-//     if (exercise) {
-//         exercise.objectID = context.params.id;
-//         // Write to the algolia index
-//         const index = client.initIndex('exercises');
-//         return index.saveObject(exercise);
-//     }
-//     return exercise;
-// });
+exports.unindexExercise = functions.firestore
+    .document('exercises/{id}')
+    .onDelete((snap, context) => {
+        const objectId = snap.id;
 
-// exports.searchExercises = functions.firestore.document('search/exercises/{}').onCreate((snap, context) => {
-//     const index = client.initIndex('exercises');
-//     const query = context.params.query;
-
-//     // Perform an Algolia search:
-//     // https://www.algolia.com/doc/api-reference/api-methods/search/
-//     index.search({ query }).then((responses) => {
-//         // Response from Algolia:
-//         // https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
-//         console.log(responses.hits);
-//         return responses.hits;
-//     });
-// });
+        // Delete an ID from the index
+        return exercisesIndex.deleteObject(objectId);
+    });

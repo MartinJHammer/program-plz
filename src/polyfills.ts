@@ -61,3 +61,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+// Prevents algolia instant search to throw on application startup
+(window as any).process = {
+    env: { DEBUG: undefined },
+};
