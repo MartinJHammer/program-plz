@@ -11,13 +11,17 @@ import { ManageComponent } from '../components/manage/manage.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
 import { AuthGuard } from '../route-guards/auth.guard';
 import { UserProfileComponent } from '../components/user-profile/user-profile.component';
+import { LoginComponent } from '../components/login/login.component';
 
 const routes: Routes = [
   {
     path: '', component: ProgramComponent
   },
   {
-    path: 'login', component: UserProfileComponent
+    path: 'login', component: LoginComponent
+  },
+  {
+    path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard]
   },
   {
     path: 'manage', component: ManageComponent, canActivate: [AuthGuard]

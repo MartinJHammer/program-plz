@@ -9,6 +9,8 @@ import { getRandomNumber } from 'src/app/helpers/random-number';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
 import { Utilities } from 'src/app/models/utilities';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/user';
 
 declare var $: any;
 
@@ -28,7 +30,8 @@ export class ProgramComponent implements OnInit {
 
   constructor(
     public afs: AngularFirestore,
-    public db: DatabaseService<any>
+    public db: DatabaseService<any>,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
