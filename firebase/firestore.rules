@@ -3,12 +3,12 @@ service cloud.firestore {
 
     match /exercises/{id} {
       allow read;
-      allow write: if getRole('admin') == true;
+      allow write, delete: if getRole('admin') == true;
     }
 
     match /exercise-types/{id} {
       allow read;
-      allow write: if getRole('admin') == true;
+      allow write, delete: if getRole('admin') == true;
     }
 
     match /users/{userId} {
