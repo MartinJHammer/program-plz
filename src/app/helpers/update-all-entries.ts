@@ -14,13 +14,41 @@ export const addRandomToAll = (entries: Entry[]): Entry[] => {
 };
 
 /**
+ * 1. Remember to install algoliasearch (DO NOT USE --save)
+ * 2. Import here: import * as algoliasearch from 'algoliasearch';
+ * 3. Update below path to indice (algolia index name) you want
+ * 4. Get the Algolia Admin API Key and replace '...' with it. THIS MUST NOT BE TRACKED!!!
+ * 5. Call in any component >>> updateAllEntries('exercises', this.db, indexToAlgolia, false);
+ */
+export const indexToAlgolia = (entries: Entry[]): Entry[] => {
+    return entries;
+    // Initialize the Algolia Client
+    // const client = algoliasearch(environment.algolia.appId, '...');
+    // const index = client.initIndex('exercises');
+
+    // return entries.map(entry => {
+    //     // Add the data to the algolia index
+    //     console.log('adding');
+    //     index.addObject({
+    //         objectID: entry.id,
+    //         ...entry
+    //     });
+    //     return entry;
+    // });
+};
+
+
+/**
  * Adds a random number to all documents in a collection.
  */
-export const updateAllEntries = (collectionPath: string, db: DatabaseService<any>, logic: (entries: Entry[]) => Entry[]) => {
+export const updateAllEntries = (collectionPath: string, db: DatabaseService<any>, logic: (entries: Entry[]) => Entry[], updateOnFirestore: boolean = true) => {
     db.getAll(collectionPath).pipe(
         map(entries => {
             const updatedEntries = logic(entries);
-            updatedEntries.forEach(entry => this.db.update(collectionPath + '/' + entry.id, entry));
+
+            if (updateOnFirestore) {
+                updatedEntries.forEach(entry => this.db.update(collectionPath + '/' + entry.id, entry));
+            }
         }),
         take(1),
     ).subscribe();
