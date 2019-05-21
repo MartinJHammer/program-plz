@@ -6,6 +6,7 @@ import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operator
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -30,21 +31,18 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   public currentEntry: Entry;
   public subscriptionHandler = new SubscriptionHandler();
 
-
-  // Search
-  public searchConfig = {
-    ...environment.algolia,
-    indexName: 'exercises'
-  };
-
-  public showResults = false;
+  @Input() public searchEnabled = false;
+  public searchConfig: any;
+  public showSearchResults = false;
 
   constructor(
-    public afs: AngularFirestore
+    public afs: AngularFirestore,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
     this.initList();
+    this.setSearchConfig();
   }
 
   ngOnDestroy(): void {
@@ -53,10 +51,17 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   public searchChanged(query) {
     if (query.length) {
-      this.showResults = true;
+      this.showSearchResults = true;
     } else {
-      this.showResults = false;
+      this.showSearchResults = false;
     }
+  }
+
+  public setSearchConfig() {
+    this.searchConfig = {
+      ...environment.algolia,
+      indexName: this.collectionName
+    };
   }
 
   /**

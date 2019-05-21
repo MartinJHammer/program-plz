@@ -13,21 +13,20 @@
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
 
     <!-- Search -->
-    <ais-instantsearch [config]="searchConfig">
+    <ais-instantsearch *ngIf="searchEnabled" [config]="searchConfig">
 
-      <ais-search-box (change)="searchChanged($event)"></ais-search-box>
+      <ais-search-box [autofocus]="false" (change)="searchChanged($event)"></ais-search-box>
 
-      <ais-hits *ngIf="showResults">
+      <ais-hits *ngIf="showSearchResults">
         <ng-template let-hits="hits">
-          <div *ngFor="let hit of hits">
-
-            <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
-
-            <div class="bio">
-              {{ hit.bio | slice:0:30 }}...
-            </div>
-
-          </div>
+          <ng-container *ngFor="let hit of hits">
+            <pre>
+            {{ hit | json }}
+            </pre>
+            <a [routerLink]="['edit', hit.id]" target="_blank">
+              <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
+            </a>
+          </ng-container>
         </ng-template>
       </ais-hits>
     </ais-instantsearch>
