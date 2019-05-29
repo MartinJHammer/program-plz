@@ -16,16 +16,13 @@
     <ais-instantsearch *ngIf="searchEnabled" [config]="searchConfig">
 
       <ais-search-box [autofocus]="false" (change)="searchChanged($event)"></ais-search-box>
-
       <ais-hits *ngIf="showSearchResults">
         <ng-template let-hits="hits">
           <ng-container *ngFor="let hit of hits">
-            <pre>
-            {{ hit | json }}
-            </pre>
-            <a [routerLink]="['edit', hit.id]" target="_blank">
+            <a class="algolia-hit" [routerLink]="['edit', hit.id]">
               <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
             </a>
+            <br />
           </ng-container>
         </ng-template>
       </ais-hits>

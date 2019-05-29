@@ -50,10 +50,12 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   }
 
   public searchChanged(query) {
-    if (query.length) {
-      this.showSearchResults = true;
-    } else {
-      this.showSearchResults = false;
+    if (typeof query === 'string') {
+      if (query.length) {
+        this.showSearchResults = true;
+      } else {
+        this.showSearchResults = false;
+      }
     }
   }
 
