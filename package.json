@@ -4,6 +4,8 @@
   "scripts": {
     "build": "ng build --prod",
     "pp:deploy": "npm run build && cd firebase && firebase deploy",
+    "pp:d:f": "cd firebase && firebase deploy --only functions",
+    "pp:d:r": "cd firebase && firebase deploy --only firestore:rules",
     "test": "cd firebase && firebase deploy"
   },
   "private": true,
