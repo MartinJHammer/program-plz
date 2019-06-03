@@ -16,8 +16,6 @@ declare var $: any;
   styleUrls: ['./crud-index.component.scss']
 })
 export class CrudIndexComponent implements OnInit, OnDestroy {
-
-
   // Infinite scroll
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
   public collectionEnd = false;

@@ -125,13 +125,19 @@ export class ProgramComponent implements OnInit {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
-  public addExercise(): void {
-
+  // START HERE: Add exercise via algolia search
+  // 1. Refactor search code in crud index into own component.
+  // 2. Create add button in program html
+  // 3. When clicking a hit, add it via this function
+  public addExercise(exercise: Exercise): void {
+    const exercises = this.exercises$.getValue();
+    exercises.unshift(exercise);
+    this.exercises$.next(exercises);
   }
 
   /**
    * Replaces an exercise in the program with another exercise.
-   * Exercise is of same difficulty and targets same muscles (roughly)
+   * Exercise is of same difficulty and targets same muscles
    */
   public differentVersion(exercises: Exercise[], exercise: Exercise): void {
     const newExercise$ = of(exercise.exerciseTypes).pipe(
