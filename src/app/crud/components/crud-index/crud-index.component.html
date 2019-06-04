@@ -12,21 +12,7 @@
     <hr />
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
 
-    <!-- Search -->
-    <ais-instantsearch *ngIf="searchEnabled" [config]="searchConfig">
-
-      <ais-search-box [autofocus]="false" (change)="searchChanged($event)"></ais-search-box>
-      <ais-hits *ngIf="showSearchResults">
-        <ng-template let-hits="hits">
-          <ng-container *ngFor="let hit of hits">
-            <a class="algolia-hit" [routerLink]="['edit', hit.id]">
-              <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
-            </a>
-            <br />
-          </ng-container>
-        </ng-template>
-      </ais-hits>
-    </ais-instantsearch>
+    <pp-search [collectionName]="collectionName"></pp-search>
 
     <!-- Entry list -->
     <ng-container *ngIf="entries$ | async as entries">

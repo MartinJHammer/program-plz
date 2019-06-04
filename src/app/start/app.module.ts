@@ -19,6 +19,7 @@ import { components } from '../components/components';
 import { directives } from '../directives/directives';
 import { crudComponents } from '../crud/components/crud-components';
 import { NgAisModule } from 'angular-instantsearch';
+import { searchComponents } from '../search/search-components';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { NgAisModule } from 'angular-instantsearch';
   declarations: [
     ...components,
     ...crudComponents,
+    ...searchComponents,
     ...directives,
     ...pipes
   ],

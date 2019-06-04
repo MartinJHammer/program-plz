@@ -40,28 +40,10 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initList();
-    this.setSearchConfig();
   }
 
   ngOnDestroy(): void {
     this.subscriptionHandler.unsubscribe();
-  }
-
-  public searchChanged(query) {
-    if (typeof query === 'string') {
-      if (query.length) {
-        this.showSearchResults = true;
-      } else {
-        this.showSearchResults = false;
-      }
-    }
-  }
-
-  public setSearchConfig() {
-    this.searchConfig = {
-      ...environment.algolia,
-      indexName: this.collectionName
-    };
   }
 
   /**
