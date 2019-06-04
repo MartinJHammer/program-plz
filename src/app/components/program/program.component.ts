@@ -20,7 +20,6 @@ declare var $: any;
   styleUrls: ['./program.component.scss']
 })
 export class ProgramComponent implements OnInit {
-
   public allExerciseTypes$: Observable<ExerciseType[]>;
   public currentExercise: Exercise;
   public exercises$ = new BehaviorSubject<Exercise[]>([]);
@@ -126,13 +125,22 @@ export class ProgramComponent implements OnInit {
   }
 
   // START HERE: Add exercises via algolia search
-  // 1. Refactor search code in crud index into own component.
-  // 2. Create add button in program html
-  // 3. When add is clicked, open a modal that
+  // 1. When add is clicked, open a modal that
   //   - Has a search bar.
   //   - Hits clicked are added to a list
   //   - Exercise can be removed from the list
   //   - Button at bottom says "Done" (add above exercises to program); when clicked, adds all exercies to the program, clears the list, and closes the modal.
+
+  public openAddModal(): void {
+    $(() => {
+      $('#addModal').modal('show');
+    });
+  }
+
+  public closeAddModal(): void {
+    $('#addModal').modal('hide');
+  }
+
   public addExercise(exercises: Exercise[]): void {
     this.exercises$.next(exercises.concat(this.exercises$.getValue()));
   }

@@ -45,16 +45,27 @@
 <pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>
 <div *ngIf="!loading" cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
   <ng-container *ngIf="exercises$ | async as exercises">
-    <!-- Toggle drag and drop -->
+
+    <!-- Program actions -->
     <ng-container *ngIf="exercises.length > 1">
       <br />
+      <!-- Toggle drag and drop -->
       <button class="btn btn-sm btn-info" (click)="toggleDragExercises()">
         <span *ngIf="dragExercises">Disable drag and drop</span>
         <span *ngIf="!dragExercises">Enable exercise drag and drop</span>
       </button>
       <br />
       <br />
+      <!-- Add exercise -->
+      <button class="btn btn-sm btn-info" (click)="openAddModal()">
+        <span>Add exercises</span>
+      </button>
+      <br />
+      <br />
     </ng-container>
+
+
+
 
     <!-- Exercises -->
     <ng-container *ngFor="let exercise of exercises; trackBy: trackById">
@@ -131,6 +142,26 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add exercise modal -->
+<div class="modal" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Choose exercises to add</h5>
+      </div>
+      <div class="modal-body">
+        <pp-search [collectionName]="'exercises'"></pp-search>
+
+        Note: Extra info
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="addExercises(exercises)">Add</button>
+        <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Close</button>
       </div>
     </div>
   </div>
