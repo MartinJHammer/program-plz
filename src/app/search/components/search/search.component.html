@@ -5,7 +5,7 @@
   <ais-hits *ngIf="showSearchResults">
     <ng-template let-hits="hits">
       <ng-container *ngFor="let hit of hits">
-        <a class="algolia-hit" [routerLink]="['edit', hit.id]">
+        <a class="algolia-hit" (click)="clickedHit(hit)">
           <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
         </a>
         <br />

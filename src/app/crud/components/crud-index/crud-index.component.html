@@ -12,7 +12,7 @@
     <hr />
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
 
-    <pp-search [collectionName]="collectionName"></pp-search>
+    <pp-search [collectionName]="collectionName" (selectedHit)="routeToHit($event)"></pp-search>
 
     <!-- Entry list -->
     <ng-container *ngIf="entries$ | async as entries">

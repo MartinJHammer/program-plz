@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -11,6 +11,7 @@ export class SearchComponent implements OnInit {
   @Input() public collectionName: string;
   public searchConfig: any;
   public showSearchResults = false;
+  @Output() public selectedHit = new EventEmitter();
 
   constructor() { }
 
@@ -33,6 +34,10 @@ export class SearchComponent implements OnInit {
       ...environment.algolia,
       indexName: this.collectionName
     };
+  }
+
+  public clickedHit(hit: any) {
+    this.selectedHit.emit(hit);
   }
 
 }

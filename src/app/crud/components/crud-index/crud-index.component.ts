@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
 declare var $: any;
@@ -44,6 +43,10 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionHandler.unsubscribe();
+  }
+
+  public routeToHit(hit: any) {
+    this.router.navigate([`${this.collectionName}/edit`, hit.id]);
   }
 
   /**
