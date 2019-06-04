@@ -29,8 +29,6 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   public subscriptionHandler = new SubscriptionHandler();
 
   @Input() public searchEnabled = false;
-  public searchConfig: any;
-  public showSearchResults = false;
 
   constructor(
     public afs: AngularFirestore,
