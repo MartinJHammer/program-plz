@@ -147,7 +147,7 @@
   </div>
 </div>
 
-<!-- Add exercise modal -->
+<!-- Add exercises modal -->
 <div class="modal" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -155,12 +155,15 @@
         <h5 class="modal-title">Choose exercises to add</h5>
       </div>
       <div class="modal-body">
-        <pp-search [collectionName]="'exercises'"></pp-search>
+        <pp-search [collectionName]="'exercises'" (selectedHit)=addToAdding($event)></pp-search>
 
-        Note: Extra info
+        <ng-container *ngFor="let exercise of exercisesToAdd">
+          <p>{{ exercise.name }} - <span style="color: red;" (click)="removeFromAdding(exercise)">remove</span></p>
+        </ng-container>
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="addExercises(exercises)">Add</button>
+        <button type="button" class="btn btn-danger" (click)="addExercises()">Add</button>
         <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Close</button>
       </div>
     </div>

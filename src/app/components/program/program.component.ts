@@ -11,6 +11,7 @@ import { shuffle } from 'src/app/helpers/shuffle';
 import { Utilities } from 'src/app/models/utilities';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
+import { instantiateEntry } from 'src/app/helpers/instantiate-entry';
 
 declare var $: any;
 
@@ -26,6 +27,7 @@ export class ProgramComponent implements OnInit {
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
   public dragExercises = false;
   public loading = false;
+  public exercisesToAdd: Exercise[] = [];
 
   constructor(
     public afs: AngularFirestore,
@@ -138,11 +140,22 @@ export class ProgramComponent implements OnInit {
   }
 
   public closeAddModal(): void {
+    this.exercisesToAdd = [];
     $('#addModal').modal('hide');
   }
 
-  public addExercise(exercises: Exercise[]): void {
-    this.exercises$.next(exercises.concat(this.exercises$.getValue()));
+  public addToAdding(exercise: Exercise) {
+    this.exercisesToAdd.push(new Exercise(exercise));
+  }
+
+  public removeFromAdding(exercise: Exercise) {
+    this.exercisesToAdd = this.exercisesToAdd.filter(x => x.id !== exercise.id);
+  }
+
+  public addExercises(): void {
+    this.exercises$.next(this.exercisesToAdd.concat(this.exercises$.getValue()));
+    this.exercisesToAdd = [];
+    this.closeAddModal();
   }
 
   /**

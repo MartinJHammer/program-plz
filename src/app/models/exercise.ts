@@ -1,5 +1,4 @@
 import { Entry } from './entry';
-import { ExerciseType } from './exercise-type';
 
 export class Exercise extends Entry {
     public name: string;
@@ -53,7 +52,7 @@ export class Exercise extends Entry {
     public qualitiesTrained: any[];
 
     constructor(values: Partial<Exercise>) {
-        super();
+        super(values);
         Object.assign(this, values);
     }
 }

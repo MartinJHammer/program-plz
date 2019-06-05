@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-
+  @ViewChild('searchBox') searchbox: any; // NgAisSearchBox;
   @Input() public collectionName: string;
   public searchConfig: any;
   public showSearchResults = false;
@@ -17,6 +17,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.setSearchConfig();
+
   }
 
   public searchChanged(query) {
@@ -38,6 +39,8 @@ export class SearchComponent implements OnInit {
 
   public clickedHit(hit: any) {
     this.selectedHit.emit(hit);
+    this.showSearchResults = false;
+    this.searchbox.searchBox.nativeElement.value = '';
   }
 
 }
