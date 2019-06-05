@@ -10,8 +10,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
 import { Utilities } from 'src/app/models/utilities';
 import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/models/user';
-import { instantiateEntry } from 'src/app/helpers/instantiate-entry';
 
 declare var $: any;
 
