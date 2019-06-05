@@ -126,13 +126,6 @@ export class ProgramComponent implements OnInit {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
-  // START HERE: Add exercises via algolia search
-  // 1. When add is clicked, open a modal that
-  //   - Has a search bar.
-  //   - Hits clicked are added to a list
-  //   - Exercise can be removed from the list
-  //   - Button at bottom says "Done" (add above exercises to program); when clicked, adds all exercies to the program, clears the list, and closes the modal.
-
   public openAddModal(): void {
     $(() => {
       $('#addModal').modal('show');
