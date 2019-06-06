@@ -103,7 +103,7 @@ export class ProgramComponent implements OnInit {
     ).pipe(
       map(([selectedExercises, exercises]) => {
         const orderedExercises: Exercise[] = selectedExercises.map(selectedExercise => {
-          return exercises.filter(exercise => exercise.exerciseTypes.includes(selectedExercise.id));
+          return exercises.filter(exercise => exercise.exerciseTypeId === selectedExercise.id);
         }).reduce((a, b) => a.concat(b), []);
 
         this.exercises$.next(Array.from(new Set(orderedExercises)));
@@ -154,10 +154,9 @@ export class ProgramComponent implements OnInit {
    * Exercise is of same difficulty and targets same muscles
    */
   public differentVersion(exercises: Exercise[], exercise: Exercise): void {
-    const newExercise$ = of(exercise.exerciseTypes).pipe(
+    const newExercise$ = of(exercise.exerciseTypeId).pipe(
       tap(() => exercise.util.loading = true),
-      switchMap(exerciseTypeIds => combineLatest(exerciseTypeIds.map(exerciseTypeId => this.getRandom(exerciseTypeId)))),
-      map(newExercises => newExercises.reduce((a, b) => a.concat(b), [])),
+      switchMap(exerciseTypeId => this.getRandom(exerciseTypeId)),
       mergeMap(x => x)
     );
 
