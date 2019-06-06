@@ -5,7 +5,7 @@ export class Exercise extends Entry {
     public alternativeNames: string[];
     public targetMuscles: any[];
     public equipment: any[];
-    public exerciseTypes: string[] = [];
+    public exerciseType: string;
 
     /**
      * Order in which the exercise appears in the program
