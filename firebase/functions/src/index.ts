@@ -18,6 +18,7 @@ exports.indexExercise = functions.firestore
     .onCreate((snap, context) => {
         // Add the data to the algolia index
         return exercisesIndex.addObject({
+            id: snap.id,
             objectID: snap.id,
             ...snap.data()
         });

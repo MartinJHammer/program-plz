@@ -8,7 +8,7 @@ export class ExerciseFields {
     public fields: Field[] = [
         { key: 'id', type: FieldTypes.hidden },
         { key: 'name', value: '', placeholder: 'Enter exercise name', type: FieldTypes.string },
-        { key: 'exerciseType', collection: 'exercise-types', displayKey: 'name', value: null, type: FieldTypes.selectField } as SelectField
+        { key: 'exerciseTypeId', collection: 'exercise-types', displayKey: 'name', value: null, type: FieldTypes.selectField } as SelectField
     ];
 }
 
