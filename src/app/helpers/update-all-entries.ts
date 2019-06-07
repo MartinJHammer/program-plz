@@ -37,6 +37,19 @@ export const indexToAlgolia = (entries: Entry[]): Entry[] => {
     // });
 };
 
+/**
+ * Remove prop from all
+ */
+export const removePropFromAll = (collectionPath: string, propName: string, db: DatabaseService<any>) => {
+    return db.getAll(collectionPath).pipe(
+        take(1),
+        map(entries => entries.map(entry => {
+            db.removeFieldValue(collectionPath + '/' + entry.id, propName);
+            return entry;
+        }))
+    ).subscribe();
+};
+
 
 /**
  * Adds a random number to all documents in a collection.
