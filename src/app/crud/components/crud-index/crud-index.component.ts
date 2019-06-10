@@ -52,6 +52,8 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
    */
   public initList(): void {
     const offset$ = this.offset.pipe(throttleTime(500));
+
+    // START HERE: BUILD QUERY VIA UI + TURN FILTERING ON/OFF VIA UI
     const query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
     const noExerciseTypeIdQuery$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.where('exerciseTypeId', '==', null).orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
 

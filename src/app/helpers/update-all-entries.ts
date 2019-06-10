@@ -72,7 +72,8 @@ export const removePropFromAll = (collectionPath: string, propName: string, db: 
     return db.getAll(collectionPath).pipe(
         take(1),
         map(entries => entries.map(entry => {
-            db.removeFieldValue(collectionPath + '/' + entry.id, propName);
+            // Incomment when needed. Same is needed for db.removeFieldValue
+            // db.removeFieldValue(collectionPath + '/' + entry.id, propName);
             return entry;
         }))
     ).subscribe();

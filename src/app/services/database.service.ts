@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { firestore } from 'firebase';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService<T> {
@@ -61,9 +60,10 @@ export class DatabaseService<T> {
         return this.afs.doc(path).delete();
     }
 
-    public removeFieldValue(path: string, field: string): Promise<void> {
-        const remove = {};
-        remove[field] = firestore.FieldValue.delete();
-        return this.afs.doc(path).update(remove);
-    }
+    // Incomment when needed.
+    // public removeFieldValue(path: string, field: string): Promise<void> {
+    //     const remove = {};
+    //     remove[field] = FieldValue.delete();
+    //     return this.afs.doc(path).update(remove);
+    // }
 }
