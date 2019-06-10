@@ -4,6 +4,34 @@ import { Entry } from '../models/entry';
 import { getRandomNumber } from './random-number';
 
 /**
+ * Updates all documents in a collection with provided logic.
+ */
+export const updateAllEntries = (collectionPath: string, db: DatabaseService<any>, logic: (entries: Entry[]) => Entry[], updateOnFirestore: boolean = true) => {
+    db.getAll(collectionPath).pipe(
+        map(entries => {
+            const updatedEntries = logic(entries);
+
+            if (updateOnFirestore) {
+                updatedEntries.forEach(entry => db.update(collectionPath + '/' + entry.id, entry));
+            }
+        }),
+        take(1),
+    ).subscribe();
+};
+
+/**
+ * Adds a specific field IF IT IS UNDEFINED OR NULL. Usage example: updateAllEntries('exercises', this.db, addFieldForAll('exerciseTypeId', null));;
+ */
+export const addFieldForAll = (fieldSelector: string, value: any): any => {
+    return (entries: Entry[]): Entry[] => {
+        return entries.map(entry => {
+            entry[fieldSelector] = entry[fieldSelector] ? entry[fieldSelector] : value;
+            return entry;
+        });
+    }
+};
+
+/**
  * Usage example: updateAllEntries('exercises', this.db, addRandomToAll);
  */
 export const addRandomToAll = (entries: Entry[]): Entry[] => {
@@ -51,18 +79,4 @@ export const removePropFromAll = (collectionPath: string, propName: string, db: 
 };
 
 
-/**
- * Adds a random number to all documents in a collection.
- */
-export const updateAllEntries = (collectionPath: string, db: DatabaseService<any>, logic: (entries: Entry[]) => Entry[], updateOnFirestore: boolean = true) => {
-    db.getAll(collectionPath).pipe(
-        map(entries => {
-            const updatedEntries = logic(entries);
 
-            if (updateOnFirestore) {
-                updatedEntries.forEach(entry => this.db.update(collectionPath + '/' + entry.id, entry));
-            }
-        }),
-        take(1),
-    ).subscribe();
-};

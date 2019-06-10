@@ -51,18 +51,21 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
    * Initial stream that listens to offset, and merges in new values.
    */
   public initList(): void {
-    this.subscriptionHandler.register(this.offset.pipe(
-      throttleTime(500), // prevent sending redundant requests
-      mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get().pipe(
-        tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
-        map(snapShot => snapShot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })))
+    const offset$ = this.offset.pipe(throttleTime(500));
+    const query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
+    const noExerciseTypeIdQuery$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.where('exerciseTypeId', '==', null).orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
+
+    this.subscriptionHandler.register(noExerciseTypeIdQuery$.pipe(
+      tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
+      map(snapShot => snapShot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })
       )),
       scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
       map(entries => this.entries$.next(entries))
     ).subscribe());
+
 
 
     this.subscriptionHandler.register(this.deleting$.pipe(

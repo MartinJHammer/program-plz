@@ -34,6 +34,8 @@ export class ProgramComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+
     this.allExerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
     const setInitialExerciseTypes = this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1));
     setInitialExerciseTypes.subscribe();
