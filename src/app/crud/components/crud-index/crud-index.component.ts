@@ -48,7 +48,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
 
   public initList(): void {
-    // START HERE: BUILD QUERY VIA UI + TURN FILTERING ON/OFF VIA UI
+    // START HERE: Add exercise types to all exercises. Check if program works.
     this.applyFilters();
 
     this.subscriptionHandler.register(this.deleting$.pipe(
