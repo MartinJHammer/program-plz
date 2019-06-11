@@ -11,6 +11,9 @@
     </div>
     <hr />
     <a class="btn btn-success" [routerLink]="['create']">Create</a>
+    <label for="filter-no-exercise-type"></label>
+    <input id="filter-no-exercise-type" [(ngModel)]="filterNoExerciseType" type="checkbox" />
+    <button (click)="applyFilters()">Filter</button>
 
     <pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)"></pp-search>
 

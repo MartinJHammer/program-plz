@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Entry } from 'src/app/models/entry';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, SubscriptionLike } from 'rxjs';
 import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
@@ -22,6 +22,9 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   public batchSize = 10;
   public entries$ = new BehaviorSubject([]);
   public deleting$ = new BehaviorSubject(undefined);
+  public query$: Observable<QuerySnapshot<any>>;
+  public querySub$: SubscriptionLike;
+  public filterNoExerciseType = false;
 
   @Input() public collectionName: string;
   @Input() public identifier: string;
@@ -43,21 +46,20 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     this.subscriptionHandler.unsubscribe();
   }
 
-  public routeToHit(hit: any) {
-    this.router.navigate([`${this.collectionName}/edit`, hit.id]);
+
+  public initList(): void {
+    // START HERE: BUILD QUERY VIA UI + TURN FILTERING ON/OFF VIA UI
+    this.applyFilters();
+
+    this.subscriptionHandler.register(this.deleting$.pipe(
+      switchMap(deleting => this.entries$.pipe(
+        map(entries => this.entries$.next(entries.filter(x => x.id !== (deleting && deleting.id))))
+      ))
+    ).subscribe());
   }
 
-  /**
-   * Initial stream that listens to offset, and merges in new values.
-   */
-  public initList(): void {
-    const offset$ = this.offset.pipe(throttleTime(500));
-
-    // START HERE: BUILD QUERY VIA UI + TURN FILTERING ON/OFF VIA UI
-    const query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
-    const noExerciseTypeIdQuery$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref.where('exerciseTypeId', '==', null).orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
-
-    this.subscriptionHandler.register(noExerciseTypeIdQuery$.pipe(
+  public executeQuery() {
+    this.querySub$ = this.query$.pipe(
       tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
       map(snapShot => snapShot.docs.map(doc => ({
         id: doc.id,
@@ -65,16 +67,31 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
       })
       )),
       scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
-      map(entries => this.entries$.next(entries))
-    ).subscribe());
+      map(entries => this.entries$.next(entries)),
+    ).subscribe();
+  }
+
+  public applyFilters() {
+    this.querySub$ ? this.querySub$.unsubscribe() : this.query$ = undefined;
+    this.entries$.next([]);
+    const offset$ = this.offset.pipe(throttleTime(500));
+    this.offset.next(null);
+    this.deleting$.next(undefined);
+
+    if (this.filterNoExerciseType) {
+      this.query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref
+        .where('exerciseTypeId', '==', null).orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
+    } else {
+      this.query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref
+        .orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
+    }
+
+    this.executeQuery();
+  }
 
 
-
-    this.subscriptionHandler.register(this.deleting$.pipe(
-      switchMap(deleting => this.entries$.pipe(
-        map(entries => this.entries$.next(entries.filter(x => x.id !== (deleting && deleting.id))))
-      ))
-    ).subscribe());
+  public routeToHit(hit: any) {
+    this.router.navigate([`${this.collectionName}/edit`, hit.id]);
   }
 
   /**
