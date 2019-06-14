@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable, BehaviorSubject, combineLatest, merge, pipe, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
@@ -10,6 +10,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
 import { Utilities } from 'src/app/models/utilities';
 import { AuthService } from 'src/app/services/auth.service';
+import { MatSelect } from '@angular/material/select';
 
 declare var $: any;
 
@@ -23,6 +24,7 @@ export class ProgramComponent implements OnInit {
   public currentExercise: Exercise;
   public exercises$ = new BehaviorSubject<Exercise[]>([]);
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
+  // @ViewChild('exerciseTypes') public exerciseTypesList: MatSelect;
   public dragExercises = false;
   public loading = false;
   public exercisesToAdd: Exercise[] = [];
@@ -34,11 +36,19 @@ export class ProgramComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-
     this.allExerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
     const setInitialExerciseTypes = this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1));
     setInitialExerciseTypes.subscribe();
+  }
+
+  // START HERE: Make (de)select work
+  public selectAllExerciseTypes() {
+    // console.log(this.exerciseTypesList);
+    this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
+  }
+
+  public deSelectAllExerciseTypes() {
+    this.selectedExerciseTypes$.next([]);
   }
 
   public createProgram(): void {
