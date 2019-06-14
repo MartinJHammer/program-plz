@@ -53,8 +53,9 @@ export class ProgramComponent implements OnInit {
 
   public getRandom(exerciseTypeId: string): Observable<Exercise[]> {
     const randomNumber = getRandomNumber();
-    const request$ = this.afs.collection('exercises', ref => ref.where('random', '>=', randomNumber).orderBy('random').where('exerciseTypes', 'array-contains', exerciseTypeId).orderBy('id').limit(1)).get();
-    const retryRequest$ = this.afs.collection('exercises', ref => ref.where('random', '<=', randomNumber).orderBy('random', 'desc').where('exerciseTypes', 'array-contains', exerciseTypeId).orderBy('id').limit(1)).get();
+
+    const request$ = this.afs.collection('exercises', ref => ref.where('random', '>=', randomNumber).orderBy('random').where('exerciseTypeId', '==', exerciseTypeId).orderBy('id').limit(1)).get();
+    const retryRequest$ = this.afs.collection('exercises', ref => ref.where('random', '<=', randomNumber).orderBy('random', 'desc').where('exerciseTypeId', '==', exerciseTypeId).orderBy('id').limit(1)).get();
 
     const docMap = pipe(
       map((docs: QuerySnapshot<any>) => {
@@ -155,7 +156,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles
    */
-  public differentVersion(exercises: Exercise[], exercise: Exercise): void {
+  public differentVersion(exercises: Exercise[], exercise: Exercise, exerciseIndex: number): void {
     const newExercise$ = of(exercise.exerciseTypeId).pipe(
       tap(() => exercise.util.loading = true),
       switchMap(exerciseTypeId => this.getRandom(exerciseTypeId)),
@@ -167,14 +168,16 @@ export class ProgramComponent implements OnInit {
     retry$.pipe(
       tap(newExercise => newExercise.util.loading = false),
       switchMap(newExercise => this.exercises$.pipe(
-        map(currentExercises => currentExercises.map(currentExercise => currentExercise.id !== exercise.id ? currentExercise : newExercise)),
+        map(currentExercises => {
+          currentExercises[exerciseIndex] = newExercise;
+          return currentExercises;
+        }),
         take(1)
       )),
       map(newExercises => this.exercises$.next(newExercises)),
       take(10)
     ).subscribe();
   }
-
   /**
    * Replaces an exercise in the program with another exercise.
    * Exercise is of lower difficulty, but still targets the same muscles (roughly)
