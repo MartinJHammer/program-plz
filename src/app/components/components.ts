@@ -11,6 +11,9 @@ import { StartComponent } from './start/start.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LoginComponent } from './login/login.component';
+import { AttributesIndexComponent } from './attributes/attributes-index/attributes-index.component';
+import { AttributesCreateComponent } from './attributes/attributes-create/attributes-create.component';
+import { AttributesEditComponent } from './attributes/attributes-edit/attributes-edit.component';
 
 export const components = [
     StartComponent,
@@ -25,5 +28,8 @@ export const components = [
     ExercisesEditComponent,
     ExerciseTypesIndexComponent,
     ExerciseTypesCreateComponent,
-    ExerciseTypesEditComponent
+    ExerciseTypesEditComponent,
+    AttributesIndexComponent,
+    AttributesCreateComponent,
+    AttributesEditComponent
 ];

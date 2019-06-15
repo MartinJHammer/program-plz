@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Field } from 'src/app/models/field';
-import { FieldTypes } from 'src/app/models/field-types';
+import { ExerciseTypesFields } from '../exercise-types-fields';
 
 @Component({
   selector: 'pp-exercise-types-create',
@@ -8,12 +7,6 @@ import { FieldTypes } from 'src/app/models/field-types';
   styleUrls: ['./exercise-types-create.component.scss']
 })
 export class ExerciseTypesCreateComponent implements OnInit {
-
-  public fields: Field[] = [
-    { key: 'name', placeholder: 'Enter type name', type: FieldTypes.string },
-  ];
-
-  constructor() { }
-
+  constructor(public fields: ExerciseTypesFields) { }
   ngOnInit() { }
 }

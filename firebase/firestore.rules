@@ -11,6 +11,11 @@ service cloud.firestore {
       allow write, delete: if getRole('admin') == true;
     }
 
+    match /attributes/{id} {
+      allow read;
+      allow write, delete: if getRole('admin') == true;
+    }
+
     match /users/{userId} {
       allow read: if isOwner(userId);
       allow create: if request.resource.data.roles.keys().hasAny(['admin']) == false;

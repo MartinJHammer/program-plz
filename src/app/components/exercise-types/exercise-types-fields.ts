@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
 import { SelectField } from 'src/app/models/select-field';
 
 @Injectable({ providedIn: 'root' })
-export class ExerciseFields {
+export class ExerciseTypesFields {
     public fields: Field[] = [
         { key: 'id', type: FieldTypes.hidden },
-        { key: 'name', value: '', placeholder: 'Enter exercise name', type: FieldTypes.string },
-        { key: 'exerciseTypeId', collection: 'exercise-types', displayKey: 'name', value: null, type: FieldTypes.selectField } as SelectField
+        { key: 'name', value: '', placeholder: 'Enter exercise type name', type: FieldTypes.string },
+        { key: 'attributes', collection: 'attributes', displayKey: 'name', type: FieldTypes.multiSelectField } as SelectField
     ];
 }
 

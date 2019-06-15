@@ -32,6 +32,7 @@ export class MultiSelectFieldComponent extends FieldBaseComponent<SelectField> i
   public setCheckboxValue(checkboxField) {
     const checkbox = checkboxField.target;
     const control = this.form.get(this.field.key);
+    control.setValue(control.value ? control.value : []);
     control.setValue(checkbox.checked ? [...control.value, checkbox.value] : control.value.filter(id => checkbox.value !== id));
   }
 }

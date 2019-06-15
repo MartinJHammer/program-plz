@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExerciseFields } from '../exercise-fields';
+import { ExercisesFields } from '../exercises-fields';
 
 @Component({
   selector: 'pp-exercises-edit',
@@ -7,6 +7,6 @@ import { ExerciseFields } from '../exercise-fields';
   styleUrls: ['./exercises-edit.component.scss']
 })
 export class ExercisesEditComponent implements OnInit {
-  constructor(public fields: ExerciseFields) { }
+  constructor(public fields: ExercisesFields) { }
   ngOnInit() { }
 }

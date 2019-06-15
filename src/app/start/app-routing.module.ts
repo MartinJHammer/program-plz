@@ -12,6 +12,9 @@ import { NotFoundComponent } from '../components/not-found/not-found.component';
 import { AuthGuard } from '../route-guards/auth.guard';
 import { UserProfileComponent } from '../components/user-profile/user-profile.component';
 import { LoginComponent } from '../components/login/login.component';
+import { AttributesIndexComponent } from '../components/attributes/attributes-index/attributes-index.component';
+import { AttributesCreateComponent } from '../components/attributes/attributes-create/attributes-create.component';
+import { AttributesEditComponent } from '../components/attributes/attributes-edit/attributes-edit.component';
 
 const routes: Routes = [
   {
@@ -43,6 +46,15 @@ const routes: Routes = [
   },
   {
     path: 'exercise-types/edit/:id', component: ExerciseTypesEditComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'attributes', component: AttributesIndexComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'attributes/create', component: AttributesCreateComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'attributes/edit/:id', component: AttributesEditComponent, canActivate: [AuthGuard]
   },
   { path: '**', component: NotFoundComponent }
 ];
