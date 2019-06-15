@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable, BehaviorSubject, combineLatest, merge, pipe, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
@@ -21,10 +21,13 @@ declare var $: any;
 })
 export class ProgramComponent implements OnInit {
   public allExerciseTypes$: Observable<ExerciseType[]>;
+  private exerciseTypesList: MatSelect;
+  @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
+    this.exerciseTypesList = exerciseTypesList;
+  }
   public currentExercise: Exercise;
   public exercises$ = new BehaviorSubject<Exercise[]>([]);
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
-  // @ViewChild('exerciseTypes') public exerciseTypesList: MatSelect;
   public dragExercises = false;
   public loading = false;
   public exercisesToAdd: Exercise[] = [];
@@ -32,7 +35,7 @@ export class ProgramComponent implements OnInit {
   constructor(
     public afs: AngularFirestore,
     public db: DatabaseService<any>,
-    public auth: AuthService
+    public auth: AuthService,
   ) { }
 
   ngOnInit() {
@@ -41,13 +44,13 @@ export class ProgramComponent implements OnInit {
     setInitialExerciseTypes.subscribe();
   }
 
-  // START HERE: Make (de)select work
   public selectAllExerciseTypes() {
-    // console.log(this.exerciseTypesList);
+    this.exerciseTypesList.options.forEach(x => x.select());
     this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
   }
 
   public deSelectAllExerciseTypes() {
+    this.exerciseTypesList.options.forEach(x => x.deselect());
     this.selectedExerciseTypes$.next([]);
   }
 

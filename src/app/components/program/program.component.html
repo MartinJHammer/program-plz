@@ -4,7 +4,8 @@
     <!-- Select exercise type -->
     <mat-form-field *ngIf="allExerciseTypes$ | async as exerciseTypes">
       <mat-label>Exercise types</mat-label>
-      <mat-select (selectionChange)="selectedExerciseTypes$.next($event.value)" [value]="exerciseTypes" multiple>
+      <mat-select #exerciseTypesList (selectionChange)="selectedExerciseTypes$.next($event.value)"
+        [value]="exerciseTypes" multiple>
         <mat-option *ngFor="let exerciseType of exerciseTypes" [value]="exerciseType">
           {{ exerciseType.name }}</mat-option>
       </mat-select>
