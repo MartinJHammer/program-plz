@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
 import { Observable, BehaviorSubject, combineLatest, merge, pipe, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
@@ -11,6 +11,7 @@ import { shuffle } from 'src/app/helpers/shuffle';
 import { Utilities } from 'src/app/models/utilities';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatSelect } from '@angular/material/select';
+import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 
 declare var $: any;
 
@@ -40,8 +41,8 @@ export class ProgramComponent implements OnInit {
 
   ngOnInit() {
     this.allExerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
-    const setInitialExerciseTypes = this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1));
-    setInitialExerciseTypes.subscribe();
+    // Set initial exercise types.
+    this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
   }
 
   public selectAllExerciseTypes() {
@@ -102,7 +103,7 @@ export class ProgramComponent implements OnInit {
   }
 
   public shuffle(): void {
-    const ex = this.exercises$.pipe(
+    this.exercises$.pipe(
       take(1),
       map(exercises => shuffle(exercises)),
     ).subscribe();
