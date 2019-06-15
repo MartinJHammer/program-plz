@@ -8,10 +8,9 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { getRandomNumber } from 'src/app/helpers/random-number';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
-import { Utilities } from 'src/app/models/utilities';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatSelect } from '@angular/material/select';
-import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
+import { docsMap } from 'src/app/helpers/docs-map';
 
 declare var $: any;
 
@@ -40,8 +39,13 @@ export class ProgramComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.allExerciseTypes$ = this.db.getAll('exercise-types').pipe(shareReplay(1));
-    // Set initial exercise types.
+    // START HERE: Make the attributes id dynamic e.g.
+    // Get all attributes
+    // Select strength as default
+    this.allExerciseTypes$ = this.afs
+      .collection('exercise-types', ref => ref.where('attributes', 'array-contains', 'Zp0BbwRWuY5TjXDNVBA5'))
+      .get().pipe(docsMap, shareReplay(1));
+
     this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
   }
 
@@ -71,24 +75,12 @@ export class ProgramComponent implements OnInit {
     const request$ = this.afs.collection('exercises', ref => ref.where('random', '>=', randomNumber).orderBy('random').where('exerciseTypeId', '==', exerciseTypeId).orderBy('id').limit(1)).get();
     const retryRequest$ = this.afs.collection('exercises', ref => ref.where('random', '<=', randomNumber).orderBy('random', 'desc').where('exerciseTypeId', '==', exerciseTypeId).orderBy('id').limit(1)).get();
 
-    const docMap = pipe(
-      map((docs: QuerySnapshot<any>) => {
-        return docs.docs.map(e => {
-          return {
-            id: e.id,
-            ...e.data(),
-            util: new Utilities()
-          } as any;
-        });
-      })
-    );
+    const random$ = request$.pipe(docsMap).pipe(filter(x => x !== undefined && x[0] !== undefined));
 
-    const random$ = request$.pipe(docMap).pipe(filter(x => x !== undefined && x[0] !== undefined));
-
-    const retry$ = request$.pipe(docMap).pipe(
+    const retry$ = request$.pipe(docsMap).pipe(
       filter(x => x === undefined || x[0] === undefined),
       switchMap(() => retryRequest$),
-      docMap
+      docsMap
     );
 
     return merge(random$, retry$);

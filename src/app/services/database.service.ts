@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { docsMap } from '../helpers/docs-map';
+import { docMap } from '../helpers/doc-map';
+import { snapshotChangesDocsMap } from '../helpers/snapshot-changes-docs-map';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService<T> {
@@ -14,38 +17,17 @@ export class DatabaseService<T> {
 
     public get(path: string): Observable<T[]> {
         return this.afs.collection(path, ref => ref.orderBy('name').startAt(this.lastVisible ? this.lastVisible : 0).limit(10)).get().pipe(
-            map(docs => {
-                this.lastVisible = docs.docs[docs.docs.length - 1];
-                return docs.docs.map(e => {
-                    return {
-                        id: e.id,
-                        ...e.data()
-                    } as any;
-                });
-            })
+            tap(docs => this.lastVisible = docs.docs[docs.docs.length - 1]),
+            docsMap
         );
     }
 
     public getAll(path: string): Observable<T[]> {
-        return this.afs.collection<T>(path).snapshotChanges().pipe(
-            map(docs => docs.map(e => {
-                return {
-                    id: e.payload.doc.id,
-                    ...e.payload.doc.data()
-                } as T;
-            })),
-        );
+        return this.afs.collection<T>(path).snapshotChanges().pipe(snapshotChangesDocsMap);
     }
 
     public getSingle(path: string, id: string): Observable<T> {
-        return this.afs.doc<T>(`${path}/${id}`).get().pipe(
-            map(doc => {
-                return {
-                    id: doc.id,
-                    ...doc.data()
-                } as any;
-            })
-        );
+        return this.afs.doc<T>(`${path}/${id}`).get().pipe(docMap);
     }
 
     public add(path: string, entity: T): Promise<DocumentReference> {
