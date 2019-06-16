@@ -50,7 +50,6 @@
 <pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>
 <div *ngIf="!loading" cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
   <ng-container *ngIf="exercises$ | async as exercises">
-
     <!-- Program actions -->
     <ng-container *ngIf="exercises">
       <!-- Add exercise -->
@@ -60,87 +59,58 @@
       <br />
       <br />
     </ng-container>
-
-
-
-
     <!-- Exercises -->
     <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
-      <div class="card my-2" style="width: 18rem;" cdkDrag>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-10 mb-2">
-
-              <h6 *ngIf="!exercise.util.loading" class="card-title">{{ exercise.name }}</h6>
-              <pp-spinner class="exercise-spinner" *ngIf="exercise.util.loading" [spinner]="'dot'"></pp-spinner>
-
-              <p class="card-text">3s x failure</p>
-            </div>
-
-            <!-- Quick menu -->
-            <div class="col-2">
-              <!-- Drag handle -->
-              <div cdkDragHandle>
-                <mat-icon *ngIf="dragExercises">drag_indicator</mat-icon>
-              </div>
-
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-              <mat-menu #menu="matMenu">
-                <!-- Exercise info -->
-                <button mat-menu-item>
-                  <mat-icon>help_outline</mat-icon>
-                  <span (click)="setCurrentExercise(exercise)" data-toggle="modal" data-target="#exerciseModal">Exercise
-                    info</span>
-                </button>
-
-                <!-- Add exercise -->
-                <button mat-menu-item (click)="openAddModal()">
-                  <mat-icon>add</mat-icon>
-                  <span>Add exercises</span>
-                </button>
-
-                <!-- Toggle drag and drop -->
-                <button mat-menu-item>
-                  <mat-icon>drag_handle</mat-icon>
-                  <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
-                  <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
-                </button>
-              </mat-menu>
-
-            </div>
+      <mat-card class="exercise-card" cdkDrag>
+        <mat-card-header>
+          <mat-card-title *ngIf="!exercise.util.loading">{{ exercise.name }}</mat-card-title>
+          <mat-card-subtitle *ngIf="!exercise.util.loading">Vertical push (temp placeholder)</mat-card-subtitle>
+          <pp-spinner class="exercise-spinner" *ngIf="exercise.util.loading" [spinner]="'dot'"></pp-spinner>
+        </mat-card-header>
+        <!-- A picture or other content can be added here -->
+        <mat-card-content>
+          <p>3s x failure</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <!-- Quick menu -->
+          <div cdkDragHandle>
+            <mat-icon *ngIf="dragExercises">drag_indicator</mat-icon>
           </div>
 
-          <!-- Card actions -->
-          <div class="row">
-            <div class="col-4">
-              <a href="javascript:void(0)" class="card-link"
-                (click)="differentVersion(exercises, exercise, index);">Replace</a>
-            </div>
-            <div class="col-4">
-              <a href="javascript:void(0)" class=" card-link">Easier</a>
-            </div>
-            <div class="col-4">
-              <a href="javascript:void(0)" class=" card-link">Harder</a>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-4">
-              ...
-            </div>
-            <div class="col-4">
-              <a href="javascript:void(0)" class=" card-link">Add</a>
-            </div>
-            <div class="col-4">
-              <a style="color:red;cursor: pointer;" (click)="openRemoveModal(exercise)">Remove</a>
-            </div>
-          </div>
-        </div>
-      </div>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <!-- Exercise info -->
+            <button mat-menu-item>
+              <mat-icon>help_outline</mat-icon>
+              <span (click)="setCurrentExercise(exercise)" data-toggle="modal" data-target="#exerciseModal">Exercise
+                info</span>
+            </button>
+
+            <!-- Add exercise -->
+            <button mat-menu-item (click)="openAddModal()">
+              <mat-icon>add</mat-icon>
+              <span>Add exercises</span>
+            </button>
+
+            <!-- Toggle drag and drop -->
+            <button mat-menu-item>
+              <mat-icon>drag_handle</mat-icon>
+              <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
+              <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
+            </button>
+
+            <!-- Different version -->
+            <button mat-menu-item>
+              <mat-icon>swap_horiz</mat-icon>
+              <span (click)="differentVersion(exercises, exercise, index);">Replace</span>
+            </button>
+          </mat-menu>
+        </mat-card-actions>
+      </mat-card>
     </ng-container>
-
   </ng-container>
 </div>
 

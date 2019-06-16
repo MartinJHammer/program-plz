@@ -9,6 +9,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
@@ -42,7 +44,9 @@ import { searchComponents } from '../search/search-components';
     DragDropModule,
     MatSelectModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule,
+    MatDialogModule
   ],
   declarations: [
     ...components,
