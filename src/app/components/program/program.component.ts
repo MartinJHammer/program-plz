@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Exercise } from 'src/app/models/exercise';
-import { Observable, BehaviorSubject, combineLatest, merge, pipe, of, EMPTY } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/models/exercise-type';
 import { map, shareReplay, take, switchMap, filter, mergeMap, tap, expand } from 'rxjs/operators';
-import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
-import { DatabaseService } from 'src/app/services/database.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { getRandomNumber } from 'src/app/helpers/random-number';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { shuffle } from 'src/app/helpers/shuffle';
@@ -162,7 +161,7 @@ export class ProgramComponent implements OnInit {
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles
    */
-  public differentVersion(exercises: Exercise[], exercise: Exercise, exerciseIndex: number): void {
+  public differentVersion(exercise: Exercise, exerciseIndex: number): void {
     const newExercise$ = of(exercise.exerciseTypeId).pipe(
       tap(() => exercise.util.loading = true),
       switchMap(exerciseTypeId => this.getRandom(exerciseTypeId)),

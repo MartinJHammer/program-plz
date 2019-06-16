@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
@@ -45,6 +46,7 @@ import { searchComponents } from '../search/search-components';
     MatSelectModule,
     MatMenuModule,
     MatIconModule,
+    MatButtonModule,
     MatCardModule,
     MatDialogModule
   ],
