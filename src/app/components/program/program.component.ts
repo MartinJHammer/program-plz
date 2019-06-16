@@ -34,17 +34,17 @@ export class ProgramComponent implements OnInit {
 
   constructor(
     public afs: AngularFirestore,
-    public db: DatabaseService<any>,
-    public auth: AuthService,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
-    // START HERE: Make the attributes id dynamic e.g.
-    // Get all attributes
-    // Select strength as default
-    this.allExerciseTypes$ = this.afs
-      .collection('exercise-types', ref => ref.where('attributes', 'array-contains', 'Zp0BbwRWuY5TjXDNVBA5'))
-      .get().pipe(docsMap, shareReplay(1));
+    const strengthId$ = this.afs.collection('attributes').get().pipe(docsMap, mergeMap(x => x), filter(x => x.name === 'Strength'), map(x => x.id));
+
+    this.allExerciseTypes$ = strengthId$.pipe(
+      switchMap(strengthId => this.afs
+        .collection('exercise-types', ref => ref.where('attributes', 'array-contains', strengthId))
+        .get().pipe(docsMap, shareReplay(1)))
+    );
 
     this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
   }
