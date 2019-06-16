@@ -95,6 +95,12 @@
               <span>Add exercises</span>
             </button>
 
+            <!-- Remove exercise -->
+            <button mat-menu-item (click)="openRemoveModal(exercise)">
+              <mat-icon>remove</mat-icon>
+              <span>Remove exercise</span>
+            </button>
+
             <!-- Toggle drag and drop -->
             <button mat-menu-item>
               <mat-icon>drag_handle</mat-icon>
@@ -103,9 +109,9 @@
             </button>
 
             <!-- Different version -->
-            <button mat-menu-item>
+            <button mat-menu-item (click)="differentVersion(exercise, index);">
               <mat-icon>swap_horiz</mat-icon>
-              <span (click)="differentVersion(exercises, exercise, index);">Replace</span>
+              <span>Replace</span>
             </button>
           </mat-menu>
         </mat-card-actions>
