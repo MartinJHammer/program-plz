@@ -5,9 +5,13 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+
 import { MatSelectModule } from '@angular/material/select';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -33,9 +37,12 @@ import { searchComponents } from '../search/search-components';
     AngularFirestoreModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,
+    // Angular material/cdk
     ScrollDispatchModule,
     DragDropModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule,
+    MatIconModule
   ],
   declarations: [
     ...components,
