@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { AttributesIndexComponent } from './attributes/attributes-index/attributes-index.component';
 import { AttributesCreateComponent } from './attributes/attributes-create/attributes-create.component';
 import { AttributesEditComponent } from './attributes/attributes-edit/attributes-edit.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 export const components = [
     StartComponent,
@@ -23,6 +24,7 @@ export const components = [
     SpinnerComponent,
     UserProfileComponent,
     LoginComponent,
+    DialogComponent,
     ExercisesIndexComponent,
     ExercisesCreateComponent,
     ExercisesEditComponent,
@@ -32,4 +34,8 @@ export const components = [
     AttributesIndexComponent,
     AttributesCreateComponent,
     AttributesEditComponent
+];
+
+export const entryComponents = [
+    DialogComponent
 ];

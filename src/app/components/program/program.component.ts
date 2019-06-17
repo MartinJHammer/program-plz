@@ -10,6 +10,8 @@ import { shuffle } from 'src/app/helpers/shuffle';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatSelect } from '@angular/material/select';
 import { docsMap } from 'src/app/helpers/docs-map';
+import { MatDialog, MatDialogConfig, DialogPosition } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 declare var $: any;
 
@@ -33,7 +35,8 @@ export class ProgramComponent implements OnInit {
 
   constructor(
     public afs: AngularFirestore,
-    public auth: AuthService
+    public auth: AuthService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -130,6 +133,20 @@ export class ProgramComponent implements OnInit {
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+  }
+
+  public openDialogTest() {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      minWidth: '500px',
+      maxWidth: '500px',
+      position: {
+      } as DialogPosition,
+      data: {}
+    } as MatDialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed. Result: ', result);
+    });
   }
 
   public openAddModal(): void {

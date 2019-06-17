@@ -1,4 +1,10 @@
 <!-- Configuration -->
+<button (click)="openDialogTest()">
+  <mat-icon>add</mat-icon>
+  <span>Test</span>
+</button>
+
+
 <div class="row mt-2">
   <div class="col-8">
     <!-- Select exercise type -->
@@ -82,6 +88,8 @@
           </button>
 
           <mat-menu #menu="matMenu">
+
+
             <!-- Exercise info -->
             <button mat-menu-item>
               <mat-icon>help_outline</mat-icon>

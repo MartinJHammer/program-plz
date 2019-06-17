@@ -22,7 +22,7 @@ import { StartComponent } from './../components/start/start.component';
 import { environment } from 'src/environments/environment';
 
 import { pipes } from '../pipes/pipes';
-import { components } from '../components/components';
+import { components, entryComponents } from '../components/components';
 import { directives } from '../directives/directives';
 import { crudComponents } from '../crud/components/crud-components';
 import { NgAisModule } from 'angular-instantsearch';
@@ -57,6 +57,7 @@ import { searchComponents } from '../search/search-components';
     ...directives,
     ...pipes
   ],
+  entryComponents: [...entryComponents],
   providers: [],
   bootstrap: [StartComponent]
 })
