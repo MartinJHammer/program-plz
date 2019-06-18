@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  <pp-search [collectionName]="'exercises'" (selectedHit)=addToAdding($event)></pp-search>
+
+  <ng-container *ngFor="let exercise of exercisesToAdd">
+    <p>{{ exercise.name }} - <span style="color: red;" (click)="removeFromAdding(exercise)">remove</span></p>
+  </ng-container>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button mat-dialog-close (click)="ok()" cdkFocusInitial>Ok</button>
+</div>

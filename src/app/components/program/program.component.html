@@ -98,13 +98,13 @@
             </button>
 
             <!-- Add exercise -->
-            <button mat-menu-item (click)="openAddModal()">
+            <button mat-menu-item (click)="addExercises()">
               <mat-icon>add</mat-icon>
               <span>Add exercises</span>
             </button>
 
             <!-- Remove exercise -->
-            <button mat-menu-item (click)="openRemoveModal(exercise)">
+            <button mat-menu-item (click)="removeExercise(exercise)">
               <mat-icon>remove</mat-icon>
               <span>Remove exercise</span>
             </button>
@@ -144,29 +144,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Add exercises modal -->
-<div class="modal" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Choose exercises to add</h5>
-      </div>
-      <div class="modal-body">
-        <pp-search [collectionName]="'exercises'" (selectedHit)=addToAdding($event)></pp-search>
-
-        <ng-container *ngFor="let exercise of exercisesToAdd">
-          <p>{{ exercise.name }} - <span style="color: red;" (click)="removeFromAdding(exercise)">remove</span></p>
-        </ng-container>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="addExercises()">Add</button>
-        <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Close</button>
       </div>
     </div>
   </div>

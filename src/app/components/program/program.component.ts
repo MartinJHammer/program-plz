@@ -12,6 +12,7 @@ import { MatSelect } from '@angular/material/select';
 import { docsMap } from 'src/app/helpers/docs-map';
 import { MatDialog, MatDialogConfig, DialogPosition } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-dialog.component';
 
 declare var $: any;
 
@@ -31,7 +32,6 @@ export class ProgramComponent implements OnInit {
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
   public dragExercises = false;
   public loading = false;
-  public exercisesToAdd: Exercise[] = [];
 
   constructor(
     public afs: AngularFirestore,
@@ -135,31 +135,6 @@ export class ProgramComponent implements OnInit {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
-  public openAddModal(): void {
-    $(() => {
-      $('#addModal').modal('show');
-    });
-  }
-
-  public closeAddModal(): void {
-    this.exercisesToAdd = [];
-    $('#addModal').modal('hide');
-  }
-
-  public addToAdding(exercise: Exercise) {
-    this.exercisesToAdd.push(new Exercise(exercise));
-  }
-
-  public removeFromAdding(exercise: Exercise) {
-    this.exercisesToAdd = this.exercisesToAdd.filter(x => x.id !== exercise.id);
-  }
-
-  public addExercises(): void {
-    this.exercises$.next(this.exercisesToAdd.concat(this.exercises$.getValue()));
-    this.exercisesToAdd = [];
-    this.closeAddModal();
-  }
-
   /**
    * Replaces an exercise in the program with another exercise.
    * Exercise is of same difficulty and targets same muscles
@@ -187,8 +162,17 @@ export class ProgramComponent implements OnInit {
     ).subscribe();
   }
 
-  public openRemoveModal(selectedExercise: Exercise): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
+  public addExercises(): void {
+    this.dialog.open(AddExerciseDialogComponent, {
+      minWidth: '250px',
+      data: {
+        exercises$: this.exercises$
+      }
+    } as MatDialogConfig);
+  }
+
+  public removeExercise(selectedExercise: Exercise): void {
+    this.dialog.open(DialogComponent, {
       minWidth: '250px',
       data: {
         title: `Are you sure you want to remove ${selectedExercise.name}`,
@@ -203,7 +187,5 @@ export class ProgramComponent implements OnInit {
         }
       }
     } as MatDialogConfig);
-
-    // dialogRef.afterClosed().pipe(take(1)).subscribe();
   }
 }
