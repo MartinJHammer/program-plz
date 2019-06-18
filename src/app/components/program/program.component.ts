@@ -135,20 +135,6 @@ export class ProgramComponent implements OnInit {
     this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
-  public openDialogTest() {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      minWidth: '500px',
-      maxWidth: '500px',
-      position: {
-      } as DialogPosition,
-      data: {}
-    } as MatDialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed. Result: ', result);
-    });
-  }
-
   public openAddModal(): void {
     $(() => {
       $('#addModal').modal('show');
@@ -200,40 +186,24 @@ export class ProgramComponent implements OnInit {
       take(10)
     ).subscribe();
   }
-  /**
-   * Replaces an exercise in the program with another exercise.
-   * Exercise is of lower difficulty, but still targets the same muscles (roughly)
-   */
-  public easierVersion(): void {
 
-  }
+  public openRemoveModal(selectedExercise: Exercise): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      minWidth: '250px',
+      data: {
+        title: `Are you sure you want to remove ${selectedExercise.name}`,
+        body: 'Remember you can add it again via the "Add" option.',
+        logic: () => {
+          this.exercises$.pipe(
+            take(1),
+            map(exercises => {
+              this.exercises$.next(exercises.filter(exercise => exercise.id !== selectedExercise.id));
+            }),
+          ).subscribe();
+        }
+      }
+    } as MatDialogConfig);
 
-  /**
-   * Replaces an exercise in the program with another exercise.
-   * Exercise is of higher difficulty, but still targets the same muscles (roughly)
-   */
-  public harderVersion(): void {
-
-  }
-
-  public openRemoveModal(currentExercise: Exercise): void {
-    this.currentExercise = currentExercise;
-    $(() => {
-      $('#removeModal').modal('show');
-    });
-  }
-
-  public closeRemoveModal(): void {
-    $('#removeModal').modal('hide');
-  }
-
-  public removeExercise() {
-    this.exercises$.pipe(
-      take(1),
-      map(exercises => {
-        this.exercises$.next(exercises.filter(exercise => exercise.id !== this.currentExercise.id));
-        this.closeRemoveModal();
-      }),
-    ).subscribe();
+    // dialogRef.afterClosed().pipe(take(1)).subscribe();
   }
 }

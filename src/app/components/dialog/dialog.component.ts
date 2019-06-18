@@ -9,10 +9,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class DialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: { title: string, body: string, logic: () => {} }
   ) { }
 
-  onNoClick(): void {
+  ok(): void {
+    this.data.logic();
+    this.dialogRef.close();
+  }
+
+  cancel(): void {
     this.dialogRef.close();
   }
 }

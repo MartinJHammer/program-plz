@@ -171,23 +171,3 @@
     </div>
   </div>
 </div>
-
-<!-- Remove exercise modal -->
-<div *ngIf="currentExercise" class="modal" id="removeModal" tabindex="-1" role="dialog"
-  aria-labelledby="removeModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="EntryModalTitle">Are you sure you want to remove {{ currentExercise.name }}?
-        </h5>
-      </div>
-      <div class="modal-body">
-        Note: You can add it again via the "Add" option.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="removeExercise(exercise)">Remove</button>
-        <button type="button" class="btn btn-secondary" (click)="closeRemoveModal()">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
