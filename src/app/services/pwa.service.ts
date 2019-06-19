@@ -20,6 +20,6 @@ export class PwaService {
 
     // Put this in the settings area somewhere.
     // <button mat-raised-button color="accent" *ngIf="pwa.promptEvent" (click)="pwa.installPwa()">
-    //     Install program - plz on your! :D
+    //     Install on phone
     // </button>
 }
