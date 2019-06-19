@@ -28,6 +28,7 @@ import { crudComponents } from '../crud/components/crud-components';
 import { NgAisModule } from 'angular-instantsearch';
 import { searchComponents } from '../search/search-components';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
     ...components,
