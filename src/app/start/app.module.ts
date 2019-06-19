@@ -27,6 +27,7 @@ import { directives } from '../directives/directives';
 import { crudComponents } from '../crud/components/crud-components';
 import { NgAisModule } from 'angular-instantsearch';
 import { searchComponents } from '../search/search-components';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -40,8 +41,9 @@ import { searchComponents } from '../search/search-components';
     AngularFirestoreModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,
-    // Angular material/cdk
+    // Angular material/cdk/flex-layout
     ScrollDispatchModule,
+    FlexLayoutModule,
     DragDropModule,
     MatSelectModule,
     MatMenuModule,

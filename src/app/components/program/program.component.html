@@ -1,115 +1,119 @@
 <!-- Select exercise type -->
-<mat-form-field *ngIf="allExerciseTypes$ | async as exerciseTypes">
-  <mat-label>Exercise types</mat-label>
-  <mat-select #exerciseTypesList (selectionChange)="selectedExerciseTypes$.next($event.value)" [value]="exerciseTypes"
-    multiple>
-    <mat-option *ngFor="let exerciseType of exerciseTypes" [value]="exerciseType">
-      {{ exerciseType.name }}</mat-option>
-  </mat-select>
-</mat-form-field>
-<br />
-<button mat-raised-button color="primary" (click)="selectAllExerciseTypes()">Select all</button>
-<button mat-raised-button color="primary" (click)="deSelectAllExerciseTypes()">Deselect all</button>
-<br />
-<br />
-
-<!-- Exercise type order -->
-<button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
-<div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
-  <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
-    <p cdkDrag>{{ exerciseType.name }}</p>
-  </ng-container>
-</div>
-
-<!-- Shuffle -->
-<button mat-raised-button color="primary" (click)="shuffle()">Shuffle order of exercises</button>
-<br />
-<br />
-
-<!-- Create program -->
-<button mat-raised-button color="primary" (click)="createProgram()">Program plz!</button>
-
-<!-- Misc options -->
-<ng-container *ngIf="auth.user$ | async as user; else anon">
-  <a mat-raised-button color="primary" (click)="auth.signOut()">Logout</a>
-  <a mat-raised-button color="primary" [routerLink]="['profile']">Profile</a>
-  <a *ngIf="user.roles && user.roles.admin" mat-raised-button color="primary" [routerLink]="['manage']">Manage</a>
-</ng-container>
-<ng-template #anon>
-  <a mat-raised-button color="primary" [routerLink]="['login']">Login</a>
-</ng-template>
-
-<!-- Program -->
-<pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>
-<div *ngIf="!loading" cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
-  <ng-container *ngIf="exercises$ | async as exercises">
-    <!-- Program actions -->
-    <ng-container *ngIf="exercises">
-      <!-- Add exercise -->
-      <button mat-raised-button color="primary" (click)="openAddModal()">
-        <span>Add exercises</span>
-      </button>
-      <br />
-      <br />
+<div fxLayout fxLayout.xs="column">
+  <!-- Misc options -->
+  <div fxLayout.xs="column" fxFlex fxFlexOrder="2" fxFlexOrder.xs="1">
+    <ng-container *ngIf="auth.user$ | async as user; else anon">
+      <a mat-raised-button color="primary" (click)="auth.signOut()">Logout</a>
+      <a mat-raised-button color="primary" [routerLink]="['profile']">Profile</a>
+      <a *ngIf="user.roles && user.roles.admin" mat-raised-button color="primary" [routerLink]="['manage']">Manage</a>
     </ng-container>
-    <!-- Exercises -->
-    <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
-      <mat-card class="exercise-card" cdkDrag>
-        <mat-card-header>
-          <mat-card-title *ngIf="!exercise.util.loading">{{ exercise.name }}</mat-card-title>
-          <mat-card-subtitle *ngIf="!exercise.util.loading">Vertical push (temp placeholder)</mat-card-subtitle>
-          <pp-spinner class="exercise-spinner" *ngIf="exercise.util.loading" [spinner]="'dot'"></pp-spinner>
-        </mat-card-header>
-        <!-- A picture or other content can be added here -->
-        <mat-card-content>
-          <p>3s x failure</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <!-- Quick menu -->
-          <div cdkDragHandle>
-            <mat-icon *ngIf="dragExercises">drag_indicator</mat-icon>
-          </div>
+    <ng-template #anon>
+      <a mat-raised-button color="primary" [routerLink]="['login']">Login</a>
+    </ng-template>
+  </div>
 
-          <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
+  <div fxLayout.xs="column" fxFlex fxFlexOrder="1" fxFlexOrder.xs="2">
 
-          <mat-menu #menu="matMenu">
+    <mat-form-field *ngIf="allExerciseTypes$ | async as exerciseTypes">
+      <mat-label>Exercise types</mat-label>
+      <mat-select #exerciseTypesList (selectionChange)="selectedExerciseTypes$.next($event.value)"
+        [value]="exerciseTypes" multiple>
+        <mat-option *ngFor="let exerciseType of exerciseTypes" [value]="exerciseType">
+          {{ exerciseType.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+    <button mat-raised-button color="primary" (click)="selectAllExerciseTypes()">Select all</button>
+    <button mat-raised-button color="primary" (click)="deSelectAllExerciseTypes()">Deselect all</button>
+    <br />
+    <br />
 
-            <!-- Exercise info -->
-            <button mat-menu-item>
-              <mat-icon>help_outline</mat-icon>
-              <span (click)="exerciseInfo(exercise)">Exercise
-                info</span>
-            </button>
+    <!-- Exercise type order -->
+    <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
+    <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
+      <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
+        <p cdkDrag>{{ exerciseType.name }}</p>
+      </ng-container>
+    </div>
 
-            <!-- Add exercise -->
-            <button mat-menu-item (click)="addExercises()">
-              <mat-icon>add</mat-icon>
-              <span>Add exercises</span>
-            </button>
+    <!-- Shuffle -->
+    <button mat-raised-button color="primary" (click)="shuffle()">Shuffle order of exercises</button>
+    <br />
+    <br />
+    <button mat-raised-button color="primary" (click)="addExercises()">Add exercises</button>
+    <br />
+    <br />
 
-            <!-- Remove exercise -->
-            <button mat-menu-item (click)="removeExercise(exercise)">
-              <mat-icon>remove</mat-icon>
-              <span>Remove exercise</span>
-            </button>
+    <!-- Create program -->
+    <button mat-raised-button color="primary" (click)="createProgram()">Program plz!</button>
+    <br />
+    <br />
 
-            <!-- Toggle drag and drop -->
-            <button mat-menu-item>
-              <mat-icon>drag_handle</mat-icon>
-              <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
-              <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
-            </button>
 
-            <!-- Different version -->
-            <button mat-menu-item (click)="differentVersion(exercise, index);">
-              <mat-icon>swap_horiz</mat-icon>
-              <span>Replace</span>
-            </button>
-          </mat-menu>
-        </mat-card-actions>
-      </mat-card>
-    </ng-container>
-  </ng-container>
+    <!-- Program -->
+    <pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>
+    <div *ngIf="!loading" cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
+      <ng-container *ngIf="exercises$ | async as exercises">
+        <!-- Exercises -->
+        <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
+          <mat-card class="exercise-card" cdkDrag>
+            <mat-card-header>
+              <mat-card-title *ngIf="!exercise.util.loading">{{ exercise.name }}</mat-card-title>
+              <mat-card-subtitle *ngIf="!exercise.util.loading">Vertical push (temp placeholder)</mat-card-subtitle>
+              <pp-spinner class="exercise-spinner" *ngIf="exercise.util.loading" [spinner]="'dot'"></pp-spinner>
+            </mat-card-header>
+            <!-- A picture or other content can be added here -->
+            <mat-card-content>
+              <p>3s x failure</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <!-- Quick menu -->
+              <div cdkDragHandle>
+                <mat-icon *ngIf="dragExercises">drag_indicator</mat-icon>
+              </div>
+
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+
+                <!-- Exercise info -->
+                <button mat-menu-item>
+                  <mat-icon>help_outline</mat-icon>
+                  <span (click)="exerciseInfo(exercise)">Exercise
+                    info</span>
+                </button>
+
+                <!-- Add exercise -->
+                <button mat-menu-item (click)="addExercises()">
+                  <mat-icon>add</mat-icon>
+                  <span>Add exercises</span>
+                </button>
+
+                <!-- Remove exercise -->
+                <button mat-menu-item (click)="removeExercise(exercise)">
+                  <mat-icon>remove</mat-icon>
+                  <span>Remove exercise</span>
+                </button>
+
+                <!-- Toggle drag and drop -->
+                <button mat-menu-item>
+                  <mat-icon>drag_handle</mat-icon>
+                  <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
+                  <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
+                </button>
+
+                <!-- Different version -->
+                <button mat-menu-item (click)="differentVersion(exercise, index);">
+                  <mat-icon>swap_horiz</mat-icon>
+                  <span>Replace</span>
+                </button>
+              </mat-menu>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
 </div>
