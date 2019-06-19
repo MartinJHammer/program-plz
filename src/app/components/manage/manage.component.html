@@ -1,13 +1,7 @@
-<div class="row">
-    <div class="col">
-
-        <a class="btn btn-secondary btn-lg" [routerLink]="['/']"><i class="icon arrow-round-back"></i> Back</a>
-        <br /><br />
-        <a class="btn btn-primary btn-lg" [routerLink]="['/exercises']">Exercises</a>
-        <br /><br />
-        <a class="btn btn-primary btn-lg" [routerLink]="['/exercise-types']">Exercises types</a>
-        <br /><br />
-        <a class="btn btn-primary btn-lg" [routerLink]="['/attributes']">Attributes</a>
-
-    </div>
-</div>
+<a mat-raised-button [routerLink]="['/']"><i class="icon arrow-round-back"></i> Back</a>
+<br /><br />
+<a mat-raised-button color="primary" [routerLink]="['/exercises']">Exercises</a>
+<br /><br />
+<a mat-raised-button color="primary" [routerLink]="['/exercise-types']">Exercises types</a>
+<br /><br />
+<a mat-raised-button color="primary" [routerLink]="['/attributes']">Attributes</a>

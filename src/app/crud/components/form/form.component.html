@@ -1,27 +1,14 @@
-<div class="row">
-    <div class="col">
-        <div class="row">
-            <div class="col-9">
-                <ng-content select="h1"></ng-content>
-            </div>
-            <div class="col-3">
-                <a class="btn btn-secondary btn-sm mt-2" [routerLink]="['/' + area]"><i
-                        class="icon arrow-round-back"></i>
-                    Back</a>
-            </div>
-        </div>
-        <hr />
-        <form *ngIf="form$ | async as form" [formGroup]="form" (ngSubmit)="onSubmit(form)">
-            <ng-container *ngFor="let field of fields">
-                <pp-hidden-field *ngIf="field.type === types.hidden" [field]="field" [form]="form"></pp-hidden-field>
-                <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
-                <pp-select-field *ngIf="field.type === types.selectField" [field]="field" [form]="form">
-                </pp-select-field>
-                <pp-multi-select-field *ngIf="field.type === types.multiSelectField" [field]="field" [form]="form">
-                </pp-multi-select-field>
-            </ng-container>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <pre> {{ form.value | json }}</pre>
-        </form>
-    </div>
-</div>
+<ng-content select="h1"></ng-content>
+<a mat-raised-button [routerLink]="['/' + area]">Back</a>
+<form *ngIf="form$ | async as form" [formGroup]="form" (ngSubmit)="onSubmit(form)">
+    <ng-container *ngFor="let field of fields">
+        <pp-hidden-field *ngIf="field.type === types.hidden" [field]="field" [form]="form"></pp-hidden-field>
+        <pp-string-field *ngIf="field.type === types.string" [field]="field" [form]="form"></pp-string-field>
+        <pp-select-field *ngIf="field.type === types.selectField" [field]="field" [form]="form">
+        </pp-select-field>
+        <pp-multi-select-field *ngIf="field.type === types.multiSelectField" [field]="field" [form]="form">
+        </pp-multi-select-field>
+    </ng-container>
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+    <pre> {{ form.value | json }}</pre>
+</form>

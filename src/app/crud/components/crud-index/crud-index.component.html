@@ -1,33 +1,21 @@
-<div class="row">
-  <div class="col">
-    <div class="row">
-      <div class="col-9">
-        <ng-content select="h1"></ng-content>
-      </div>
-      <div class="col-3">
-        <a class="btn btn-secondary btn-sm mt-2" [routerLink]="['/manage']"><i class="icon arrow-round-back"></i>
-          Back</a>
-      </div>
-    </div>
-    <hr />
-    <a class="btn btn-success" [routerLink]="['create']">Create</a>
-    <label for="filter-no-exercise-type"></label>
-    <input id="filter-no-exercise-type" [(ngModel)]="filterNoExerciseType" type="checkbox" />
-    <button (click)="applyFilters()">Filter</button>
+<ng-content select="h1"></ng-content>
+<a mat-raised-button [routerLink]="['/manage']">Back</a>
+<a mat-raised-button color="Primary" [routerLink]="['create']">Create</a>
+<label for="filter-no-exercise-type"></label>
+<input id="filter-no-exercise-type" [(ngModel)]="filterNoExerciseType" type="checkbox" />
+<button (click)="applyFilters()">Filter</button>
 
-    <pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)"></pp-search>
+<pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)"></pp-search>
 
-    <!-- Entry list -->
-    <ng-container *ngIf="entries$ | async as entries">
-      <cdk-virtual-scroll-viewport itemSize="100"
-        (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">
-        <ul>
-          <li *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">{{ entry[identifier] }} - <a
-              [routerLink]="['edit', entry.id]">Edit</a> - <a style="color:red;cursor: pointer;"
-              (click)="delete(entry)">Delete</a>
-          </li>
-        </ul>
-      </cdk-virtual-scroll-viewport>
-    </ng-container>
-  </div>
-</div>
+<!-- Entry list -->
+<ng-container *ngIf="entries$ | async as entries">
+  <cdk-virtual-scroll-viewport itemSize="100"
+    (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">
+    <ul>
+      <li *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">{{ entry[identifier] }} - <a
+          [routerLink]="['edit', entry.id]">Edit</a> - <a style="color:red;cursor: pointer;"
+          (click)="delete(entry)">Delete</a>
+      </li>
+    </ul>
+  </cdk-virtual-scroll-viewport>
+</ng-container>
