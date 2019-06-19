@@ -10,11 +10,9 @@ import { shuffle } from 'src/app/helpers/shuffle';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatSelect } from '@angular/material/select';
 import { docsMap } from 'src/app/helpers/docs-map';
-import { MatDialog, MatDialogConfig, DialogPosition } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-dialog.component';
-
-declare var $: any;
 
 @Component({
   selector: 'pp-program',
@@ -27,7 +25,6 @@ export class ProgramComponent implements OnInit {
   @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
     this.exerciseTypesList = exerciseTypesList;
   }
-  public currentExercise: Exercise;
   public exercises$ = new BehaviorSubject<Exercise[]>([]);
   public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
   public dragExercises = false;
@@ -90,10 +87,6 @@ export class ProgramComponent implements OnInit {
 
   public toggleDragExercises(): void {
     this.dragExercises = !this.dragExercises;
-  }
-
-  public setCurrentExercise(exercise: Exercise): void {
-    this.currentExercise = exercise;
   }
 
   public shuffle(): void {
@@ -160,6 +153,17 @@ export class ProgramComponent implements OnInit {
       map(newExercises => this.exercises$.next(newExercises)),
       take(10)
     ).subscribe();
+  }
+
+  public exerciseInfo(exercise: Exercise): void {
+    this.dialog.open(DialogComponent, {
+      minWidth: '250px',
+      data: {
+        title: `${exercise.name} information`,
+        body: `More information wil be added soon!`,
+        exercises$: this.exercises$
+      }
+    } as MatDialogConfig);
   }
 
   public addExercises(): void {

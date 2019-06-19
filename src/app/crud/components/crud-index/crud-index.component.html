@@ -24,31 +24,10 @@
         <ul>
           <li *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">{{ entry[identifier] }} - <a
               [routerLink]="['edit', entry.id]">Edit</a> - <a style="color:red;cursor: pointer;"
-              (click)="openDeleteModal(entry)">Delete</a>
+              (click)="delete(entry)">Delete</a>
           </li>
         </ul>
       </cdk-virtual-scroll-viewport>
     </ng-container>
-  </div>
-</div>
-
-<!-- Modal -->
-<div *ngIf="currentEntry" class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="EntryModalTitle">Are you sure you want to delete {{ currentEntry[identifier] }}
-        </h5>
-      </div>
-      <div class="modal-body">
-        This action cannot be undone. Srsly!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="delete(currentEntry)">Delete
-          it!</button>
-        <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Close</button>
-      </div>
-    </div>
   </div>
 </div>

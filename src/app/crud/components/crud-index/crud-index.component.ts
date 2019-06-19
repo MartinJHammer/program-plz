@@ -2,12 +2,12 @@ import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Entry } from 'src/app/models/entry';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, SubscriptionLike } from 'rxjs';
-import { map, tap, throttleTime, mergeMap, scan, switchMap } from 'rxjs/operators';
+import { map, tap, throttleTime, mergeMap, scan, switchMap, take } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 import { Router } from '@angular/router';
-
-declare var $: any;
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'pp-crud-index',
@@ -28,14 +28,14 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   @Input() public collectionName: string;
   @Input() public identifier: string;
-  public currentEntry: Entry;
   public subscriptionHandler = new SubscriptionHandler();
 
   @Input() public searchEnabled = false;
 
   constructor(
     public afs: AngularFirestore,
-    public router: Router
+    public router: Router,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -113,20 +113,17 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  public openDeleteModal(currentEntry: Entry): void {
-    this.currentEntry = currentEntry;
-    $(() => {
-      $('#deleteModal').modal('show');
-    });
-  }
-
-  public closeDeleteModal(): void {
-    $('#deleteModal').modal('hide');
-  }
-
-  public delete(): void {
-    this.afs.doc(`${this.collectionName}/${this.currentEntry.id}`).delete();
-    this.deleting$.next(this.currentEntry);
-    $('#deleteModal').modal('hide');
+  public delete(selectedEntry: Entry): void {
+    this.dialog.open(DialogComponent, {
+      minWidth: '250px',
+      data: {
+        title: `Are you sure you want to remove ${selectedEntry[this.identifier]}`,
+        body: 'Remember you can add it again via the "Add" option.',
+        logic: () => {
+          this.afs.doc(`${this.collectionName}/${selectedEntry.id}`).delete();
+          this.deleting$.next(selectedEntry);
+        }
+      }
+    } as MatDialogConfig);
   }
 }
