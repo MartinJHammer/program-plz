@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FieldBaseComponent } from '../../field-base/field-base.component';
+import { FieldBase } from '../../field-base';
 import { Field } from 'src/app/models/field';
 
 @Component({
@@ -7,7 +7,7 @@ import { Field } from 'src/app/models/field';
   templateUrl: './hidden-field.component.html',
   styleUrls: ['./hidden-field.component.scss']
 })
-export class HiddenFieldComponent extends FieldBaseComponent<Field> implements OnInit {
+export class HiddenFieldComponent extends FieldBase<Field> implements OnInit {
 
   constructor() { super(); }
 

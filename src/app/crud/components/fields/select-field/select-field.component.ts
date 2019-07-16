@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DatabaseService } from 'src/app/services/database.service';
-import { FieldBaseComponent } from '../../field-base/field-base.component';
+import { FieldBase } from '../../field-base';
 import { SelectField } from 'src/app/models/select-field';
 import { Entry } from 'src/app/models/entry';
 
@@ -11,7 +11,7 @@ import { Entry } from 'src/app/models/entry';
   templateUrl: './select-field.component.html',
   styleUrls: ['./select-field.component.scss']
 })
-export class SelectFieldComponent extends FieldBaseComponent<SelectField> implements OnInit {
+export class SelectFieldComponent extends FieldBase<SelectField> implements OnInit {
 
   public entries$: Observable<Entry[]>;
 

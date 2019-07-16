@@ -1,5 +1,2 @@
-import { ScrollableDirective } from './scrollable.directive';
 
-export const directives = [
-    ScrollableDirective
-];
+export const directives = [];

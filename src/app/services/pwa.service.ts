@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
+
+/**
+ * Used for showing PWA install button, etc.
+ */
 @Injectable({ providedIn: 'root' })
 export class PwaService {
     public promptEvent: any;

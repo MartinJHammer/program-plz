@@ -32,8 +32,8 @@ export class AuthService {
     private getUser() {
         this.user$ = this.afAuth.authState.pipe(
             switchMap(user => {
-                // Logged in
                 if (user) {
+                    // Logged in
                     return this.afs.doc<User>(`users/${user.uid}`).valueChanges().pipe(shareReplay(1));
                 } else {
                     // Logged out
