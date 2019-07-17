@@ -29,7 +29,7 @@ import { NgAisModule } from 'angular-instantsearch';
 import { searchComponents } from '../search/search-components';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ServiceWorkerModule } from '@angular/service-worker';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
@@ -52,6 +52,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
+    MatCheckboxModule,
+    // PWA
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [

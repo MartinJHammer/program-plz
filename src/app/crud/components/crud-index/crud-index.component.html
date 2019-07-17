@@ -1,21 +1,61 @@
-<ng-content select="h1"></ng-content>
-<a mat-raised-button [routerLink]="['/manage']">Back</a>
-<a mat-raised-button color="Primary" [routerLink]="['create']">Create</a>
-<label for="filter-no-exercise-type"></label>
-<input id="filter-no-exercise-type" [(ngModel)]="filterNoExerciseType" type="checkbox" />
-<button (click)="applyFilters()">Filter</button>
+<!-- Title -->
+<div fxLayout fxLayoutAlign="space-between">
+  <ng-content select="h1"></ng-content>
+  <a mat-raised-button [routerLink]="['/manage']" fxFlexAlign="center">Back</a>
+</div>
 
-<pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)"></pp-search>
+<div fxLayout fxLayoutAlign="space-between">
+  <a mat-raised-button color="primary" [routerLink]="['create']" fxFlexAlign="start">Create</a>
+
+  <div fxLayout="column">
+    <mat-checkbox [(ngModel)]="filterNoExerciseType">Exercises w. no exercise type</mat-checkbox>
+    <button mat-raised-button (click)="applyFilters()">Filter</button>
+  </div>
+
+</div>
+
+<pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
+</pp-search>
+
 
 <!-- Entry list -->
 <ng-container *ngIf="entries$ | async as entries">
   <cdk-virtual-scroll-viewport itemSize="100"
     (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">
-    <ul>
-      <li *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">{{ entry[identifier] }} - <a
-          [routerLink]="['edit', entry.id]">Edit</a> - <a style="color:red;cursor: pointer;"
-          (click)="delete(entry)">Delete</a>
-      </li>
-    </ul>
+
+
+    <!-- Entry -->
+    <div class="entry">
+      <mat-card *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">
+        <div fxLayout>
+          <mat-card-header fxFlexAlign="center">
+            <mat-card-title>{{ entry[identifier] }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+          </mat-card-content>
+          <mat-card-actions fxFlexAlign="center">
+            <!-- Quick menu -->
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <!-- Edit -->
+              <a mat-menu-item [routerLink]="['edit', entry.id]">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </a>
+
+              <!-- Remove exercise -->
+              <button mat-menu-item (click)="delete(entry)">
+                <mat-icon>remove</mat-icon>
+                <span>Remove</span>
+              </button>
+            </mat-menu>
+          </mat-card-actions>
+        </div>
+      </mat-card>
+    </div>
+
   </cdk-virtual-scroll-viewport>
 </ng-container>
