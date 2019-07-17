@@ -1,24 +1,29 @@
-<!-- Title -->
-<div fxLayout fxLayoutAlign="space-between">
-  <ng-content select="h1"></ng-content>
-  <a mat-raised-button [routerLink]="['/manage']" fxFlexAlign="center">Back</a>
-</div>
-
-<div fxLayout fxLayoutAlign="space-between">
-  <a mat-raised-button color="primary" [routerLink]="['create']" fxFlexAlign="start">Create</a>
-
-  <div fxLayout="column">
-    <mat-checkbox [(ngModel)]="filterNoExerciseType">Exercises w. no exercise type</mat-checkbox>
-    <button mat-raised-button (click)="applyFilters()">Filter</button>
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- Title -->
+  <div fxLayout fxLayoutAlign="space-between">
+    <ng-content select="h1"></ng-content>
+    <a mat-raised-button [routerLink]="['/manage']" fxFlexAlign="center">Back</a>
   </div>
 
+  <!-- Actions -->
+  <div fxLayout fxLayoutAlign="space-between">
+    <a mat-raised-button color="primary" [routerLink]="['create']" fxFlexAlign="start">Create</a>
+
+    <div fxLayout="column">
+      <mat-checkbox [(ngModel)]="filterNoExerciseType">Exercises w. no exercise type</mat-checkbox>
+      <button mat-raised-button (click)="applyFilters()">Filter</button>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
+  </pp-search>
 </div>
 
-<pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
-</pp-search>
+<!-- Spacing -->
+<br><br>
 
-
-<!-- Entry list -->
+<!-- Entries -->
 <ng-container *ngIf="entries$ | async as entries">
   <cdk-virtual-scroll-viewport itemSize="100"
     (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">
