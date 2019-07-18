@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { ExerciseType } from 'src/app/models/exercise-type';
 import { DatabaseService } from 'src/app/services/database.service';
-import { FieldBase } from '../../field-base';
+import { FieldBase } from 'src/app/crud/models/field-base';
 import { SelectField } from 'src/app/models/select-field';
 
 @Component({

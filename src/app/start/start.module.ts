@@ -16,20 +16,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
-
 import { StartComponent } from './../components/start/start.component';
 import { environment } from 'src/environments/environment';
 
-import { pipes } from '../pipes/pipes';
 import { components, entryComponents } from '../components/components';
-import { directives } from '../directives/directives';
-import { crudComponents } from '../crud/components/crud-components';
-import { NgAisModule } from 'angular-instantsearch';
-import { searchComponents } from '../search/search-components';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { StartRoutingModule } from './start-routing.module';
+import { CrudModule } from '../crud/crud.module';
+import { SearchModule } from '../search/search.module';
 
 @NgModule({
   imports: [
@@ -37,14 +33,15 @@ import { StartRoutingModule } from './start-routing.module';
     StartRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgAisModule.forRoot(),
+    CrudModule,
+    SearchModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,
     // Angular material/cdk/flex-layout
-    ScrollDispatchModule,
     FlexLayoutModule,
+    ScrollDispatchModule,
     DragDropModule,
     MatSelectModule,
     MatMenuModule,
@@ -57,11 +54,7 @@ import { StartRoutingModule } from './start-routing.module';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
-    ...components,
-    ...crudComponents,
-    ...searchComponents,
-    ...directives,
-    ...pipes
+    ...components
   ],
   entryComponents: [...entryComponents],
   providers: [],
