@@ -17,7 +17,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 
-import { AppRoutingModule } from './app-routing.module';
 import { StartComponent } from './../components/start/start.component';
 import { environment } from 'src/environments/environment';
 
@@ -30,11 +29,12 @@ import { searchComponents } from '../search/search-components';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { StartRoutingModule } from './start-routing.module';
 
 @NgModule({
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    StartRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     NgAisModule.forRoot(),
@@ -67,4 +67,4 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   providers: [],
   bootstrap: [StartComponent]
 })
-export class AppModule { }
+export class StartModule { }
