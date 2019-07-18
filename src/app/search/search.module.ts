@@ -10,7 +10,7 @@ import { NgAisModule } from 'angular-instantsearch';
   imports: [
     CommonModule,
     SearchRoutingModule,
-    NgAisModule.forRoot(),
+    NgAisModule.forRoot()
   ],
   declarations: [
     ...searchComponents

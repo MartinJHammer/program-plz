@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { components } from '../components/components';
-import { ExerciseTypesRoutingModule } from './exercise-types.routing.module';
+import { FormRoutingModule } from './form.routing.module';
 
 @NgModule({
 
   imports: [
     CommonModule,
-    ExerciseTypesRoutingModule
+    FormRoutingModule
   ],
   declarations: [
     ...components
@@ -16,4 +16,4 @@ import { ExerciseTypesRoutingModule } from './exercise-types.routing.module';
     ...components
   ]
 })
-export class ExerciseTypesModule { }
+export class FormModule { }
