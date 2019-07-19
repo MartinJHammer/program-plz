@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FieldBase } from 'src/app/crud/models/field-base';
+import { FieldBase } from '../../field-base';
 import { Field } from 'src/app/models/field';
 
 @Component({
