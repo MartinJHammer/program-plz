@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '../route-guards/auth.guard';
 import { ExercisesIndexComponent } from './components/exercises-index/exercises-index.component';
 import { ExercisesCreateComponent } from './components/exercises-create/exercises-create.component';
 import { ExercisesEditComponent } from './components/exercises-edit/exercises-edit.component';
+import { AuthGuard } from '../start/routing/auth.guard';
 
 const routes: Routes = [
   {

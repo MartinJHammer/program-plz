@@ -1,4 +1,4 @@
-import { Entry } from './entry';
+import { Entry } from 'src/app/start/models/entry';
 
 export class Exercise extends Entry {
     public name: string;

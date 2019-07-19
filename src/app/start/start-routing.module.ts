@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '../route-guards/auth.guard';
+import { AuthGuard } from '../start/routing/auth.guard';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ManageComponent } from './components/manage/manage.component';
 

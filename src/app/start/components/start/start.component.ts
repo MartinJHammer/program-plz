@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PwaService } from 'src/app/services/pwa.service';
+import { PwaService } from '../../services/pwa.service';
 
 @Component({
   selector: 'pp-start',

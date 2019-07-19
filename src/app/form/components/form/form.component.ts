@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Field } from 'src/app/models/field';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FieldTypes } from 'src/app/models/field-types';
-import { DatabaseService } from 'src/app/services/database.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map, filter, switchMap, tap } from 'rxjs/operators';
 import { merge, Observable } from 'rxjs';
-import { getRandomNumber } from 'src/app/helpers/random-number';
+import { Field } from '../../models/field';
+import { FieldTypes } from '../../models/field-types';
+import { DatabaseService } from 'src/app/start/services/database.service';
+import { getRandomNumber } from 'src/app/start/helpers/random-number';
 
 @Component({
   selector: 'pp-form',

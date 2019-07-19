@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FieldBase } from '../field-base';
+import { SelectField } from '../../models/select-field';
+import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
+import { DatabaseService } from 'src/app/start/services/database.service';
 
-import { ExerciseType } from 'src/app/models/exercise-type';
-import { DatabaseService } from 'src/app/services/database.service';
-import { FieldBase } from '../../field-base';
-import { SelectField } from 'src/app/models/select-field';
 
 @Component({
   selector: 'pp-multi-select-field',

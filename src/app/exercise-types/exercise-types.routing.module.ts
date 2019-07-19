@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '../route-guards/auth.guard';
+import { AuthGuard } from '../start/routing/auth.guard';
 import { ExerciseTypesIndexComponent } from './components/exercise-types-index/exercise-types-index.component';
 import { ExerciseTypesCreateComponent } from './components/exercise-types-create/exercise-types-create.component';
 import { ExerciseTypesEditComponent } from './components/exercise-types-edit/exercise-types-edit.component';

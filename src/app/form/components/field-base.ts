@@ -1,6 +1,6 @@
 import { OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
+import { SubscriptionHandler } from '../../start/helpers/subscription-handler';
 
 export class FieldBase<FieldType> implements OnInit, OnDestroy {
 

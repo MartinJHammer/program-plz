@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Exercise } from 'src/app/models/exercise';
 import { BehaviorSubject } from 'rxjs';
+import { Exercise } from '../../models/exercise';
 
 @Component({
   selector: 'pp-add-exercise-dialog',

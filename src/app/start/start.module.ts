@@ -13,7 +13,7 @@ import { StartRoutingModule } from './start-routing.module';
 import { CrudModule } from '../crud/crud.module';
 import { components } from './components/components';
 import { StartComponent } from './components/start/start.component';
-import { CoalescingComponentFactoryResolver } from '../services/coalescing-component-factory-resolver.service';
+import { CoalescingComponentFactoryResolver } from './services/coalescing-component-factory-resolver.service';
 import { UiModule } from '../ui/ui.module';
 
 @NgModule({

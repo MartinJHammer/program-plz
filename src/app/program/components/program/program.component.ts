@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Exercise } from 'src/app/models/exercise';
 import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rxjs';
-import { ExerciseType } from 'src/app/models/exercise-type';
 import { map, shareReplay, take, switchMap, filter, mergeMap, tap, expand } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { getRandomNumber } from 'src/app/helpers/random-number';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { shuffle } from 'src/app/helpers/shuffle';
-import { AuthService } from 'src/app/services/auth.service';
 import { MatSelect } from '@angular/material/select';
-import { docsMap } from 'src/app/helpers/docs-map';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { AddExerciseDialogComponent } from 'src/app/exercises/components/add-exercise-dialog/add-exercise-dialog.component';
+import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
+import { Exercise } from 'src/app/exercises/models/exercise';
+import { AuthService } from 'src/app/start/services/auth.service';
+import { docsMap } from 'src/app/start/helpers/docs-map';
+import { getRandomNumber } from 'src/app/start/helpers/random-number';
+import { shuffle } from 'src/app/start/helpers/shuffle';
 
 @Component({
   selector: 'pp-program',

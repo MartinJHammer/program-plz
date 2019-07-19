@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FieldBase } from '../field-base';
+import { SelectField } from '../../models/select-field';
+import { Entry } from 'src/app/start/models/entry';
+import { DatabaseService } from 'src/app/start/services/database.service';
 
-import { DatabaseService } from 'src/app/services/database.service';
-import { FieldBase } from '../../field-base';
-import { SelectField } from 'src/app/models/select-field';
-import { Entry } from 'src/app/models/entry';
 
 @Component({
   selector: 'pp-select-field',

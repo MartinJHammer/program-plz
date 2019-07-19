@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ExercisesRoutingModule } from './exercises.routing.module';
 import { components, entryComponents } from './components/components';
 import { CrudModule } from '../crud/crud.module';
-import { CoalescingComponentFactoryResolver } from '../services/coalescing-component-factory-resolver.service';
 import { SearchModule } from '../search/search.module';
+import { CoalescingComponentFactoryResolver } from '../start/services/coalescing-component-factory-resolver.service';
 
 @NgModule({
   imports: [

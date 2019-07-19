@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FieldBase } from '../../field-base';
-import { Field } from 'src/app/models/field';
+import { FieldBase } from '../field-base';
+import { Field } from '../../models/field';
 
 @Component({
   selector: 'pp-string-field',

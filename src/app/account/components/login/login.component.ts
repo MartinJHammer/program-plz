@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
-import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
+
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { SubscriptionHandler } from 'src/app/start/helpers/subscription-handler';
+import { AuthService } from 'src/app/start/services/auth.service';
 
 @Component({
   selector: 'pp-login',
