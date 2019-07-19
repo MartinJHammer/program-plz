@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExerciseTypesFields } from '../exercise-types-fields';
+import { ExerciseTypesFields } from '../../exercise-types-fields';
 
 @Component({
   selector: 'pp-exercise-types-create',

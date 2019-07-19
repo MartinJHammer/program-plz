@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProgramComponent } from './../components/program/program.component';
-import { ExerciseTypesIndexComponent } from '../components/exercise-types/exercise-types-index/exercise-types-index.component';
-import { ExerciseTypesCreateComponent } from '../components/exercise-types/exercise-types-create/exercise-types-create.component';
-import { ExerciseTypesEditComponent } from '../components/exercise-types/exercise-types-edit/exercise-types-edit.component';
 import { ManageComponent } from '../components/manage/manage.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
 import { AuthGuard } from '../route-guards/auth.guard';
@@ -24,20 +21,12 @@ const routes: Routes = [
     path: 'manage', component: ManageComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'exercise-types', component: ExerciseTypesIndexComponent, canActivate: [AuthGuard]
-  },
-  {
-    path: 'exercise-types/create', component: ExerciseTypesCreateComponent, canActivate: [AuthGuard]
-  },
-  {
-    path: 'exercise-types/edit/:id', component: ExerciseTypesEditComponent, canActivate: [AuthGuard]
-  },
-  {
-    path: 'exercise-types/edit/:id', component: ExerciseTypesEditComponent
-  },
-  {
     path: 'exercises',
     loadChildren: '../exercises/exercises.module#ExercisesModule'
+  },
+  {
+    path: 'exercise-types',
+    loadChildren: '../exercise-types/exercise-types.module#ExerciseTypesModule'
   },
   {
     path: 'attributes',

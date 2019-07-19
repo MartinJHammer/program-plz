@@ -1,8 +1,5 @@
 import { ProgramComponent } from './program/program.component';
 import { ManageComponent } from './manage/manage.component';
-import { ExerciseTypesIndexComponent } from './exercise-types/exercise-types-index/exercise-types-index.component';
-import { ExerciseTypesCreateComponent } from './exercise-types/exercise-types-create/exercise-types-create.component';
-import { ExerciseTypesEditComponent } from './exercise-types/exercise-types-edit/exercise-types-edit.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { StartComponent } from './start/start.component';
 import { SpinnerComponent } from './spinner/spinner.component';
@@ -20,10 +17,7 @@ export const components = [
     UserProfileComponent,
     LoginComponent,
     DialogComponent,
-    AddExerciseDialogComponent,
-    ExerciseTypesIndexComponent,
-    ExerciseTypesCreateComponent,
-    ExerciseTypesEditComponent
+    AddExerciseDialogComponent
 ];
 
 export const entryComponents = [

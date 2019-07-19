@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { components } from '../components/components';
 import { ExerciseTypesRoutingModule } from './exercise-types.routing.module';
+import { CrudModule } from '../crud/crud.module';
+import { components } from './components/components';
 
 @NgModule({
 
   imports: [
     CommonModule,
-    ExerciseTypesRoutingModule
+    ExerciseTypesRoutingModule,
+    CrudModule
   ],
   declarations: [
     ...components
