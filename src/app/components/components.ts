@@ -1,7 +1,4 @@
-import { ExercisesIndexComponent } from './exercises/exercises-index/exercises-index.component';
 import { ProgramComponent } from './program/program.component';
-import { ExercisesCreateComponent } from './exercises/exercises-create/exercises-create.component';
-import { ExercisesEditComponent } from './exercises/exercises-edit/exercises-edit.component';
 import { ManageComponent } from './manage/manage.component';
 import { ExerciseTypesIndexComponent } from './exercise-types/exercise-types-index/exercise-types-index.component';
 import { ExerciseTypesCreateComponent } from './exercise-types/exercise-types-create/exercise-types-create.component';
@@ -24,9 +21,6 @@ export const components = [
     LoginComponent,
     DialogComponent,
     AddExerciseDialogComponent,
-    ExercisesIndexComponent,
-    ExercisesCreateComponent,
-    ExercisesEditComponent,
     ExerciseTypesIndexComponent,
     ExerciseTypesCreateComponent,
     ExerciseTypesEditComponent

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExercisesFields } from '../exercises-fields';
+import { ExercisesFields } from '../../exercises-fields';
 
 @Component({
   selector: 'pp-exercises-edit',

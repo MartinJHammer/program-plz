@@ -1,7 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from '../route-guards/auth.guard';
+import { ExercisesIndexComponent } from './components/exercises-index/exercises-index.component';
+import { ExercisesCreateComponent } from './components/exercises-create/exercises-create.component';
+import { ExercisesEditComponent } from './components/exercises-edit/exercises-edit.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '', component: ExercisesIndexComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'create', component: ExercisesCreateComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'edit/:id', component: ExercisesEditComponent, canActivate: [AuthGuard]
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
