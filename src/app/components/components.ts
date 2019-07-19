@@ -11,9 +11,6 @@ import { StartComponent } from './start/start.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LoginComponent } from './login/login.component';
-import { AttributesIndexComponent } from './attributes/attributes-index/attributes-index.component';
-import { AttributesCreateComponent } from './attributes/attributes-create/attributes-create.component';
-import { AttributesEditComponent } from './attributes/attributes-edit/attributes-edit.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { AddExerciseDialogComponent } from './add-exercise-dialog/add-exercise-dialog.component';
 
@@ -32,10 +29,7 @@ export const components = [
     ExercisesEditComponent,
     ExerciseTypesIndexComponent,
     ExerciseTypesCreateComponent,
-    ExerciseTypesEditComponent,
-    AttributesIndexComponent,
-    AttributesCreateComponent,
-    AttributesEditComponent
+    ExerciseTypesEditComponent
 ];
 
 export const entryComponents = [

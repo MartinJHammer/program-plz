@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AttributesFields } from '../attributes-fields';
+import { AttributesFields } from '../../attributes-fields';
 
 @Component({
   selector: 'pp-attributes-edit',
