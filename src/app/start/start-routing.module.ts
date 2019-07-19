@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProgramComponent } from './../components/program/program.component';
 import { ManageComponent } from '../components/manage/manage.component';
-import { NotFoundComponent } from '../components/not-found/not-found.component';
 import { AuthGuard } from '../route-guards/auth.guard';
 import { UserProfileComponent } from '../components/user-profile/user-profile.component';
 import { LoginComponent } from '../components/login/login.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Routes = [
   {

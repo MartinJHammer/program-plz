@@ -16,7 +16,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
-import { StartComponent } from './../components/start/start.component';
 import { environment } from 'src/environments/environment';
 
 import { components, entryComponents } from '../components/components';
@@ -26,6 +25,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { StartRoutingModule } from './start-routing.module';
 import { CrudModule } from '../crud/crud.module';
 import { SearchModule } from '../search/search.module';
+import { startComponents } from './components/start-components';
+import { StartComponent } from './components/start/start.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { SearchModule } from '../search/search.module';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
+    ...startComponents,
     ...components
   ],
   entryComponents: [...entryComponents],
