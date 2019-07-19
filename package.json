@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "ng build --prod",
-    "pp:deploy": "npm run build && cd firebase && firebase deploy",
+    "pp:deploy": "npm run build --prod && cd firebase && firebase deploy",
+    "pp:analyze": "ng build --stats-json && webpack-bundle-analyzer firebase/public/stats.json",
     "pp:d:f": "cd firebase && firebase deploy --only functions",
     "pp:d:r": "cd firebase && firebase deploy --only firestore:rules"
   },
@@ -51,6 +52,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.2.2"
+    "typescript": "~3.2.2",
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }
