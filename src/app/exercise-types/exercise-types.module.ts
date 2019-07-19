@@ -5,7 +5,6 @@ import { CrudModule } from '../crud/crud.module';
 import { components } from './components/components';
 
 @NgModule({
-
   imports: [
     CommonModule,
     ExerciseTypesRoutingModule,

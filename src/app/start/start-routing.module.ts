@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ProgramComponent } from './../components/program/program.component';
 import { ManageComponent } from '../components/manage/manage.component';
 import { AuthGuard } from '../route-guards/auth.guard';
 import { UserProfileComponent } from '../components/user-profile/user-profile.component';
@@ -9,9 +8,6 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Routes = [
   {
-    path: '', component: ProgramComponent
-  },
-  {
     path: 'login', component: LoginComponent
   },
   {
@@ -19,6 +15,10 @@ const routes: Routes = [
   },
   {
     path: 'manage', component: ManageComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: '',
+    loadChildren: '../program/program.module#ProgramModule'
   },
   {
     path: 'exercises',

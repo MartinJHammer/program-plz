@@ -6,8 +6,8 @@ import { map, tap, throttleTime, mergeMap, scan, switchMap, take } from 'rxjs/op
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SubscriptionHandler } from 'src/app/helpers/subscription-handler';
 import { Router } from '@angular/router';
-import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 
 @Component({
   selector: 'pp-crud-index',

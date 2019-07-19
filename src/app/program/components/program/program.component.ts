@@ -11,8 +11,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MatSelect } from '@angular/material/select';
 import { docsMap } from 'src/app/helpers/docs-map';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
-import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-dialog.component';
+import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
+import { AddExerciseDialogComponent } from 'src/app/exercises/components/add-exercise-dialog/add-exercise-dialog.component';
 
 @Component({
   selector: 'pp-program',

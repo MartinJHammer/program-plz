@@ -1,16 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { components } from '../components/components';
 import { ProgramRoutingModule } from './program.routing.module';
+import { components, entryComponents } from './components/components';
+import { UiModule } from '../ui/ui.module';
 
 @NgModule({
 
   imports: [
     CommonModule,
-    ProgramRoutingModule
+    ProgramRoutingModule,
+    UiModule
   ],
   declarations: [
     ...components
+  ],
+  entryComponents: [
+    ...entryComponents
   ],
   exports: [
     ...components
