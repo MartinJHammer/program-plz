@@ -1,24 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ManageComponent } from '../components/manage/manage.component';
 import { AuthGuard } from '../route-guards/auth.guard';
-import { UserProfileComponent } from '../components/user-profile/user-profile.component';
-import { LoginComponent } from '../components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ManageComponent } from './components/manage/manage.component';
 
 const routes: Routes = [
-  {
-    path: 'login', component: LoginComponent
-  },
-  {
-    path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard]
-  },
   {
     path: 'manage', component: ManageComponent, canActivate: [AuthGuard]
   },
   {
     path: '',
     loadChildren: '../program/program.module#ProgramModule'
+  },
+  {
+    path: 'account',
+    loadChildren: '../account/account.module#AccountModule'
   },
   {
     path: 'exercises',

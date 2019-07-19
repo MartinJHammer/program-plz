@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptionHandler.register(this.auth.user$.pipe(
-      map(user => user ? this.router.navigate(['profile']) : user)
+      map(user => user ? this.router.navigate(['account/profile']) : user)
     ).subscribe());
   }
 
