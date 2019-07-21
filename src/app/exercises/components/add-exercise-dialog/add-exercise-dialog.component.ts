@@ -1,7 +1,7 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Exercise } from '../../models/exercise';
+import { ProgramService } from 'src/app/program/services/program.service';
 
 @Component({
   selector: 'pp-add-exercise-dialog',
@@ -13,11 +13,11 @@ export class AddExerciseDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AddExerciseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { exercises$: BehaviorSubject<Exercise[]> }
+    public program: ProgramService
   ) { }
 
   public ok(): void {
-    this.data.exercises$.next(this.exercisesToAdd.concat(this.data.exercises$.getValue()));
+    this.program.exercises$.next(this.exercisesToAdd.concat(this.program.exercises$.getValue()));
     this.exercisesToAdd = [];
     this.dialogRef.close();
   }

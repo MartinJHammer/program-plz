@@ -32,7 +32,7 @@ export class ProgramService {
     }
 
     /**
-     * Creates the program.
+     * Returns exercises for the program.
      */
     public plz(): Observable<void> {
         return this.selectedExerciseTypes$.pipe(

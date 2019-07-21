@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { map, take, tap } from 'rxjs/operators';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatSelect } from '@angular/material/select';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -16,6 +15,7 @@ import { AuthService } from 'src/app/start/services/auth.service';
   styleUrls: ['./program.component.scss']
 })
 export class ProgramComponent implements OnInit {
+  public loading = false;
   private exerciseTypesList: MatSelect;
   @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
     this.exerciseTypesList = exerciseTypesList;
@@ -23,10 +23,8 @@ export class ProgramComponent implements OnInit {
 
   // Move to exercise component
   public dragExercises = false;
-  public loading = false;
 
   constructor(
-    public afs: AngularFirestore,
     public program: ProgramService,
     public auth: AuthService,
     public dialog: MatDialog
@@ -38,7 +36,10 @@ export class ProgramComponent implements OnInit {
 
   public createProgram(): void {
     this.toggleLoading();
-    this.program.plz().pipe(tap(() => this.toggleLoading()), take(1)).subscribe();
+    this.program.plz().pipe(
+      tap(() => this.toggleLoading()),
+      take(1)
+    ).subscribe();
   }
 
   public selectAllExerciseTypes() {
@@ -92,19 +93,13 @@ export class ProgramComponent implements OnInit {
       minWidth: '250px',
       data: {
         title: `${exercise.name} information`,
-        body: `More information wil be added soon!`,
-        exercises$: this.program.exercises$
+        body: `More information wil be added soon!`
       }
     } as MatDialogConfig);
   }
 
   public addExercises(): void {
-    this.dialog.open(AddExerciseDialogComponent, {
-      minWidth: '250px',
-      data: {
-        exercises$: this.program.exercises$
-      }
-    } as MatDialogConfig);
+    this.dialog.open(AddExerciseDialogComponent, { minWidth: '250px' });
   }
 
   public removeExercise(selectedExercise: Exercise): void {
