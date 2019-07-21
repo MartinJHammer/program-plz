@@ -108,14 +108,7 @@ export class ProgramComponent implements OnInit {
       data: {
         title: `Are you sure you want to remove ${selectedExercise.name}`,
         body: 'Remember you can add it again via the "Add" option.',
-        logic: () => {
-          this.program.exercises$.pipe(
-            take(1),
-            map(exercises => {
-              this.program.exercises$.next(exercises.filter(exercise => exercise.id !== selectedExercise.id));
-            }),
-          ).subscribe();
-        }
+        logic: () => { this.program.removeExercise(selectedExercise) }
       }
     } as MatDialogConfig);
   }

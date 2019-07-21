@@ -41,6 +41,18 @@ export class ProgramService {
         );
     }
 
+    /**
+     * Removes an exercise from the program
+     */
+    public removeExercise(selectedExercise: Exercise) {
+        this.exercises$.pipe(
+            map(exercises => {
+                this.exercises$.next(exercises.filter(exercise => exercise.id !== selectedExercise.id));
+            }),
+            take(1)
+        ).subscribe();
+    }
+
     public selectAllExerciseTypes() {
         this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
     }
@@ -70,18 +82,6 @@ export class ProgramService {
             }),
             take(1)
         ).subscribe();
-    }
-
-    public trackById(item): string {
-        return item.id;
-    }
-
-    public exerciseDrop(event: CdkDragDrop<string[]>): void {
-        this.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-    }
-
-    public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-        this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
     }
 
     /**
