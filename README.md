@@ -14,3 +14,8 @@ npm install -g firebase-tools
 *Deploy functions only*
 firebase deploy --only functions
 firebase deploy --only firestore:rules
+
+## Code design
+- Components should only use its methods to call services.
+- Services should implement design patterns
+- Componenets should have no logic; they must only control layout/design + delegate user interaction + show results.
