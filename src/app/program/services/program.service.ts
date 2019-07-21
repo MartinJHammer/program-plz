@@ -7,7 +7,6 @@ import { docsMap } from 'src/app/start/helpers/docs-map';
 import { mergeMap, filter, map, switchMap, shareReplay, take, tap, expand } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {

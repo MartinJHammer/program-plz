@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProgramComponent } from '../program/program.component';
 
 @Component({
   selector: 'pp-exercise',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExerciseComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public program: ProgramComponent
+  ) { }
 
   ngOnInit() {
   }

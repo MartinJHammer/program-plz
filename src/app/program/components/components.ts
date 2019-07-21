@@ -1,7 +1,9 @@
 import { ProgramComponent } from './program/program.component';
+import { ExerciseComponent } from './exercise/exercise.component';
 
 export const components = [
-    ProgramComponent
+    ProgramComponent,
+    ExerciseComponent
 ];
 
 export const entryComponents = [];
