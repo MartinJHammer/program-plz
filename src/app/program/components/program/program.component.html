@@ -56,62 +56,7 @@
       <ng-container *ngIf="program.exercises$ | async as exercises">
         <!-- Exercises -->
         <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
-          <mat-card class="exercise-card" cdkDrag>
-            <mat-card-header>
-              <mat-card-title *ngIf="!exercise.util.loading">{{ exercise.name }}</mat-card-title>
-              <mat-card-subtitle *ngIf="!exercise.util.loading">Vertical push (temp placeholder)</mat-card-subtitle>
-              <pp-spinner class="exercise-spinner" *ngIf="exercise.util.loading" [spinner]="'dot'"></pp-spinner>
-            </mat-card-header>
-            <!-- A picture or other content can be added here -->
-            <mat-card-content>
-              <p>3s x failure</p>
-            </mat-card-content>
-            <mat-card-actions>
-              <!-- Quick menu -->
-              <div cdkDragHandle>
-                <mat-icon *ngIf="dragExercises">drag_indicator</mat-icon>
-              </div>
-
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-              <mat-menu #menu="matMenu">
-
-                <!-- Exercise info -->
-                <button mat-menu-item>
-                  <mat-icon>help_outline</mat-icon>
-                  <span (click)="exerciseInfo(exercise)">Exercise
-                    info</span>
-                </button>
-
-                <!-- Add exercise -->
-                <button mat-menu-item (click)="addExercises()">
-                  <mat-icon>add</mat-icon>
-                  <span>Add exercises</span>
-                </button>
-
-                <!-- Remove exercise -->
-                <button mat-menu-item (click)="removeExercise(exercise)">
-                  <mat-icon>remove</mat-icon>
-                  <span>Remove exercise</span>
-                </button>
-
-                <!-- Toggle drag and drop -->
-                <button mat-menu-item>
-                  <mat-icon>drag_handle</mat-icon>
-                  <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
-                  <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
-                </button>
-
-                <!-- Different version -->
-                <button mat-menu-item (click)="differentVersion(exercise, index);">
-                  <mat-icon>swap_horiz</mat-icon>
-                  <span>Replace</span>
-                </button>
-              </mat-menu>
-            </mat-card-actions>
-          </mat-card>
+          <pp-exercise [exercise]="exercise" [index]="index" cdkDrag></pp-exercise>
         </ng-container>
       </ng-container>
     </div>

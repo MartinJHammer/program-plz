@@ -45,10 +45,10 @@ export class ProgramService {
      */
     public removeExercise(selectedExercise: Exercise) {
         this.exercises$.pipe(
+            take(1), // Must come first to prevent infinite loop
             map(exercises => {
                 this.exercises$.next(exercises.filter(exercise => exercise.id !== selectedExercise.id));
             }),
-            take(1)
         ).subscribe();
     }
 
@@ -87,16 +87,15 @@ export class ProgramService {
      * Replaces an exercise in the program with another exercise.
      * Exercise is of same difficulty and targets same muscles
      */
-    public differentVersion(exercise: Exercise, exerciseIndex: number): void {
+    public differentVersion(exercise: Exercise, exerciseIndex: number): Observable<void> {
         const newExercise$ = of(exercise.exerciseTypeId).pipe(
-            tap(() => exercise.util.loading = true),
             switchMap(exerciseTypeId => this.getRandomExercise(exerciseTypeId)),
             mergeMap(x => x)
         );
 
         const retry$ = newExercise$.pipe(expand(newExercise => newExercise.id === exercise.id ? newExercise$ : EMPTY));
 
-        retry$.pipe(
+        return retry$.pipe(
             tap(newExercise => newExercise.util.loading = false),
             switchMap(newExercise => this.exercises$.pipe(
                 map(currentExercises => {
@@ -107,7 +106,7 @@ export class ProgramService {
             )),
             map(newExercises => this.exercises$.next(newExercises)),
             take(10)
-        ).subscribe();
+        );
     }
 
     private getRandomExercise(exerciseTypeId: string): Observable<Exercise[]> {

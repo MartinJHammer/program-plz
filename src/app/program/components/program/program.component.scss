@@ -14,16 +14,6 @@ hr {
     font-size: 30px;
 }
 
-
-.exercise-card {
-  max-width: 400px;
-  margin-bottom: 25px;
-}
-
-button {
-   outline: none;
-}
-
 /* Animate items as they're being sorted. */
 .cdk-drop-list-dragging .cdk-drag {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);

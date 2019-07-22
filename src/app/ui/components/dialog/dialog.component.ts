@@ -13,7 +13,9 @@ export class DialogComponent {
   ) { }
 
   ok(): void {
-    this.data.logic();
+    if (this.data.logic) {
+      this.data.logic();
+    }
     this.dialogRef.close();
   }
 

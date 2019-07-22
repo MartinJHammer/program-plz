@@ -15,19 +15,18 @@ import { AuthService } from 'src/app/start/services/auth.service';
   styleUrls: ['./program.component.scss']
 })
 export class ProgramComponent implements OnInit {
-  public loading = false;
+  public loading: boolean;
   private exerciseTypesList: MatSelect;
   @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
     this.exerciseTypesList = exerciseTypesList;
   }
-
   // Move to exercise component
-  public dragExercises = false;
+
 
   constructor(
     public program: ProgramService,
+    public dialog: MatDialog,
     public auth: AuthService,
-    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -35,9 +34,10 @@ export class ProgramComponent implements OnInit {
   }
 
   public createProgram(): void {
-    this.toggleLoading();
+    const toggleLoading = () => this.loading = !this.loading;
+    toggleLoading();
     this.program.plz().pipe(
-      tap(() => this.toggleLoading()),
+      tap(() => toggleLoading()),
       take(1)
     ).subscribe();
   }
@@ -52,16 +52,8 @@ export class ProgramComponent implements OnInit {
     this.program.deSelectAllExerciseTypes();
   }
 
-  public toggleDragExercises(): void {
-    this.dragExercises = !this.dragExercises;
-  }
-
   public shuffleExercises(): void {
     this.program.shuffleExercises();
-  }
-
-  public toggleLoading(): void {
-    this.loading = !this.loading;
   }
 
   public applyExerciseTypeOrder(): void {
@@ -72,44 +64,7 @@ export class ProgramComponent implements OnInit {
     return item.id;
   }
 
-  public exerciseDrop(event: CdkDragDrop<string[]>): void {
-    this.program.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-  }
-
-  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-    this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-  }
-
-  /**
-   * Replaces an exercise in the program with another exercise.
-   * Exercise is of same difficulty and targets same muscles
-   */
-  public differentVersion(exercise: Exercise, exerciseIndex: number): void {
-    this.program.differentVersion(exercise, exerciseIndex);
-  }
-
-  public exerciseInfo(exercise: Exercise): void {
-    this.dialog.open(DialogComponent, {
-      minWidth: '250px',
-      data: {
-        title: `${exercise.name} information`,
-        body: `More information wil be added soon!`
-      }
-    } as MatDialogConfig);
-  }
-
   public addExercises(): void {
     this.dialog.open(AddExerciseDialogComponent, { minWidth: '250px' });
-  }
-
-  public removeExercise(selectedExercise: Exercise): void {
-    this.dialog.open(DialogComponent, {
-      minWidth: '250px',
-      data: {
-        title: `Are you sure you want to remove ${selectedExercise.name}`,
-        body: 'Remember you can add it again via the "Add" option.',
-        logic: () => { this.program.removeExercise(selectedExercise) }
-      }
-    } as MatDialogConfig);
   }
 }
