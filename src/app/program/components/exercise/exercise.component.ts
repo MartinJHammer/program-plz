@@ -3,8 +3,7 @@ import { Exercise } from 'src/app/exercises/models/exercise';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { ProgramService } from '../../services/program.service';
-import { tap, map, take } from 'rxjs/operators';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-exercise',
@@ -15,7 +14,6 @@ export class ExerciseComponent implements OnInit {
   @Input() public exercise: Exercise;
   @Input() public index: number;
   public loading: boolean;
-  public dragExercises: boolean;
 
   constructor(
     public program: ProgramService,
@@ -46,17 +44,7 @@ export class ExerciseComponent implements OnInit {
     } as MatDialogConfig);
   }
 
-  public toggleDragExercises(): void {
-    this.dragExercises = !this.dragExercises;
-  }
 
-  public exerciseDrop(event: CdkDragDrop<string[]>): void {
-    this.program.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-  }
-
-  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-    this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-  }
 
   /**
    * Replaces an exercise in the program with another exercise.

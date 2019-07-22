@@ -96,7 +96,6 @@ export class ProgramService {
         const retry$ = newExercise$.pipe(expand(newExercise => newExercise.id === exercise.id ? newExercise$ : EMPTY));
 
         return retry$.pipe(
-            tap(newExercise => newExercise.util.loading = false),
             switchMap(newExercise => this.exercises$.pipe(
                 map(currentExercises => {
                     currentExercises[exerciseIndex] = newExercise;

@@ -11,10 +11,6 @@
     </mat-card-content>
     <mat-card-actions>
       <!-- Quick menu -->
-      <div cdkDragHandle>
-        <mat-icon *ngIf="dragExercises">drag_indicator</mat-icon>
-      </div>
-
 
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
@@ -33,13 +29,6 @@
         <button mat-menu-item (click)="removeExercise(exercise)">
           <mat-icon>remove</mat-icon>
           <span>Remove exercise</span>
-        </button>
-
-        <!-- Toggle drag and drop -->
-        <button mat-menu-item>
-          <mat-icon>drag_handle</mat-icon>
-          <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
-          <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
         </button>
 
         <!-- Different version -->

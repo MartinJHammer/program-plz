@@ -2,10 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { map, take, tap } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatSelect } from '@angular/material/select';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { AddExerciseDialogComponent } from 'src/app/exercises/components/add-exercise-dialog/add-exercise-dialog.component';
-import { Exercise } from 'src/app/exercises/models/exercise';
 import { ProgramService } from '../../services/program.service';
 import { AuthService } from 'src/app/start/services/auth.service';
 
@@ -20,8 +18,8 @@ export class ProgramComponent implements OnInit {
   @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
     this.exerciseTypesList = exerciseTypesList;
   }
-  // Move to exercise component
 
+  public dragExercises: boolean;
 
   constructor(
     public program: ProgramService,
@@ -66,5 +64,17 @@ export class ProgramComponent implements OnInit {
 
   public addExercises(): void {
     this.dialog.open(AddExerciseDialogComponent, { minWidth: '250px' });
+  }
+
+  public toggleDragExercises(): void {
+    this.dragExercises = !this.dragExercises;
+  }
+
+  public exerciseDrop(event: CdkDragDrop<string[]>): void {
+    this.program.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+  }
+
+  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
+    this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 }

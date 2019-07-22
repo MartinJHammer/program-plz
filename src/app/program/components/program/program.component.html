@@ -35,6 +35,17 @@
         <p cdkDrag>{{ exerciseType.name }}</p>
       </ng-container>
     </div>
+    <br />
+    <br />
+
+    <!-- Toggle drag and drop -->
+    <button mat-raised-button color="primary">
+      <mat-icon>drag_handle</mat-icon>
+      <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
+      <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
+    </button>
+    <br />
+    <br />
 
     <!-- Shuffle -->
     <button mat-raised-button color="primary" (click)="shuffleExercises()">Shuffle order of exercises</button>
@@ -56,7 +67,12 @@
       <ng-container *ngIf="program.exercises$ | async as exercises">
         <!-- Exercises -->
         <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
-          <pp-exercise [exercise]="exercise" [index]="index" cdkDrag></pp-exercise>
+          <pp-exercise *ngIf="!dragExercises" [exercise]="exercise" [index]="index"></pp-exercise>
+          <ng-container *ngIf="dragExercises">
+            <div cdkDrag>
+              <div class="exercise-drag" cdkDragHandle>{{ exercise.name }}</div>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </div>
