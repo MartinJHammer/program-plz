@@ -52,7 +52,7 @@ export class Exercise extends Entry {
     public qualitiesTrained: any[];
 
     constructor(values: Partial<Exercise>) {
-        super(values);
+        super();
         Object.assign(this, values);
     }
 }

@@ -1,7 +1,6 @@
 import { pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuerySnapshot } from '@angular/fire/firestore/interfaces';
-import { Utilities } from '../models/utilities';
 
 /**
  * Maps incoming firebase data to a proper instantiated entry.
@@ -12,8 +11,7 @@ export const docsMap = pipe(
         return docs.docs.map(e => {
             return {
                 id: e.id,
-                ...e.data(),
-                util: new Utilities()
+                ...e.data()
             } as any;
         });
     })

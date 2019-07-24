@@ -5,6 +5,7 @@ export class ExerciseType extends Entry {
     public attributes: string[];
 
     constructor(values: Partial<ExerciseType>) {
-        super(values);
+        super();
+        Object.assign(this, values);
     }
 }
