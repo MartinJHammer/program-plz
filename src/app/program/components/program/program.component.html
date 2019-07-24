@@ -29,12 +29,23 @@
     <br />
 
     <!-- Exercise type order -->
-    <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
-    <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
-      <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
-        <p cdkDrag>{{ exerciseType.name }}</p>
-      </ng-container>
-    </div>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Sort program exercises by type
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
+        <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
+          <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
+            <p cdkDrag>{{ exerciseType.name }}</p>
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
 
     <!-- Shuffle -->
     <button mat-raised-button color="primary" (click)="shuffle()">Shuffle order of exercises</button>

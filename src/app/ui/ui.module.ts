@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { components, entryComponents } from './components/components';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const material = [
   FlexLayoutModule,
@@ -25,6 +26,7 @@ const material = [
   MatCardModule,
   MatDialogModule,
   MatCheckboxModule,
+  MatExpansionModule
 ];
 
 @NgModule({
