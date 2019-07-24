@@ -54,10 +54,6 @@ export class ProgramComponent implements OnInit {
     this.program.shuffleExercises();
   }
 
-  public applyExerciseTypeOrder(): void {
-    this.program.applyExerciseTypeOrder();
-  }
-
   public trackById(item): string {
     return item.id;
   }
@@ -72,6 +68,10 @@ export class ProgramComponent implements OnInit {
 
   public exerciseDrop(event: CdkDragDrop<string[]>): void {
     this.program.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+  }
+
+  public applyExerciseTypeOrder(): void {
+    this.program.applyExerciseTypeOrder();
   }
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {

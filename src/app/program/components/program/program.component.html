@@ -29,21 +29,24 @@
     <br />
 
     <!-- Exercise type order -->
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Sort program exercises by type
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
-        <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
-          <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
-            <p cdkDrag>{{ exerciseType.name }}</p>
-          </ng-container>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
+    <div class="exercise-type-drag-container">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Sort program exercises by type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
+          <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
+            <ng-container *ngFor="let exerciseType of program.selectedExerciseTypes$ | async; trackBy: trackById">
+              <p class="exercise-type-drag" cdkDrag>{{ exerciseType.name }}</p>
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <br />
 
     <!-- Toggle drag and drop -->
     <button mat-raised-button color="primary">
