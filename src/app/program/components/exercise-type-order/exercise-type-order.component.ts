@@ -17,7 +17,9 @@ export class ExerciseTypeOrderComponent implements OnInit {
   ngOnInit() {
   }
 
-
+  public trackById(item): string {
+    return item.id;
+  }
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
     this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
