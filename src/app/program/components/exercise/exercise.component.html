@@ -1,7 +1,8 @@
 <ng-container *ngIf="exercise">
   <mat-card class="exercise-card">
     <mat-card-header>
-      <mat-card-title *ngIf="!loading">{{ exercise.name }}</mat-card-title>
+      <mat-card-title *ngIf="!loading">{{ exercise.name }}
+      </mat-card-title>
       <mat-card-subtitle *ngIf="!loading">Vertical push (temp placeholder)</mat-card-subtitle>
       <pp-spinner class="exercise-spinner" *ngIf="loading" [spinner]="'dot'"></pp-spinner>
     </mat-card-header>
@@ -10,12 +11,15 @@
       <p>3s x failure</p>
     </mat-card-content>
     <mat-card-actions>
-      <!-- Quick menu -->
-
+      <!-- Menu button -->
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
 
+      <!-- Drag handle -->
+      <ng-content select=".drag-handle"></ng-content>
+
+      <!-- Menu Items -->
       <mat-menu #menu="matMenu">
 
         <!-- Exercise info -->

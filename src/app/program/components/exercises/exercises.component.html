@@ -1,0 +1,12 @@
+<div cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
+  <ng-container *ngIf="program.exercises$ | async as exercises">
+    <!-- Exercises -->
+    <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
+      <div cdkDrag>
+        <pp-exercise *ngIf="!dragExercises" [exercise]="exercise" [index]="index">
+          <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+        </pp-exercise>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

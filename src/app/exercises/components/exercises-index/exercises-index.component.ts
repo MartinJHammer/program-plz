@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pp-exercises',
+  selector: 'pp-exercises-index',
   templateUrl: './exercises-index.component.html',
   styleUrls: ['./exercises-index.component.scss']
 })
