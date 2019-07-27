@@ -5,6 +5,7 @@ import { ShuffleExercisesComponent } from './shuffle-exercises/shuffle-exercises
 import { ExerciseTypeOrderComponent } from './exercise-type-order/exercise-type-order.component';
 import { AddExercisesComponent } from './add-exercises/add-exercises.component';
 import { ExercisesComponent } from './exercises/exercises.component';
+import { ProgramStepperComponent } from './program-stepper/program-stepper.component';
 
 export const components = [
     ProgramComponent,
@@ -13,7 +14,8 @@ export const components = [
     AddExercisesComponent,
     ExerciseTypeSelectComponent,
     ExerciseTypeOrderComponent,
-    ShuffleExercisesComponent
+    ShuffleExercisesComponent,
+    ProgramStepperComponent
 ];
 
 export const entryComponents = [

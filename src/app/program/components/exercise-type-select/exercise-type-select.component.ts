@@ -21,12 +21,16 @@ export class ExerciseTypeSelectComponent implements OnInit {
   }
 
   public selectAllExerciseTypes() {
-    this.exerciseTypesList.options.forEach(x => x.select());
-    this.program.selectAllExerciseTypes();
+    if (this.exerciseTypesList) {
+      this.exerciseTypesList.options.forEach(x => x.select());
+      this.program.selectAllExerciseTypes();
+    }
   }
 
   public deSelectAllExerciseTypes() {
-    this.exerciseTypesList.options.forEach(x => x.deselect());
-    this.program.deSelectAllExerciseTypes();
+    if (this.exerciseTypesList) {
+      this.exerciseTypesList.options.forEach(x => x.deselect());
+      this.program.deSelectAllExerciseTypes();
+    }
   }
 }

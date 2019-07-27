@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { take, tap } from 'rxjs/operators';
 import { ProgramService } from '../../services/program.service';
 
 @Component({
@@ -8,7 +7,7 @@ import { ProgramService } from '../../services/program.service';
   styleUrls: ['./program.component.scss']
 })
 export class ProgramComponent implements OnInit {
-  public loading: boolean;
+  public programStepper: boolean;
 
   constructor(
     public program: ProgramService
@@ -18,12 +17,7 @@ export class ProgramComponent implements OnInit {
     this.program.loadPreferences();
   }
 
-  public createProgram(): void {
-    const toggleLoading = () => this.loading = !this.loading;
-    toggleLoading();
-    this.program.plz().pipe(
-      tap(() => toggleLoading()),
-      take(1)
-    ).subscribe();
+  public toggleProgramStepper(): void {
+    this.programStepper = !this.programStepper;
   }
 }

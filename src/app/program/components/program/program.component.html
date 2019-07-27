@@ -2,19 +2,15 @@
 <div fxLayout fxLayout.xs="column">
   <div fxLayout.xs="column">
 
-    <pp-exercise-type-select></pp-exercise-type-select>
-    <pp-exercise-type-order></pp-exercise-type-order>
-    <pp-add-exercises></pp-add-exercises>
-    <pp-shuffle-exercises></pp-shuffle-exercises>
+    <button mat-raised-button color="primary" (click)="program.plz()">Program plz!</button>
+    <button *ngIf="!programStepper" mat-raised-button (click)="toggleProgramStepper()">Customize program</button>
+    <button *ngIf="programStepper" mat-raised-button (click)="toggleProgramStepper()">Hide customize options</button>
 
-    <!-- Add exercises -->
-    <button mat-raised-button color="primary" (click)="addExercises()">Add exercises</button>
+    <pp-program-stepper *ngIf="programStepper"></pp-program-stepper>
 
-    <!-- Create program -->
-    <button mat-raised-button color="primary" (click)="createProgram()">Program plz!</button>
-
-    <!-- Program -->
-    <pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>
-    <pp-exercises *ngIf="!loading"></pp-exercises>
+    <ng-container *ngIf="program.exercises$ | async as exercises">
+      <h3 *ngIf="exercises.length > 0">Program</h3>
+    </ng-container>
+    <pp-exercises></pp-exercises>
   </div>
 </div>

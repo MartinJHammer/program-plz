@@ -4,12 +4,14 @@ import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rx
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
-import { mergeMap, filter, map, switchMap, shareReplay, take, expand } from 'rxjs/operators';
+import { mergeMap, filter, map, switchMap, shareReplay, take, expand, tap } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
+    public programCreated: boolean;
+
     public allExerciseTypes$: Observable<ExerciseType[]>;
     public exercises$ = new BehaviorSubject<Exercise[]>([]);
     public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
@@ -33,11 +35,13 @@ export class ProgramService {
     /**
      * Returns exercises for the program.
      */
-    public plz(): Observable<void> {
-        return this.selectedExerciseTypes$.pipe(
+    public plz(): void {
+        this.selectedExerciseTypes$.pipe(
             switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandomExercise(exerciseType.id)))),
             map(exercises => this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []))),
-        );
+            tap(() => this.programCreated = true),
+            take(1)
+        ).subscribe();
     }
 
     /**

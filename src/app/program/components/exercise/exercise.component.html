@@ -1,46 +1,37 @@
 <ng-container *ngIf="exercise">
-  <mat-card class="exercise-card">
-    <mat-card-header>
-      <mat-card-title *ngIf="!loading">{{ exercise.name }}
-      </mat-card-title>
-      <mat-card-subtitle *ngIf="!loading">Vertical push (temp placeholder)</mat-card-subtitle>
-      <pp-spinner class="exercise-spinner" *ngIf="loading" [spinner]="'dot'"></pp-spinner>
-    </mat-card-header>
-    <!-- A picture or other content can be added here -->
-    <mat-card-content>
-      <p>3s x failure</p>
-    </mat-card-content>
-    <mat-card-actions>
-      <!-- Menu button -->
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
+  <mat-card class="exercise-card" fxLayout fxLayoutAlign="null center">
+    <h3 *ngIf="!loading">{{ exercise.name }}</h3>
+    <pp-spinner class="exercise-spinner" *ngIf="loading" [spinner]="'dot'"></pp-spinner>
+    <!-- Menu button -->
+    <button fxFlex fxFlexAlign="null end" class="exercise-menu" mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <!-- Drag handle -->
+    <ng-content fxFlex fxFlexAlign="null end" select=".drag-handle"></ng-content>
+
+    <!-- Menu Items -->
+    <mat-menu #menu="matMenu">
+
+      <!-- Exercise info -->
+      <button mat-menu-item>
+        <mat-icon>help_outline</mat-icon>
+        <span (click)="exerciseInfo(exercise)">Exercise
+          info</span>
       </button>
 
-      <!-- Drag handle -->
-      <ng-content select=".drag-handle"></ng-content>
+      <!-- Remove exercise -->
+      <button mat-menu-item (click)="removeExercise(exercise)">
+        <mat-icon>remove</mat-icon>
+        <span>Remove exercise</span>
+      </button>
 
-      <!-- Menu Items -->
-      <mat-menu #menu="matMenu">
+      <!-- Different version -->
+      <button mat-menu-item (click)="differentVersion(exercise, index);">
+        <mat-icon>swap_horiz</mat-icon>
+        <span>Replace</span>
+      </button>
+    </mat-menu>
 
-        <!-- Exercise info -->
-        <button mat-menu-item>
-          <mat-icon>help_outline</mat-icon>
-          <span (click)="exerciseInfo(exercise)">Exercise
-            info</span>
-        </button>
-
-        <!-- Remove exercise -->
-        <button mat-menu-item (click)="removeExercise(exercise)">
-          <mat-icon>remove</mat-icon>
-          <span>Remove exercise</span>
-        </button>
-
-        <!-- Different version -->
-        <button mat-menu-item (click)="differentVersion(exercise, index);">
-          <mat-icon>swap_horiz</mat-icon>
-          <span>Replace</span>
-        </button>
-      </mat-menu>
-    </mat-card-actions>
   </mat-card>
 </ng-container>
