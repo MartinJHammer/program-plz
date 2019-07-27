@@ -40,7 +40,13 @@
           <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
           <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
             <ng-container *ngFor="let exerciseType of program.selectedExerciseTypes$ | async; trackBy: trackById">
-              <p class="exercise-type-drag" cdkDrag>{{ exerciseType.name }}</p>
+
+              <div cdkDrag>
+                <div class="exercise-type-drag" fxLayout fxLayoutAlign="space-between">
+                  {{ exerciseType.name }}
+                  <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+                </div>
+              </div>
             </ng-container>
           </div>
         </mat-expansion-panel>
@@ -80,7 +86,12 @@
           <pp-exercise *ngIf="!dragExercises" [exercise]="exercise" [index]="index"></pp-exercise>
           <ng-container *ngIf="dragExercises">
             <div cdkDrag>
-              <div class="exercise-drag" cdkDragHandle>{{ exercise.name }}</div>
+              <div class="exercise-drag" fxLayout fxLayoutAlign="space-between">
+                {{ exercise.name }}
+                <div *ngIf="dragExercises">
+                  <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+                </div>
+              </div>
             </div>
           </ng-container>
         </ng-container>
