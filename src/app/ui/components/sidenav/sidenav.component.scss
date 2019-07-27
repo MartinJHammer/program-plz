@@ -3,6 +3,10 @@
     outline: none;
 }
 
+mat-sidenav {
+    min-width: 150px;
+}
+
 .main-content {
     padding: 28px;
     min-height:100vh;
