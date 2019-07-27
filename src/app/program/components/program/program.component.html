@@ -2,19 +2,7 @@
 <div fxLayout fxLayout.xs="column">
   <div fxLayout.xs="column" fxFlex fxFlexOrder="1" fxFlexOrder.xs="2">
 
-    <mat-form-field *ngIf="program.allExerciseTypes$ | async as exerciseTypes">
-      <mat-label>Exercise types</mat-label>
-      <mat-select #exerciseTypesList (selectionChange)="program.selectedExerciseTypes$.next($event.value)"
-        [value]="exerciseTypes" multiple>
-        <mat-option *ngFor="let exerciseType of exerciseTypes" [value]="exerciseType">
-          {{ exerciseType.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br />
-    <button mat-raised-button color="primary" (click)="selectAllExerciseTypes()">Select all</button>
-    <button mat-raised-button color="primary" (click)="deSelectAllExerciseTypes()">Deselect all</button>
-    <br />
-    <br />
+    <pp-exercise-type-select></pp-exercise-type-select>
 
     <!-- Exercise type order -->
     <div class="exercise-type-drag-container">

@@ -13,11 +13,6 @@ import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-
 })
 export class ProgramComponent implements OnInit {
   public loading: boolean;
-  private exerciseTypesList: MatSelect;
-  @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
-    this.exerciseTypesList = exerciseTypesList;
-  }
-
   public dragExercises: boolean;
 
   constructor(
@@ -36,16 +31,6 @@ export class ProgramComponent implements OnInit {
       tap(() => toggleLoading()),
       take(1)
     ).subscribe();
-  }
-
-  public selectAllExerciseTypes() {
-    this.exerciseTypesList.options.forEach(x => x.select());
-    this.program.selectAllExerciseTypes();
-  }
-
-  public deSelectAllExerciseTypes() {
-    this.exerciseTypesList.options.forEach(x => x.deselect());
-    this.program.deSelectAllExerciseTypes();
   }
 
   public shuffleExercises(): void {
