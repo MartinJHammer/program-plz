@@ -3,9 +3,8 @@ import { map, take, tap } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatSelect } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
-import { AddExerciseDialogComponent } from 'src/app/exercises/components/add-exercise-dialog/add-exercise-dialog.component';
 import { ProgramService } from '../../services/program.service';
-import { AuthService } from 'src/app/start/services/auth.service';
+import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-dialog.component';
 
 @Component({
   selector: 'pp-program',
@@ -23,8 +22,7 @@ export class ProgramComponent implements OnInit {
 
   constructor(
     public program: ProgramService,
-    public dialog: MatDialog,
-    public auth: AuthService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {

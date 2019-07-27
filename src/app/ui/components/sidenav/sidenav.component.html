@@ -1,0 +1,50 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <!-- Open sidenav -->
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button *ngIf="!sidenav.opened" (click)="sidenav.toggle()"
+      color="primary">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+
+    <!-- Close sidenav -->
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button *ngIf="sidenav.opened" (click)="sidenav.toggle()"
+      color="primary">
+      <mat-icon aria-label="Side nav toggle icon">close</mat-icon>
+    </button>
+
+    <!-- Title -->
+    <h1 class="title" [routerLink]="['/']">program-plz</h1>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav mode="side" role="navigation">
+
+    <!-- Menu -->
+    <mat-nav-list>
+
+      <!-- Logged in -->
+      <ng-container *ngIf="auth.user$ | async as user; else anon">
+        <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['']">Home</a>
+        <a *ngIf="user.roles && user.roles.admin" mat-list-item (click)="sidenav.toggle()"
+          [routerLink]="['manage']">Manage</a>
+        <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['account/profile']">Profile</a>
+
+        <a mat-list-item (click)="auth.signOut(); sidenav.toggle()">Logout</a>
+      </ng-container>
+
+      <!-- Logged out -->
+      <ng-template #anon>
+        <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['account/login']">Login</a>
+      </ng-template>
+
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <!-- Content -->
+  <mat-sidenav-content class="main-content">
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

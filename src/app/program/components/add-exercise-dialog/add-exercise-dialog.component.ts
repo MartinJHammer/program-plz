@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Exercise } from '../../models/exercise';
 import { ProgramService } from 'src/app/program/services/program.service';
+import { Exercise } from 'src/app/exercises/models/exercise';
 
 @Component({
   selector: 'pp-add-exercise-dialog',

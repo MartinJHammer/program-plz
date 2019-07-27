@@ -1,17 +1,5 @@
 <!-- Select exercise type -->
 <div fxLayout fxLayout.xs="column">
-  <!-- Misc options -->
-  <div fxLayout.xs="column" fxFlex fxFlexOrder="2" fxFlexOrder.xs="1">
-    <ng-container *ngIf="auth.user$ | async as user; else anon">
-      <a mat-raised-button color="primary" (click)="auth.signOut()">Logout</a>
-      <a mat-raised-button color="primary" [routerLink]="['account/profile']">Profile</a>
-      <a *ngIf="user.roles && user.roles.admin" mat-raised-button color="primary" [routerLink]="['manage']">Manage</a>
-    </ng-container>
-    <ng-template #anon>
-      <a mat-raised-button color="primary" [routerLink]="['account/login']">Login</a>
-    </ng-template>
-  </div>
-
   <div fxLayout.xs="column" fxFlex fxFlexOrder="1" fxFlexOrder.xs="2">
 
     <mat-form-field *ngIf="program.allExerciseTypes$ | async as exerciseTypes">
