@@ -16,7 +16,7 @@
 
     <mat-form-field *ngIf="program.allExerciseTypes$ | async as exerciseTypes">
       <mat-label>Exercise types</mat-label>
-      <mat-select #exerciseTypesList (selectionChange)="selectedExerciseTypes$.next($event.value)"
+      <mat-select #exerciseTypesList (selectionChange)="program.selectedExerciseTypes$.next($event.value)"
         [value]="exerciseTypes" multiple>
         <mat-option *ngFor="let exerciseType of exerciseTypes" [value]="exerciseType">
           {{ exerciseType.name }}</mat-option>
