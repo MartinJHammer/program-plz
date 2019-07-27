@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { map, take, tap } from 'rxjs/operators';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { MatSelect } from '@angular/material/select';
+import { Component, OnInit } from '@angular/core';
+import { take, tap, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgramService } from '../../services/program.service';
 import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-dialog.component';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'pp-program',
@@ -33,10 +32,6 @@ export class ProgramComponent implements OnInit {
     ).subscribe();
   }
 
-  public shuffleExercises(): void {
-    this.program.shuffleExercises();
-  }
-
   public trackById(item): string {
     return item.id;
   }
@@ -53,11 +48,4 @@ export class ProgramComponent implements OnInit {
     this.program.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
-  public applyExerciseTypeOrder(): void {
-    this.program.applyExerciseTypeOrder();
-  }
-
-  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-    this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-  }
 }

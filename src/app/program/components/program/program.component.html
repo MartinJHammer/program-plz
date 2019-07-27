@@ -1,34 +1,10 @@
 <!-- Select exercise type -->
 <div fxLayout fxLayout.xs="column">
-  <div fxLayout.xs="column" fxFlex fxFlexOrder="1" fxFlexOrder.xs="2">
+  <div fxLayout.xs="column">
 
     <pp-exercise-type-select></pp-exercise-type-select>
-
-    <!-- Exercise type order -->
-    <div class="exercise-type-drag-container">
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Sort program exercises by type
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
-          <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
-            <ng-container *ngFor="let exerciseType of program.selectedExerciseTypes$ | async; trackBy: trackById">
-
-              <div cdkDrag>
-                <div class="exercise-type-drag" fxLayout fxLayoutAlign="space-between">
-                  {{ exerciseType.name }}
-                  <mat-icon cdkDragHandle>drag_indicator</mat-icon>
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
-    <br />
+    <pp-exercise-type-order></pp-exercise-type-order>
+    <pp-shuffle-exercises></pp-shuffle-exercises>
 
     <!-- Toggle drag and drop -->
     <button mat-raised-button color="primary">
@@ -36,22 +12,12 @@
       <span *ngIf="!dragExercises" (click)="toggleDragExercises()">Drag'n drop: On</span>
       <span *ngIf="dragExercises" (click)="toggleDragExercises()">Drag'n drop: Off</span>
     </button>
-    <br />
-    <br />
 
-    <!-- Shuffle -->
-    <button mat-raised-button color="primary" (click)="shuffleExercises()">Shuffle order of exercises</button>
-    <br />
-    <br />
+    <!-- Add exercises -->
     <button mat-raised-button color="primary" (click)="addExercises()">Add exercises</button>
-    <br />
-    <br />
 
     <!-- Create program -->
     <button mat-raised-button color="primary" (click)="createProgram()">Program plz!</button>
-    <br />
-    <br />
-
 
     <!-- Program -->
     <pp-spinner class="program-spinner" *ngIf="loading"></pp-spinner>

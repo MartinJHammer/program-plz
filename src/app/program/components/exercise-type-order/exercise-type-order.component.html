@@ -1,0 +1,15 @@
+<button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
+<div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
+  <ng-container *ngFor="let exerciseType of program.selectedExerciseTypes$ | async; trackBy: trackById">
+
+    <div cdkDrag>
+      <div class="exercise-type-drag" fxLayout fxLayoutAlign="space-between">
+        {{ exerciseType.name }}
+        <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+<!-- Shuffle -->
