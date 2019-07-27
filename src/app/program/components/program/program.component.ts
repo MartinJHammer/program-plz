@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { take, tap, map } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
 import { ProgramService } from '../../services/program.service';
-import { AddExerciseDialogComponent } from '../add-exercise-dialog/add-exercise-dialog.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -15,8 +13,7 @@ export class ProgramComponent implements OnInit {
   public dragExercises: boolean;
 
   constructor(
-    public program: ProgramService,
-    public dialog: MatDialog
+    public program: ProgramService
   ) { }
 
   ngOnInit() {
@@ -34,10 +31,6 @@ export class ProgramComponent implements OnInit {
 
   public trackById(item): string {
     return item.id;
-  }
-
-  public addExercises(): void {
-    this.dialog.open(AddExerciseDialogComponent, { minWidth: '250px' });
   }
 
   public toggleDragExercises(): void {

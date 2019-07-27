@@ -1,0 +1,10 @@
+<h3>Add exercise</h3>
+<pp-search [collectionName]="'exercises'" (selectedHit)=addToAdding($event)></pp-search>
+
+<ng-container *ngFor="let exercise of exercisesToAdd">
+  <p>{{ exercise.name }} - <span style="color: red;" (click)="removeFromAdding(exercise)">remove</span></p>
+</ng-container>
+
+<p *ngIf="message">{{ message }}</p>
+
+<button mat-raised-button color="primary" (click)="add()" cdkFocusInitial>Add</button>

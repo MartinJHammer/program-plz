@@ -18,5 +18,4 @@ export class ShuffleExercisesComponent implements OnInit {
   public shuffleExercises(): void {
     this.program.shuffleExercises();
   }
-
 }
