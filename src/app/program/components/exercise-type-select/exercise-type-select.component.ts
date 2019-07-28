@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
-import { MatSelect } from '@angular/material/select';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 
