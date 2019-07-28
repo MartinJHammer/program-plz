@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
 import { MatSelect } from '@angular/material/select';
+import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'pp-exercise-type-select',
@@ -8,10 +10,8 @@ import { MatSelect } from '@angular/material/select';
   styleUrls: ['./exercise-type-select.component.scss']
 })
 export class ExerciseTypeSelectComponent implements OnInit {
-  private exerciseTypesList: MatSelect;
-  @ViewChild('exerciseTypesList') set content(exerciseTypesList: MatSelect) {
-    this.exerciseTypesList = exerciseTypesList;
-  }
+  public selectedExerciseTypes: ExerciseType[] = [];
+  @ViewChildren(MatCheckbox) public checkboxes !: QueryList<MatCheckbox>;
 
   constructor(
     public program: ProgramService
@@ -20,17 +20,24 @@ export class ExerciseTypeSelectComponent implements OnInit {
   ngOnInit() {
   }
 
+  public updateSelectedExercises(event: MatCheckboxChange) {
+    this.selectedExerciseTypes.push(((event.source.value as unknown) as ExerciseType));
+    this.program.selectedExerciseTypes$.next(this.selectedExerciseTypes);
+  }
+
   public selectAllExerciseTypes() {
-    if (this.exerciseTypesList) {
-      this.exerciseTypesList.options.forEach(x => x.select());
-      this.program.selectAllExerciseTypes();
-    }
+    this.checkboxes.filter(checkbox => !checkbox.checked).forEach(checkbox => {
+      checkbox.checked = true;
+      this.selectedExerciseTypes.push(((checkbox.value as unknown) as ExerciseType));
+    });
+    this.program.selectedExerciseTypes$.next(this.selectedExerciseTypes);
   }
 
   public deSelectAllExerciseTypes() {
-    if (this.exerciseTypesList) {
-      this.exerciseTypesList.options.forEach(x => x.deselect());
-      this.program.deSelectAllExerciseTypes();
-    }
+    this.checkboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+    this.selectedExerciseTypes = [];
+    this.program.selectedExerciseTypes$.next(this.selectedExerciseTypes);
   }
 }
