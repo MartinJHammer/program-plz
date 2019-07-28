@@ -1,13 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '../start/routing/auth.guard';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ManageComponent } from './components/manage/manage.component';
 
 const routes: Routes = [
-  {
-    path: 'manage', component: ManageComponent, canActivate: [AuthGuard]
-  },
   {
     path: '',
     loadChildren: '../program/program.module#ProgramModule'

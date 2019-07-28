@@ -11,3 +11,24 @@ mat-sidenav {
     padding: 28px;
     min-height:100vh;
 }
+
+/* Nested menu styles */
+.full-width {
+  width: 100%;
+}
+
+.menu-button {
+  transition: 300ms ease-in-out;
+  transform: rotate(0deg);
+}
+.menu-button.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  display: none;
+  padding-left: 10px;
+}
+.submenu.expanded {
+  display: inline-block;
+}

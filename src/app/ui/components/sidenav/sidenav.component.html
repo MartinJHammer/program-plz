@@ -22,24 +22,44 @@
 
     <!-- Menu -->
     <mat-nav-list>
+      <!-- Home -->
+      <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['']">Home</a>
 
-      <!-- Logged in -->
+      <!-- Authenticated -->
       <ng-container *ngIf="auth.user$ | async as user; else anon">
-        <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['']">Home</a>
-        <a *ngIf="user.roles && user.roles.admin" mat-list-item (click)="sidenav.toggle()"
-          [routerLink]="['manage']">Manage</a>
+
+        <!-- Admin -->
+        <ng-container *ngIf="user.roles && user.roles.admin">
+          <!-- Manage -->
+          <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+            <span class="full-width" *ngIf="isExpanded || isShowing">Manage</span>
+            <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">
+              expand_more</mat-icon>
+          </mat-list-item>
+
+          <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+            <!-- Exercises -->
+            <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['/exercises']">Exercises</a>
+            <!-- ExerciseTypes -->
+            <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['/exercise-types']">Exercises types</a>
+            <!-- Attributes -->
+            <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['/attributes']">Attributes</a>
+          </div>
+        </ng-container>
+
+        <!-- Profile -->
         <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['account/profile']">Profile</a>
 
+        <!-- Logout -->
         <a mat-list-item (click)="auth.signOut(); sidenav.toggle()">Logout</a>
       </ng-container>
 
-      <!-- Logged out -->
+      <!-- Anonymous -->
       <ng-template #anon>
         <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['account/login']">Login</a>
       </ng-template>
 
     </mat-nav-list>
-
   </mat-sidenav>
 
   <!-- Content -->

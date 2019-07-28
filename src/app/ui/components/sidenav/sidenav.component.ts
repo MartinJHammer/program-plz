@@ -7,6 +7,9 @@ import { AuthService } from 'src/app/start/services/auth.service';
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent implements OnInit {
+  public isExpanded = true;
+  public showSubmenu: boolean;
+  public isShowing: boolean;
 
   constructor(
     public auth: AuthService
