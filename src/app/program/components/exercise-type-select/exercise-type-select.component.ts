@@ -10,7 +10,6 @@ import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
   styleUrls: ['./exercise-type-select.component.scss']
 })
 export class ExerciseTypeSelectComponent implements OnInit {
-  public selectedExerciseTypes: ExerciseType[] = [];
   @ViewChildren(MatCheckbox) public checkboxes !: QueryList<MatCheckbox>;
 
   constructor(
@@ -21,23 +20,22 @@ export class ExerciseTypeSelectComponent implements OnInit {
   }
 
   public updateSelectedExercises(event: MatCheckboxChange) {
-    this.selectedExerciseTypes.push(((event.source.value as unknown) as ExerciseType));
-    this.program.selectedExerciseTypes$.next(this.selectedExerciseTypes);
+    this.program.selectedExerciseTypes$.next(this.checkboxes.filter(checkbox => checkbox.checked).map(checkbox => ((checkbox.value) as unknown) as ExerciseType));
   }
 
   public selectAllExerciseTypes() {
-    this.checkboxes.filter(checkbox => !checkbox.checked).forEach(checkbox => {
-      checkbox.checked = true;
-      this.selectedExerciseTypes.push(((checkbox.value as unknown) as ExerciseType));
-    });
-    this.program.selectedExerciseTypes$.next(this.selectedExerciseTypes);
+    this.program.selectedExerciseTypes$.next(this.checkboxes.map(checkbox => {
+      if (!checkbox.checked) {
+        checkbox.checked = true;
+      }
+      return ((checkbox.value) as unknown) as ExerciseType;
+    }));
   }
 
   public deSelectAllExerciseTypes() {
     this.checkboxes.forEach(checkbox => {
       checkbox.checked = false;
     });
-    this.selectedExerciseTypes = [];
-    this.program.selectedExerciseTypes$.next(this.selectedExerciseTypes);
+    this.program.selectedExerciseTypes$.next([]);
   }
 }
