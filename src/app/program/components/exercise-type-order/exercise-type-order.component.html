@@ -1,4 +1,3 @@
-<button mat-raised-button color="primary" (click)="applyExerciseTypeOrder()">Apply order</button>
 <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
   <ng-container *ngFor="let exerciseType of program.selectedExerciseTypes$ | async; trackBy: trackById">
 

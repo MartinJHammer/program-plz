@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
-import { take } from 'rxjs/operators';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
@@ -18,7 +17,7 @@ export class ProgramStepperComponent implements OnInit {
   }
 
   public currentStep(currentStep: StepperSelectionEvent) {
-    if (currentStep.selectedIndex === 2 && !this.program.programCreated) {
+    if (currentStep.selectedIndex >= 2 && !this.program.programCreated) {
       this.program.plz();
     }
   }

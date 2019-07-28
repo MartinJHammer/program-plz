@@ -9,7 +9,6 @@ import { map, take } from 'rxjs/operators';
   styleUrls: ['./exercise-type-order.component.scss']
 })
 export class ExerciseTypeOrderComponent implements OnInit {
-
   constructor(
     public program: ProgramService
   ) { }
@@ -23,9 +22,6 @@ export class ExerciseTypeOrderComponent implements OnInit {
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
     this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-  }
-
-  public applyExerciseTypeOrder(): void {
     this.program.applyExerciseTypeOrder();
   }
 }
