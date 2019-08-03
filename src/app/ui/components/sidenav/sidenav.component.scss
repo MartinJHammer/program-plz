@@ -7,9 +7,17 @@ mat-sidenav {
     min-width: 150px;
 }
 
-.main-content {
-    padding: 28px;
-    min-height:100vh;
+mat-toolbar-row {
+  height: 8vh
+}
+
+mat-sidenav-content {
+  height: 92vh;
+  overflow: hidden;
+}
+
+.content {
+  padding: 28px;
 }
 
 /* Nested menu styles */
@@ -21,6 +29,7 @@ mat-sidenav {
   transition: 300ms ease-in-out;
   transform: rotate(0deg);
 }
+
 .menu-button.rotated {
   transform: rotate(180deg);
 }
@@ -29,6 +38,7 @@ mat-sidenav {
   display: none;
   padding-left: 10px;
 }
+
 .submenu.expanded {
   display: inline-block;
 }
