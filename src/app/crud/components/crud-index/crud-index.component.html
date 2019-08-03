@@ -27,40 +27,28 @@
 <ng-container *ngIf="entries$ | async as entries">
   <cdk-virtual-scroll-viewport itemSize="100"
     (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">
+    <div *cdkVirtualFor="let entry of entries; trackBy: trackById">
+      <pp-entry [identifier]="identifier" [entry]=entry>
+        <!-- Quick menu -->
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="entry-menu push">
+          <mat-icon>more_vert</mat-icon>
+        </button>
 
+        <mat-menu #menu="matMenu">
+          <!-- Edit -->
+          <a mat-menu-item [routerLink]="['edit', entry.id]">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </a>
 
-    <!-- Entry -->
-    <div class="entry">
-      <mat-card *cdkVirtualFor="let entry of entries; let i = index; trackBy: trackById">
-        <div fxLayout>
-          <mat-card-header fxFlexAlign="center">
-            <mat-card-title>{{ entry[identifier] }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-          </mat-card-content>
-          <mat-card-actions fxFlexAlign="center">
-            <!-- Quick menu -->
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-
-            <mat-menu #menu="matMenu">
-              <!-- Edit -->
-              <a mat-menu-item [routerLink]="['edit', entry.id]">
-                <mat-icon>edit</mat-icon>
-                Edit
-              </a>
-
-              <!-- Remove exercise -->
-              <button mat-menu-item (click)="delete(entry)">
-                <mat-icon>remove</mat-icon>
-                <span>Remove</span>
-              </button>
-            </mat-menu>
-          </mat-card-actions>
-        </div>
-      </mat-card>
+          <!-- Delete -->
+          <button mat-menu-item (click)="delete(entry)">
+            <mat-icon>remove</mat-icon>
+            <span>Remove</span>
+          </button>
+        </mat-menu>
+      </pp-entry>
+      <br />
     </div>
-
   </cdk-virtual-scroll-viewport>
 </ng-container>

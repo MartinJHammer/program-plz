@@ -1,0 +1,6 @@
+<ng-container *ngIf="entry">
+  <mat-card class="entry-card" fxLayout fxLayoutAlign="null center">
+    <h3>{{ entry[identifier] }}</h3>
+    <ng-content select=".entry-menu"></ng-content>
+  </mat-card>
+</ng-container>

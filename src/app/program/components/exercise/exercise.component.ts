@@ -39,12 +39,10 @@ export class ExerciseComponent implements OnInit {
       data: {
         title: `Are you sure you want to remove ${selectedExercise.name}`,
         body: 'Remember you can add it again via the "Add" option.',
-        logic: () => { this.program.removeExercise(selectedExercise) }
+        logic: () => { this.program.removeExercise(selectedExercise); }
       }
     } as MatDialogConfig);
   }
-
-
 
   /**
    * Replaces an exercise in the program with another exercise.
