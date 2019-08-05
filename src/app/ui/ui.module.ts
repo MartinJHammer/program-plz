@@ -18,6 +18,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
 
 const material = [
   FlexLayoutModule,
@@ -34,7 +35,8 @@ const material = [
   MatSidenavModule,
   MatToolbarModule,
   MatListModule,
-  MatStepperModule
+  MatStepperModule,
+  MatInputModule
 ];
 
 @NgModule({

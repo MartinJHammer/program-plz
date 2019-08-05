@@ -1,3 +1,5 @@
 <div [formGroup]="form">
-  <input type="text" [formControlName]="field.key" [placeholder]="field.placeholder">
+  <mat-form-field>
+    <input matInput type="text" [formControlName]="field.key" [placeholder]="field.placeholder" />
+  </mat-form-field>
 </div>
