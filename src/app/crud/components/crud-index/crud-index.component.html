@@ -1,29 +1,25 @@
-<div fxLayout="column" fxLayoutGap="20px">
-  <!-- Title -->
-  <div fxLayout fxLayoutAlign="space-between">
-    <ng-content select="h1"></ng-content>
-    <a mat-raised-button [routerLink]="['/manage']" fxFlexAlign="center">Back</a>
-  </div>
+<!-- Title -->
+<ng-content select="h1"></ng-content>
 
-  <!-- Actions -->
-  <div fxLayout fxLayoutAlign="space-between">
-    <a mat-raised-button color="primary" [routerLink]="['create']" fxFlexAlign="start">Create</a>
+<!-- Actions -->
+<a mat-raised-button (click)="toggleActions()">{{ (showActions ? 'Hide actions' : 'Show actions') }}</a>
+<a mat-raised-button color="primary" [routerLink]="['create']">Create</a>
 
-    <div fxLayout="column">
-      <mat-checkbox [(ngModel)]="filterNoExerciseType">Exercises w. no exercise type</mat-checkbox>
-      <button mat-raised-button (click)="applyFilters()">Filter</button>
-    </div>
-  </div>
+<ng-container *ngIf="showActions">
+  <h2>Filters</h2>
+  <mat-checkbox (change)="applyFilters()" [(ngModel)]="filterNoExerciseType">Exercises w.
+    no exercise type</mat-checkbox>
 
-  <!-- Search -->
+  <h2>Search</h2>
   <pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
   </pp-search>
-</div>
+</ng-container>
 
-<!-- Spacing -->
-<br /><br />
+<br />
+<br />
 
 <!-- Entries -->
+<p style="font-size: 12px; font-style: italic;">Swipe down or scroll to load more</p>
 <ng-container *ngIf="entries$ | async as entries">
   <cdk-virtual-scroll-viewport itemSize="100"
     (scrolledIndexChange)="nextBatch($event, (entries.length > 0 && entries[entries.length - 1][identifier]))">

@@ -1,8 +1,18 @@
 cdk-virtual-scroll-viewport {
-    height: 80vh;
+    min-height: 70vh;
     li {
         height: 100px;
     }
+}
+
+cdk-virtual-scroll-viewport::-webkit-scrollbar {
+    display: none;
+}
+cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
+    display: none;
+}
+cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
+    display: none;
 }
 
 .algolia-hit {

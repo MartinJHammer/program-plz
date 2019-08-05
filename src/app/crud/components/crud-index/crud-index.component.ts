@@ -26,6 +26,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   public query$: Observable<QuerySnapshot<any>>;
   public querySub$: SubscriptionLike;
   public filterNoExerciseType = false;
+  public showActions: boolean;
 
   @Input() public collectionName: string;
   @Input() public identifier: string;
@@ -47,6 +48,9 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     this.subscriptionHandler.unsubscribe();
   }
 
+  public toggleActions() {
+    this.showActions = !this.showActions;
+  }
 
   public initList(): void {
     this.applyFilters();
