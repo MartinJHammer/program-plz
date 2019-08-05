@@ -10,9 +10,11 @@
   <mat-checkbox (change)="applyFilters()" [(ngModel)]="filterNoExerciseType">Exercises w.
     no exercise type</mat-checkbox>
 
-  <h2>Search</h2>
-  <pp-search *ngIf="searchEnabled" [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
-  </pp-search>
+  <ng-container *ngIf="searchEnabled">
+    <h2>Search</h2>
+    <pp-search [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
+    </pp-search>
+  </ng-container>
 </ng-container>
 
 <br />
