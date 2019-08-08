@@ -1,0 +1,7 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <mat-form-field>
+    <input matInput type="search" #input (keyup)="onInput(input.value)" [value]="this.state.query"
+      placeholder="Search" />
+  </mat-form-field>
+  <mat-icon aria-hidden="false" aria-label="Search">search</mat-icon>
+</div>
