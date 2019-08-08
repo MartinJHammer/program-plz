@@ -123,7 +123,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
       minWidth: '250px',
       data: {
         title: `Are you sure you want to remove ${selectedEntry[this.identifier]}`,
-        body: 'Remember you can add it again via the "Add" option.',
+        body: 'This cannot be undone.',
         logic: () => {
           this.afs.doc(`${this.collectionName}/${selectedEntry.id}`).delete();
           this.deleting$.next(selectedEntry);
