@@ -3,11 +3,11 @@ import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
 import { connectSearchBox } from 'instantsearch.js/es/connectors';
 
 @Component({
-  selector: 'pp-search2',
-  templateUrl: './search2.component.html',
-  styleUrls: ['./search2.component.scss']
+  selector: 'pp-search-input',
+  templateUrl: './search-input.component.html',
+  styleUrls: ['./search-input.component.scss']
 })
-export class Search2Component extends BaseWidget implements OnInit {
+export class SearchInputComponent extends BaseWidget implements OnInit {
   @Input() public autofocus: boolean;
   @ViewChild('input') public input: ElementRef;
   @Output() public change = new EventEmitter();

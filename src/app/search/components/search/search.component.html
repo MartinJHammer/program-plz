@@ -4,8 +4,9 @@
 
     <!-- <ais-search-box [autofocus]="false" (change)="searchChanged($event)" (reset)="showSearchResults = false" #searchBox>
     </ais-search-box> -->
-    <pp-search2 [autofocus]="false" (change)="searchChanged($event)" (reset)="showSearchResults = false" #searchBox>
-    </pp-search2>
+    <pp-search-input [autofocus]="false" (change)="searchChanged($event)" (reset)="showSearchResults = false"
+      #searchBox>
+    </pp-search-input>
     <ais-hits *ngIf="showSearchResults">
       <ng-template let-hits="hits">
         <ng-container *ngFor="let hit of hits">
