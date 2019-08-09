@@ -7,6 +7,8 @@
         </pp-select-field>
         <pp-multi-select-field *ngIf="field.type === types.multiSelectField" [field]="field" [form]="form">
         </pp-multi-select-field>
+        <pp-editor-field *ngIf="field.type === types.editorField" [field]="field" [form]="form">
+        </pp-editor-field>
     </ng-container>
     <a mat-raised-button [routerLink]="['/' + area]">Cancel</a>
     <button type="submit" mat-raised-button color="primary">Submit</button>

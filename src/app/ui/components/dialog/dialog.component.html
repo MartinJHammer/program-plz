@@ -1,6 +1,7 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-  <p>{{ data.body }}</p>
+  <p *ngIf="!data.html">{{ data.body }}</p>
+  <div *ngIf="data.html" [innerHtml]="data.body"></div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>

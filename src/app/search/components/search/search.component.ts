@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { SearchInputComponent } from '../search-input/search-input.component';
 
 @Component({
   selector: 'pp-search',
@@ -40,7 +41,7 @@ export class SearchComponent implements OnInit {
   public clickedHit(hit: any) {
     this.selectedHit.emit(hit);
     this.showSearchResults = false;
-    this.searchbox.searchBox.nativeElement.value = '';
+    (this.searchbox as SearchInputComponent).input.nativeElement.value = '';
   }
 
 }

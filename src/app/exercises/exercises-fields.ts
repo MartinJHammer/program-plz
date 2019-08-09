@@ -17,7 +17,7 @@ export class ExercisesFields {
             key: 'description',
             value: '',
             placeholder: 'Enter description',
-            type: FieldTypes.string
+            type: FieldTypes.editorField
         },
         {
             key: 'exerciseTypeId',

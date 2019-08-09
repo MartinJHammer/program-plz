@@ -28,7 +28,8 @@ export class ExerciseComponent implements OnInit {
       minWidth: '250px',
       data: {
         title: `${exercise.name} information`,
-        body: `More information wil be added soon!`
+        body: exercise.description,
+        html: true
       }
     } as MatDialogConfig);
   }

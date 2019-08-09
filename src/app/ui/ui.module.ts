@@ -19,6 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 const material = [
   FlexLayoutModule,
@@ -43,6 +44,7 @@ const material = [
   imports: [
     CommonModule,
     UiRoutingModule,
+    CKEditorModule,
     ...material
   ],
   declarations: [

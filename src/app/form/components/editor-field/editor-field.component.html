@@ -1,0 +1,8 @@
+<div [formGroup]="form">
+  <button *ngIf="!showEditor" (click)="toggleEditor()" mat-raised-button color="primary">Edit {{ field.key }}</button>
+  <button *ngIf="showEditor" (click)="toggleEditor()" mat-raised-button color="primary">Hide editor</button>
+  <br />
+  <br />
+  <pp-editor *ngIf="showEditor" [data]="data" (change)="onChange($event)"></pp-editor>
+  <br />
+</div>
