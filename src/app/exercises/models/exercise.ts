@@ -1,55 +1,28 @@
 import { Entry } from 'src/app/start/models/entry';
 
 export class Exercise extends Entry {
+    // Actually implemented
     public name: string;
-    public alternativeNames: string[];
-    public targetMuscles: any[];
-    public equipment: any[];
+    public equipmentIds: string[];
     public exerciseTypeId: string;
 
-    /**
-     * Order in which the exercise appears in the program
-     */
-    public order: number;
-
-    /**
-     * Handstand
-     */
-    public family: string;
-    /**
-     * Push up, Presses, Headstand
-     */
-    public relations: string[];
-
-    /**
-     * Exercise ids
-     */
-    public easierVersions: number[];
-    /**
-     * Exercise ids
-     */
-    public harderVersions: number[];
-
-    /**
-     * ???
-     */
-    public categories: string[];
-    // public pictures: any[];
-    public correctFormGifs: any[];
-    public incorrectFormGifs: any[];
-    public cues: string[];
-    public description: string;
-    /**
-     * Equipment, alternation, speed, static|dynamic,
-     */
-    public modifications: any[];
-    public setupTime: number;
-    public averageRepTime: number;
-
-    /**
-     * Strength, balance, endurance,
-     */
-    public qualitiesTrained: any[];
+    // Possible props
+    // public alternativeNames: string[];
+    // public targetMuscles: any[];
+    // public order: number;
+    // public family: string;
+    // public relations: string[];
+    // public easierVersions: number[];
+    // public harderVersions: number[];
+    // public categories: string[];
+    // public correctFormGifs: any[];
+    // public incorrectFormGifs: any[];
+    // public cues: string[];
+    // public description: string;
+    // public modifications: any[];
+    // public setupTime: number;
+    // public averageRepTime: number;
+    // public qualitiesTrained: any[];
 
     constructor(values: Partial<Exercise>) {
         super();

@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'attributes',
     loadChildren: '../attributes/attributes.module#AttributesModule'
   },
+  {
+    path: 'equipment',
+    loadChildren: '../equipment/equipment.module#EquipmentModule'
+  },
   { path: '**', component: NotFoundComponent }
 ];
 

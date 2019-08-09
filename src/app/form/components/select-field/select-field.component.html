@@ -1,6 +1,6 @@
 <ng-container [formGroup]="form">
   <mat-form-field>
-    <mat-label>Exercise type</mat-label>
+    <mat-label>{{ field.placeholder }}</mat-label>
     <mat-select [formControlName]="field.key">
       <mat-option *ngFor="let entry of entries$ | async" [value]="entry.id">
         {{ entry[field.displayKey] }}

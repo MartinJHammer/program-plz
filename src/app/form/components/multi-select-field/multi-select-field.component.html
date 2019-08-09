@@ -1,5 +1,6 @@
 <div [formGroup]="form">
 
+  <h4>{{ field.placeholder }}</h4>
   <ng-container *ngFor="let entry of entries$ | async">
     <mat-checkbox [value]="entry.id" [id]="entry.id" (change)="setCheckboxValue($event)"
       [checked]="entry.id | checked: form.get(field.key).value">
@@ -8,11 +9,4 @@
     <br />
   </ng-container>
   <br />
-
-  <!-- <label class="checkbox-container" *ngFor="let entry of entries$ | async" [for]="entry.id">
-    <input type="checkbox" (change)="setCheckboxValue($event)" [value]="entry.id" [id]="entry.id"
-      [checked]="entry.id | checked: form.get(field.key).value">
-    <span class="checkmark"></span>
-    {{ entry[field.displayKey] }}
-  </label> -->
 </div>
