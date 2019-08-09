@@ -14,6 +14,12 @@ export class ExercisesFields {
             type: FieldTypes.string
         },
         {
+            key: 'description',
+            value: '',
+            placeholder: 'Enter description',
+            type: FieldTypes.string
+        },
+        {
             key: 'exerciseTypeId',
             placeholder: 'Exercise types',
             collection: 'exercise-types',
