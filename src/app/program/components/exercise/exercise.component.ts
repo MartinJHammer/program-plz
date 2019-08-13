@@ -4,6 +4,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { ProgramService } from '../../services/program.service';
 import { tap } from 'rxjs/operators';
+import { ReplaceExerciseSearchComponent } from '../replace-exercise-search/replace-exercise-search.component';
 
 @Component({
   selector: 'pp-exercise',
@@ -45,14 +46,19 @@ export class ExerciseComponent implements OnInit {
     } as MatDialogConfig);
   }
 
-  /**
-   * Replaces an exercise in the program with another exercise.
-   * Exercise is of same difficulty and targets same muscles
-   */
-  public differentVersion(exercise: Exercise, exerciseIndex: number): void {
+  public replaceWithRandom(exercise: Exercise, exerciseIndex: number): void {
     this.loading = true;
-    this.program.differentVersion(exercise, exerciseIndex).pipe(
+    this.program.replaceWithRandom(exercise, exerciseIndex).pipe(
       tap(() => this.loading = false)
     ).subscribe();
+  }
+
+  public replaceWithSearch(exerciseIndex: number): void {
+    this.dialog.open(ReplaceExerciseSearchComponent, {
+      minWidth: '250px',
+      data: {
+        exerciseIndex
+      }
+    } as MatDialogConfig);
   }
 }

@@ -27,9 +27,20 @@
       </button>
 
       <!-- Different version -->
-      <button mat-menu-item (click)="differentVersion(exercise, index);">
+      <button mat-menu-item [matMenuTriggerFor]="replace">
         <mat-icon>swap_horiz</mat-icon>
         <span>Replace</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #replace="matMenu">
+      <button mat-menu-item (click)="replaceWithSearch(index);">
+        <mat-icon>search</mat-icon>
+        <span>Search</span>
+      </button>
+      <button mat-menu-item (click)="replaceWithRandom(exercise, index);">
+        <mat-icon>contact_support</mat-icon>
+        <span>Random</span>
       </button>
     </mat-menu>
 

@@ -6,12 +6,14 @@ import { ExerciseTypeOrderComponent } from './exercise-type-order/exercise-type-
 import { AddExercisesComponent } from './add-exercises/add-exercises.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ProgramStepperComponent } from './program-stepper/program-stepper.component';
+import { ReplaceExerciseSearchComponent } from './replace-exercise-search/replace-exercise-search.component';
 
 export const components = [
     ProgramComponent,
     ExerciseComponent,
     ExercisesComponent,
     AddExercisesComponent,
+    ReplaceExerciseSearchComponent,
     ExerciseTypeSelectComponent,
     ExerciseTypeOrderComponent,
     ShuffleExercisesComponent,
@@ -19,4 +21,5 @@ export const components = [
 ];
 
 export const entryComponents = [
+    ReplaceExerciseSearchComponent
 ];

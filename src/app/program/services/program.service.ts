@@ -87,11 +87,7 @@ export class ProgramService {
         ).subscribe();
     }
 
-    /**
-     * Replaces an exercise in the program with another exercise.
-     * Exercise is of same difficulty and targets same muscles
-     */
-    public differentVersion(exercise: Exercise, exerciseIndex: number): Observable<void> {
+    public replaceWithRandom(exercise: Exercise, exerciseIndex: number): Observable<void> {
         const newExercise$ = of(exercise.exerciseTypeId).pipe(
             switchMap(exerciseTypeId => this.getRandomExercise(exerciseTypeId)),
             mergeMap(x => x)
@@ -100,16 +96,14 @@ export class ProgramService {
         const retry$ = newExercise$.pipe(expand(newExercise => newExercise.id === exercise.id ? newExercise$ : EMPTY));
 
         return retry$.pipe(
-            switchMap(newExercise => this.exercises$.pipe(
-                map(currentExercises => {
-                    currentExercises[exerciseIndex] = newExercise;
-                    return currentExercises;
-                }),
-                take(1)
-            )),
-            map(newExercises => this.exercises$.next(newExercises)),
+            map(newExercise => this.replaceExercise(newExercise, exerciseIndex)),
             take(10)
         );
+    }
+
+    public replaceExercise(newExercise: Exercise, exerciseIndex: number): void {
+        const currentExercises = this.exercises$.getValue();
+        currentExercises[exerciseIndex] = newExercise;
     }
 
     private getRandomExercise(exerciseTypeId: string): Observable<Exercise[]> {
