@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, SubscriptionLike } from 'rxjs';
-import { map, tap, throttleTime, mergeMap, scan, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, SubscriptionLike, combineLatest } from 'rxjs';
+import { map, tap, throttleTime, mergeMap, scan } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { Router } from '@angular/router';
@@ -58,39 +58,17 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.generateQuery();
-    this.initList();
+    this.initDeleteStream();
   }
 
   ngOnDestroy(): void {
     this.subscriptionHandler.unsubscribe();
   }
 
-  public initList(): void {
-    this.subscriptionHandler.register(this.deleting$.pipe( // We start the list with deleting, so the list can get updated when we delete something
-      switchMap(deleting => this.entries$.pipe(
-        map(entries => this.entries$.next(entries.filter(x => x.id !== (deleting && deleting.id))))
-      ))
-    ).subscribe());
-  }
+
 
   public toggleActions() {
     this.showActions = !this.showActions;
-  }
-
-  /**
-   * Executes the query generated in generateQuery
-   */
-  public executeQuery() {
-    this.querySub$ = this.query$.pipe(
-      tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
-      map(snapShot => snapShot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })
-      )),
-      scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
-      map(entries => this.entries$.next(entries)),
-    ).subscribe();
   }
 
   /**
@@ -148,7 +126,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   /**
    * Used in the html to request next batch.
    */
-  public nextBatch(event: any, offset: string): void {
+  public nextBatch(offset: string): void {
     if (this.collectionEnd) {
       return;
     }
@@ -161,7 +139,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     }
   }
 
-  public trackById(index: number, item: Entry): string {
+  public trackById(item: Entry): string {
     return item.id;
   }
 
@@ -180,5 +158,33 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
         }
       }
     } as MatDialogConfig);
+  }
+
+  /**
+   * Executes the query generated in generateQuery
+   */
+  private executeQuery() {
+    this.querySub$ = this.query$.pipe(
+      tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
+      map(snapShot => snapShot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })
+      )),
+      scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
+      map(entries => this.entries$.next(entries)),
+    ).subscribe();
+  }
+
+  /**
+   * Inits a stream that removes the passed entry in deleting$ from the entries$ stream
+   */
+  private initDeleteStream(): void {
+    this.subscriptionHandler.register(combineLatest(
+      this.deleting$,
+      this.entries$
+    ).pipe(
+      tap(([deleting, entries]) => this.entries$.next(entries.filter(x => x.id !== (deleting && deleting.id))))
+    ).subscribe());
   }
 }
