@@ -16,23 +16,39 @@ import { Entry } from 'src/app/start/models/entry';
   styleUrls: ['./crud-index.component.scss']
 })
 export class CrudIndexComponent implements OnInit, OnDestroy {
-  // Infinite scroll
-  @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
-  public collectionEnd = false;
-  public offset = new BehaviorSubject(null);
-  public batchSize = 10;
-  public entries$ = new BehaviorSubject([]);
-  public deleting$ = new BehaviorSubject(undefined);
-  public query$: Observable<QuerySnapshot<any>>;
-  public querySub$: SubscriptionLike;
-  public filterNoExerciseType = false;
-  public showActions: boolean;
-
   @Input() public collectionName: string;
   @Input() public identifier: string;
-  public subscriptionHandler = new SubscriptionHandler();
-
   @Input() public searchEnabled = false;
+  public entries$ = new BehaviorSubject([]);  // Entries are updated via next()
+  public filterNoExerciseType = false; // Use this filter? Current hardcoded - needs to be removed
+  public showActions: boolean;
+
+  //#region Entries (data, infinite scroll, pagination, etc.)
+
+  // The viewport - Used to check if we need to load more data
+  @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
+
+  // The query to be exected against the db
+  private query$: Observable<QuerySnapshot<any>>;
+
+  // The subscript
+  private querySub$: SubscriptionLike;
+
+  // Whether we have loaded all data
+  private collectionEnd = false;
+
+  // Current point in the data list
+  private offset$ = new BehaviorSubject(null);
+
+  // Amount of data pr. request
+  public batchSize = 10;
+
+  //#endregion
+
+  //#region Utility
+  private deleting$ = new BehaviorSubject(undefined);
+  private subscriptionHandler = new SubscriptionHandler();
+  //#endregion
 
   constructor(
     public afs: AngularFirestore,
@@ -41,6 +57,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.generateQuery();
     this.initList();
   }
 
@@ -48,20 +65,21 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     this.subscriptionHandler.unsubscribe();
   }
 
-  public toggleActions() {
-    this.showActions = !this.showActions;
-  }
-
   public initList(): void {
-    this.applyFilters();
-
-    this.subscriptionHandler.register(this.deleting$.pipe(
+    this.subscriptionHandler.register(this.deleting$.pipe( // We start the list with deleting, so the list can get updated when we delete something
       switchMap(deleting => this.entries$.pipe(
         map(entries => this.entries$.next(entries.filter(x => x.id !== (deleting && deleting.id))))
       ))
     ).subscribe());
   }
 
+  public toggleActions() {
+    this.showActions = !this.showActions;
+  }
+
+  /**
+   * Executes the query generated in generateQuery
+   */
   public executeQuery() {
     this.querySub$ = this.query$.pipe(
       tap(snapShot => (snapShot.docs.length ? null : (this.collectionEnd = true))),
@@ -75,25 +93,54 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  public applyFilters() {
+  /**
+   * Generates the collection query to be executed - with filters if any
+   */
+  public generateQuery() {
+    // Reset: Unsubscribe the current list
     this.querySub$ ? this.querySub$.unsubscribe() : this.query$ = undefined;
+
+    // Reset: Empty the list
     this.entries$.next([]);
-    const offset$ = this.offset.pipe(throttleTime(500));
-    this.offset.next(null);
+
+    // Reset: relevant streams
+    const throttledOffset$ = this.offset$.pipe(throttleTime(500));
+    this.offset$.next(null);
     this.deleting$.next(undefined);
 
+    // New query w. filters if any
     if (this.filterNoExerciseType) {
-      this.query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref
-        .where('exerciseTypeId', '==', null).orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
+      // Current filters - Hardcoded... These needs to be provided.
+      this.query$ = throttledOffset$.pipe(
+        mergeMap(offset =>
+          this.afs.collection(this.collectionName, ref => ref
+            .where('exerciseTypeId', '==', null)
+            .orderBy('name')
+            .startAfter(offset)
+            .limit(this.batchSize))
+            .get()
+        )
+      );
     } else {
-      this.query$ = offset$.pipe(mergeMap(offset => this.afs.collection(this.collectionName, ref => ref
-        .orderBy('name').startAfter(offset).limit(this.batchSize)).get()));
+      // No filters. Get collection sorted by name asc
+      this.query$ = throttledOffset$.pipe(
+        mergeMap(offset =>
+          this.afs.collection(this.collectionName, ref => ref
+            .orderBy('name')
+            .startAfter(offset)
+            .limit(this.batchSize))
+            .get()
+        )
+      );
     }
 
+    // Execute the final query.
     this.executeQuery();
   }
 
-
+  /**
+   * Routes to the selected hit (edit)
+   */
   public routeToHit(hit: any) {
     this.router.navigate([`${this.collectionName}/edit`, hit.id]);
   }
@@ -110,7 +157,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     const total = this.viewport.getDataLength();
 
     if (end === total) {
-      this.offset.next(offset);
+      this.offset$.next(offset);
     }
   }
 
@@ -125,7 +172,10 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
         title: `Are you sure you want to remove ${selectedEntry[this.identifier]}`,
         body: 'This cannot be undone.',
         logic: () => {
+          // Delete from db
           this.afs.doc(`${this.collectionName}/${selectedEntry.id}`).delete();
+
+          // Delete locally
           this.deleting$.next(selectedEntry);
         }
       }
