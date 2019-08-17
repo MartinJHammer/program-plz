@@ -4,7 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { map, filter, switchMap, tap } from 'rxjs/operators';
 import { merge, Observable } from 'rxjs';
 import { Field } from '../../models/field';
-import { FieldTypes } from '../../models/field-types';
 import { DatabaseService } from 'src/app/start/services/database.service';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 
@@ -18,7 +17,6 @@ export class FormComponent implements OnInit {
   @Input() public fields: Field[];
   @Input() public area: string;
   public form$: Observable<FormGroup>;
-  public types = FieldTypes;
 
   @Output() public submitted = new EventEmitter();
 

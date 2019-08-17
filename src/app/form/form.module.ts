@@ -5,6 +5,7 @@ import { FormRoutingModule } from './form.routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { UiModule } from '../ui/ui.module';
 import { CheckedPipe } from './components/multi-select-field/checked.pipe';
+import { DynamicFormFieldDirective } from './components/dynamic-form-field-directive';
 
 @NgModule({
 
@@ -17,7 +18,11 @@ import { CheckedPipe } from './components/multi-select-field/checked.pipe';
   ],
   declarations: [
     ...components,
+    DynamicFormFieldDirective,
     CheckedPipe
+  ],
+  entryComponents: [
+    ...components
   ],
   exports: [
     ...components

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FieldTypes } from '../form/models/field-types';
 import { Field } from '../form/models/field';
+import { HiddenFieldComponent } from '../form/components/hidden-field/hidden-field.component';
+import { StringFieldComponent } from '../form/components/string-field/string-field.component';
 
 @Injectable({ providedIn: 'root' })
 export class AttributesFields {
     public fields: Field[] = [
-        { key: 'id', type: FieldTypes.hidden },
-        { key: 'name', value: '', placeholder: 'Enter attribute name', type: FieldTypes.string }
+        { key: 'id', component: HiddenFieldComponent },
+        { key: 'name', value: '', placeholder: 'Enter attribute name', component: StringFieldComponent }
     ];
 }
 
