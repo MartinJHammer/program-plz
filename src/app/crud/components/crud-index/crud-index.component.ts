@@ -65,8 +65,6 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     this.subscriptionHandler.unsubscribe();
   }
 
-
-
   public toggleActions() {
     this.showActions = !this.showActions;
   }
@@ -169,8 +167,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
       map(snapShot => snapShot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      })
-      )),
+      }))),
       scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
       map(entries => this.entries$.next(entries)),
     ).subscribe();
