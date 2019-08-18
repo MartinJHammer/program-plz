@@ -27,7 +27,13 @@ export class ExercisesComponent implements OnInit {
   }
 
   public exerciseDrop(event: CdkDragDrop<string[]>): void {
-    this.program.getExercises$().pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+    this.program.getExercises$().pipe(
+      take(1),
+      map(exercises => {
+        moveItemInArray(exercises, event.previousIndex, event.currentIndex);
+        this.program.updateProgram(exercises);
+      })
+    ).subscribe();
   }
 
 }
