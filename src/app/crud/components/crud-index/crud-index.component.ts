@@ -7,6 +7,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { Entry } from 'src/app/start/models/entry';
 import { DatabaseService } from 'src/app/start/services/database.service';
+import { CrudService } from '../../services/crud.service';
 
 @Component({
   selector: 'pp-crud-index',
@@ -24,12 +25,13 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   constructor(
     public db: DatabaseService<any>,
+    public service: CrudService<any>,
     public router: Router,
     public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.entries$ = this.db.getEntries(this.collectionName);
+    this.entries$ = this.service.getEntries(this.collectionName);
   }
 
   ngOnDestroy(): void {
@@ -44,25 +46,15 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   }
 
   public applyFilter(filterName: string) {
-    this.db
+    this.service
       .setFilters(filterName, this.filterNoExerciseType)
       .runFilters();
   }
 
-  /**
-   * Used in the html to request next batch.
-   */
   public nextBatch(offset: string): void {
-    if (this.db.collectionEnd) {
-      return;
-    }
-
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
-
-    if (end === total) {
-      this.db.offset$.next(offset);
-    }
+    this.service.nextBatch(offset, end, total);
   }
 
   public trackById(index: any, item: Entry): string {
@@ -78,7 +70,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
         body: 'This cannot be undone.',
         logic: () => {
           this.db.delete(`${this.collectionName}/${selectedEntry.id}`);
-          this.db.deleteFromLocalList(selectedEntry);
+          this.service.removeFromEntries$(selectedEntry);
         }
       }
     } as MatDialogConfig);
