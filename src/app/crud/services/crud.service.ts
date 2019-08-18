@@ -6,9 +6,6 @@ import { Entry } from 'src/app/start/models/entry';
 
 @Injectable({ providedIn: 'root' })
 export class CrudService<T> {
-    public offset$ = new BehaviorSubject(null);
-    public collectionEnd = false;
-
     private collectionName: string;
     private deleting$ = new BehaviorSubject(undefined);
     private query$: Observable<QuerySnapshot<any>>;
@@ -16,6 +13,8 @@ export class CrudService<T> {
     private querySub$: SubscriptionLike;
     private batchSize = 10;
     private filters: any = {};
+    private offset$ = new BehaviorSubject(null);
+    private collectionEnd = false;
 
     constructor(
         public afs: AngularFirestore
@@ -130,8 +129,6 @@ export class CrudService<T> {
             map(entries => this.entries$.next(entries)),
         ).subscribe();
     }
-
-
 
     /**
      * Inits a stream that removes the passed entry in deleting$ from the entries$ stream

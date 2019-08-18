@@ -58,7 +58,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   }
 
   public trackById(index: any, item: Entry): string {
-    const temp = index; // prevents argument auto removal.
+    let temp = index; temp = temp;
     return item.id;
   }
 
