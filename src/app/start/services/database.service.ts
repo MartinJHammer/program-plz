@@ -95,7 +95,6 @@ export class DatabaseService<T> {
         } else {
             // No filters. Get collection sorted by name asc
             this.query$ = throttledOffset$.pipe(
-                tap(x => console.log('offset', x)),
                 mergeMap(offset =>
                     this.afs.collection(this.collectionName, ref => ref
                         .orderBy('name')
@@ -117,9 +116,7 @@ export class DatabaseService<T> {
                 id: doc.id,
                 ...doc.data()
             }))),
-            tap(x => console.log('returned data', x)),
             scan((acc, batch) => [...acc, ...batch], []), // merge all batches together
-            tap(x => console.log('merged data', x)),
             map(entries => this.entries$.next(entries)),
         ).subscribe();
     }
@@ -144,9 +141,7 @@ export class DatabaseService<T> {
     public deleteStream(): Observable<Entry[]> {
         return combineLatest(
             this.deleting$,
-            this.entries$.pipe(
-                tap(x => console.log('data going into list', x)),
-            )
+            this.entries$
         ).pipe(
             map(([deleting, entries]) => entries.filter(x => x.id !== (deleting && deleting.id)))
         );

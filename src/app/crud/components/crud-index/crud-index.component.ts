@@ -60,14 +60,13 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
 
-    console.log('nextBatch', end, total, offset);
-
     if (end === total) {
       this.db.offset$.next(offset);
     }
   }
 
-  public trackById(item: Entry): string {
+  public trackById(index: any, item: Entry): string {
+    const temp = index; // prevents argument auto removal.
     return item.id;
   }
 
