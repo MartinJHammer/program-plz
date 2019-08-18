@@ -8,7 +8,7 @@
 <ng-container *ngIf="showActions">
   <!-- Filters -->
   <h2>Filters</h2>
-  <mat-checkbox (change)="generateQuery()" [(ngModel)]="filterNoExerciseType">Exercises w.
+  <mat-checkbox (change)="applyFilter('filterNoExerciseType')" [(ngModel)]="filterNoExerciseType">Exercises w.
     no exercise type</mat-checkbox>
 
   <!-- Search -->
