@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
@@ -7,18 +7,22 @@ import { docsMap } from 'src/app/start/helpers/docs-map';
 import { mergeMap, filter, map, switchMap, shareReplay, take, expand, tap } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
+import { StorageService } from 'src/app/start/services/storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
     public programCreated: boolean;
 
     public allExerciseTypes$: Observable<ExerciseType[]>;
-    public exercises$ = new BehaviorSubject<Exercise[]>([]);
+    private exercises$ = new BehaviorSubject<Exercise[]>([]);
     public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
 
     constructor(
-        public afs: AngularFirestore
-    ) { }
+        private afs: AngularFirestore,
+        private storageService: StorageService
+    ) {
+        this.loadProgramFromStorage();
+    }
 
     public loadPreferences(): void {
         const strengthId$ = this.afs.collection('attributes').get().pipe(docsMap, mergeMap(x => x), filter(x => x.name === 'Strength'), map(x => x.id));
@@ -33,15 +37,28 @@ export class ProgramService {
     }
 
     /**
-     * Returns exercises for the program.
+     * Inits the program.
      */
     public plz(): void {
         this.selectedExerciseTypes$.pipe(
             switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandomExercise(exerciseType.id)))),
-            map(exercises => this.exercises$.next(exercises.reduce((a, b) => a.concat(b), []))),
+            map(exercises => this.updateProgram(exercises.reduce((a, b) => a.concat(b), []))),
             tap(() => this.programCreated = true),
             take(1)
         ).subscribe();
+    }
+
+    public getExercises$(): Observable<Exercise[]> {
+        return this.exercises$;
+    }
+
+    public getExercises(): Exercise[] {
+        return this.exercises$.getValue();
+    }
+
+    public updateProgram(exercises: Exercise[]) {
+        this.exercises$.next(exercises);
+        this.storageService.set('program', exercises);
     }
 
     /**
@@ -51,7 +68,7 @@ export class ProgramService {
         this.exercises$.pipe(
             take(1), // Must come first to prevent infinite loop
             map(exercises => {
-                this.exercises$.next(exercises.filter(exercise => exercise.id !== selectedExercise.id));
+                this.updateProgram(exercises.filter(exercise => exercise.id !== selectedExercise.id));
             }),
         ).subscribe();
     }
@@ -67,7 +84,11 @@ export class ProgramService {
     public shuffleExercises(): void {
         this.exercises$.pipe(
             take(1),
-            map(exercises => shuffle(exercises)),
+            map(exercises => {
+                const shuffledExercises = shuffle(exercises);
+                this.updateProgram(shuffledExercises);
+                return shuffledExercises;
+            }),
         ).subscribe();
     }
 
@@ -81,7 +102,7 @@ export class ProgramService {
                     return exercises.filter(exercise => exercise.exerciseTypeId === selectedExercise.id);
                 }).reduce((a, b) => a.concat(b), []);
 
-                this.exercises$.next(Array.from(new Set(orderedExercises)));
+                this.updateProgram(Array.from(new Set(orderedExercises)));
             }),
             take(1)
         ).subscribe();
@@ -104,6 +125,19 @@ export class ProgramService {
     public replaceExercise(newExercise: Exercise, exerciseIndex: number): void {
         const currentExercises = this.exercises$.getValue();
         currentExercises[exerciseIndex] = newExercise;
+        this.updateProgram(currentExercises);
+    }
+
+    private loadProgramFromStorage() {
+        this.storageService.select('program').pipe(
+            take(1),
+            tap((x: Exercise[]) => {
+                if (x.length > 0) {
+                    this.programCreated = true;
+                }
+                this.exercises$.next(x);
+            })
+        ).subscribe();
     }
 
     private getRandomExercise(exerciseTypeId: string): Observable<Exercise[]> {

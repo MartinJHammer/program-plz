@@ -15,10 +15,6 @@ import { components } from './components/components';
 import { StartComponent } from './components/start/start.component';
 import { CoalescingComponentFactoryResolver } from './services/coalescing-component-factory-resolver.service';
 import { UiModule } from '../ui/ui.module';
-import { StorageService } from './services/storage.service';
-import { Exercise } from '../exercises/models/exercise';
-import { from, timer, BehaviorSubject } from 'rxjs';
-import { tap, map, switchMap, filter, delay, take } from 'rxjs/operators';
 
 @NgModule({
   imports: [
@@ -41,75 +37,8 @@ import { tap, map, switchMap, filter, delay, take } from 'rxjs/operators';
 })
 export class StartModule {
   constructor(
-    coalescingResolver: CoalescingComponentFactoryResolver,
-    public storageService: StorageService
+    coalescingResolver: CoalescingComponentFactoryResolver
   ) {
     coalescingResolver.init();
-
-    // Starting up the app
-    const program$ = new BehaviorSubject<any[]>([]);
-
-    // Get program from last session
-    storageService.select('program').pipe(
-      take(1),
-      tap(x => program$.next(x)),
-    ).subscribe();
-
-    setTimeout(() => {
-      // Change is made to program.
-      const updatedProgram = program$.getValue().concat([
-        new Exercise({
-          name: 'Squat',
-          description: 'So good!',
-          equipmentIds: [
-            '123',
-            '234'
-          ],
-          exerciseTypeId: '123'
-        })
-      ]);
-
-      program$.next(updatedProgram);
-      this.storageService.set('program', updatedProgram);
-    }, 5000);
-
-    setTimeout(() => {
-      // Change is made to program.
-      const updatedProgram = program$.getValue().concat([
-        new Exercise({
-          name: 'Deadlift',
-          description: 'So good!',
-          equipmentIds: [
-            '123',
-            '234'
-          ],
-          exerciseTypeId: '123'
-        })
-      ]);
-      program$.next(updatedProgram);
-      this.storageService.set('program', updatedProgram);
-    }, 10000);
-
-    setTimeout(() => {
-      // Change is made to program.
-      const updatedProgram = program$.getValue().concat([
-        new Exercise({
-          name: 'Bench press',
-          description: 'So good!',
-          equipmentIds: [
-            '123',
-            '234'
-          ],
-          exerciseTypeId: '123'
-        })
-      ]);
-      program$.next(updatedProgram);
-      this.storageService.set('program', updatedProgram);
-    }, 15000);
-
-    // Persist program whenever it changes.
-    program$.pipe(
-      tap(program => console.log(program)),
-    ).subscribe();
   }
 }

@@ -20,7 +20,7 @@ export class AddExercisesComponent implements OnDestroy {
   }
 
   public add(): void {
-    this.program.exercises$.next(this.exercisesToAdd.concat(this.program.exercises$.getValue()));
+    this.program.updateProgram(this.exercisesToAdd.concat(this.program.getExercises()));
     this.exercisesToAdd = [];
     this.message = 'Added!';
     setTimeout(() => {

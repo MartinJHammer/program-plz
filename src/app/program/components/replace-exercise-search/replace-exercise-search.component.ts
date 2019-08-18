@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ProgramService } from 'src/app/program/services/program.service';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';

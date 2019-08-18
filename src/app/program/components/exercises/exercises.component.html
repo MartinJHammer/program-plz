@@ -1,5 +1,5 @@
 <div cdkDropList (cdkDropListDropped)="exerciseDrop($event)">
-  <ng-container *ngIf="program.exercises$ | async as exercises">
+  <ng-container *ngIf="exercises$ | async as exercises">
     <!-- Exercises -->
     <ng-container *ngFor="let exercise of exercises; trackBy: trackById; let index = index">
       <div cdkDrag>

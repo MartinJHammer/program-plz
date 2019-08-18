@@ -7,7 +7,7 @@
 
     <pp-program-stepper *ngIf="programStepper"></pp-program-stepper>
 
-    <ng-container *ngIf="program.exercises$ | async as exercises">
+    <ng-container *ngIf="exercises$ | async as exercises">
       <h3 *ngIf="exercises.length > 0">Program</h3>
     </ng-container>
     <pp-exercises></pp-exercises>

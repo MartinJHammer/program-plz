@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { map, take } from 'rxjs/operators';
 import { ProgramService } from '../../services/program.service';
+import { Exercise } from 'src/app/exercises/models/exercise';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pp-exercises',
@@ -9,11 +11,15 @@ import { ProgramService } from '../../services/program.service';
   styleUrls: ['./exercises.component.scss']
 })
 export class ExercisesComponent implements OnInit {
+
+  public exercises$: Observable<Exercise[]>;
+
   constructor(
     public program: ProgramService
   ) { }
 
   ngOnInit() {
+    this.exercises$ = this.program.getExercises$();
   }
 
   public trackById(item): string {
@@ -21,7 +27,7 @@ export class ExercisesComponent implements OnInit {
   }
 
   public exerciseDrop(event: CdkDragDrop<string[]>): void {
-    this.program.exercises$.pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+    this.program.getExercises$().pipe(map(exercises => moveItemInArray(exercises, event.previousIndex, event.currentIndex)), take(1)).subscribe();
   }
 
 }
