@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pp-exercise-type-select',
@@ -11,11 +12,14 @@ import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 export class ExerciseTypeSelectComponent implements OnInit {
   @ViewChildren(MatCheckbox) public checkboxes !: QueryList<MatCheckbox>;
 
+  public allExerciseTypes$: Observable<ExerciseType[]>;
+
   constructor(
     public program: ProgramService
   ) { }
 
   ngOnInit() {
+    this.allExerciseTypes$ = this.program.allExerciseTypes$;
   }
 
   public updateSelectedExercises(event: MatCheckboxChange) {

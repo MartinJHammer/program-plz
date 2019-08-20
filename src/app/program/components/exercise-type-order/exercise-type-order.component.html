@@ -1,5 +1,5 @@
 <div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
-  <ng-container *ngFor="let exerciseType of program.selectedExerciseTypes$ | async; trackBy: trackById">
+  <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
 
     <div cdkDrag>
       <div class="exercise-type-drag" fxLayout fxLayoutAlign="space-between">

@@ -1,7 +1,6 @@
 import * as localforage from 'localforage';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from, timer } from 'rxjs';
-import { TouchSequence } from 'selenium-webdriver';
 import { flatMap, switchMap } from 'rxjs/operators';
 
 /**
@@ -12,7 +11,7 @@ export class StorageService {
 
     protected subjects: { [key: string]: BehaviorSubject<any> } = {};
 
-    public select(key: string, defaultValue: any = null, delay: number = 1000): Observable<any> {
+    public select(key: string, defaultValue: any = null, delay: number = 0): Observable<any> {
         if (this.subjects.hasOwnProperty(key)) {
             return this.subjects[key];
         }

@@ -4,10 +4,11 @@ import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rx
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
-import { mergeMap, filter, map, switchMap, shareReplay, take, expand, tap } from 'rxjs/operators';
+import { mergeMap, filter, map, switchMap, take, expand, tap, distinctUntilChanged } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
+import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
@@ -19,18 +20,20 @@ export class ProgramService {
 
     constructor(
         private afs: AngularFirestore,
+        private exerciseTypesService: ExerciseTypesService,
         private storageService: StorageService
     ) {
         this.loadProgramFromStorage();
     }
 
     public loadPreferences(): void {
-        const strengthId$ = this.afs.collection('attributes').get().pipe(docsMap, mergeMap(x => x), filter(x => x.name === 'Strength'), map(x => x.id));
+        const strengthId$ = of('Zp0BbwRWuY5TjXDNVBA5'); // Strength id
 
-        this.allExerciseTypes$ = strengthId$.pipe(
-            switchMap(strengthId => this.afs
-                .collection('exercise-types', ref => ref.where('attributes', 'array-contains', strengthId))
-                .get().pipe(docsMap, shareReplay(1)))
+        this.allExerciseTypes$ = combineLatest(
+            strengthId$,
+            this.exerciseTypesService.getAll()
+        ).pipe(
+            map(([strengthId, exerciseTypes]) => exerciseTypes.filter(exerciseType => exerciseType.attributes.includes(strengthId)))
         );
 
         this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
@@ -132,10 +135,10 @@ export class ProgramService {
         this.storageService.select('program').pipe(
             take(1),
             tap((x: Exercise[]) => {
-                if (x.length > 0) {
+                if (x && x.length > 0) {
                     this.programCreated = true;
                 }
-                this.exercises$.next(x);
+                this.exercises$.next(x ? x : []);
             })
         ).subscribe();
     }
