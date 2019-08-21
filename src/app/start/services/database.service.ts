@@ -6,6 +6,9 @@ import { docsMap } from '../helpers/docs-map';
 import { docMap } from '../helpers/doc-map';
 import { snapshotChangesDocsMap } from '../helpers/snapshot-changes-docs-map';
 
+/**
+ * Outdated. Remove when replaced by data services.
+ */
 @Injectable({ providedIn: 'root' })
 export class DatabaseService<T> {
 

@@ -5,6 +5,7 @@ import { docMap } from '../helpers/doc-map';
 import { StorageService } from './storage.service';
 import { take, tap, flatMap, filter } from 'rxjs/operators';
 import { Entry } from '../models/entry';
+import { docsMap } from '../helpers/docs-map';
 
 export abstract class DataService<T extends Entry> {
     protected entries$ = new BehaviorSubject<T[]>([]);

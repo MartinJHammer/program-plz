@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rx
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
-import { mergeMap, filter, map, switchMap, take, expand, tap, distinctUntilChanged } from 'rxjs/operators';
+import { mergeMap, filter, map, switchMap, take, expand, tap } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
