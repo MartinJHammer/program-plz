@@ -14,7 +14,7 @@
   <!-- Search -->
   <ng-container *ngIf="searchEnabled">
     <h2>Search</h2>
-    <pp-search [collectionName]="collectionName" (selectedHit)="routeToHit($event)">
+    <pp-search [collection]="collection" (selectedHit)="routeToHit($event)">
     </pp-search>
   </ng-container>
 </ng-container>

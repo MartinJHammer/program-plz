@@ -18,6 +18,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
   @Input() public searchEnabled = false;
   @Input() public dataService: DataService<any>;
+  public collection: string;
   public entries$: Observable<Entry[]>;
   public showActions: boolean;
   public filterNoExerciseType = false; // Needs to be removed
@@ -29,7 +30,8 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.entries$ = this.service.getEntries(this.dataService.collection);
+    this.collection = this.dataService.collection;
+    this.entries$ = this.service.getEntries(this.collection);
   }
 
   ngOnDestroy(): void {
@@ -40,7 +42,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   }
 
   public routeToHit(hit: any): void {
-    this.router.navigate([`${this.dataService.collection}/edit`, hit.id]);
+    this.router.navigate([`${this.collection}/edit`, hit.id]);
   }
 
   public applyFilter(filterName: string) {

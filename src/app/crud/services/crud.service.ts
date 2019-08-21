@@ -6,7 +6,7 @@ import { Entry } from 'src/app/start/models/entry';
 
 @Injectable({ providedIn: 'root' })
 export class CrudService<T> {
-    private collectionName: string;
+    private collection: string;
     private deleting$ = new BehaviorSubject(undefined);
     private query$: Observable<QuerySnapshot<any>>;
     private entries$ = new BehaviorSubject([]);  // Entries are updated via next()
@@ -23,8 +23,8 @@ export class CrudService<T> {
     /**
      * Inits necessary logic and returns the entries stream.
      */
-    public getEntries(collectionName: string): Observable<Entry[]> {
-        this.collectionName = collectionName;
+    public getEntries(collection: string): Observable<Entry[]> {
+        this.collection = collection;
         this.generateQuery();
         this.executeQuery();
         return this.deleteStream();
@@ -93,7 +93,7 @@ export class CrudService<T> {
             // Current filters - Hardcoded... These needs to be provided.
             this.query$ = throttledOffset$.pipe(
                 mergeMap(offset =>
-                    this.afs.collection(this.collectionName, ref => ref
+                    this.afs.collection(this.collection, ref => ref
                         .where('exerciseTypeId', '==', null)
                         .orderBy('name')
                         .startAfter(offset)
@@ -105,7 +105,7 @@ export class CrudService<T> {
             // No filters. Get collection sorted by name asc
             this.query$ = throttledOffset$.pipe(
                 mergeMap(offset =>
-                    this.afs.collection(this.collectionName, ref => ref
+                    this.afs.collection(this.collection, ref => ref
                         .orderBy('name')
                         .startAfter(offset)
                         .limit(this.batchSize))

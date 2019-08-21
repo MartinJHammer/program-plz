@@ -1,5 +1,5 @@
 <ng-content select="h3"></ng-content>
-<pp-search [collectionName]="'exercises'" (selectedHit)=addToAdding($event)></pp-search>
+<pp-search [collection]="'exercises'" (selectedHit)=addToAdding($event)></pp-search>
 
 <ng-container *ngFor="let exercise of exercisesToAdd">
   <p>{{ exercise.name }} - <span style="color: red;" (click)="removeFromAdding(exercise)">remove</span></p>

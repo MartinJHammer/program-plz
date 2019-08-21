@@ -9,7 +9,7 @@ import { SearchInputComponent } from '../search-input/search-input.component';
 })
 export class SearchComponent implements OnInit {
   @ViewChild('searchBox') searchbox: any; // NgAisSearchBox;
-  @Input() public collectionName: string;
+  @Input() public collection: string;
   public searchConfig: any;
   public showSearchResults = false;
   @Output() public selectedHit = new EventEmitter();
@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
   public setSearchConfig() {
     this.searchConfig = {
       ...environment.algolia,
-      indexName: this.collectionName
+      indexName: this.collection
     };
   }
 
