@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { snapshotChangesDocsMap } from '../helpers/snapshot-changes-docs-map';
 import { docMap } from '../helpers/doc-map';
 import { StorageService } from './storage.service';
-import { take, tap, flatMap, filter } from 'rxjs/operators';
+import { take, tap, flatMap, filter, map } from 'rxjs/operators';
 import { Entry } from '../models/entry';
 
 export abstract class DataService<T extends Entry> {
@@ -34,19 +34,16 @@ export abstract class DataService<T extends Entry> {
     }
 
     public getSingle(id: string): Observable<T> {
-        // Get current values
-        const currentEntries = this.entries$.getValue();
+        this.afs.doc<T>(`${this.collectionPath}/${id}`).get().pipe(
+            docMap,
+            tap(entry => this.updateSingleEntryInEntries(entry)),
+            take(1)
+        ).subscribe();
 
-        // Only fetch the entry if it isn't in the local stream.
-        if (currentEntries.some(currentEntry => currentEntry.id !== id)) {
-            this.afs.doc<T>(`${this.collectionPath}/${id}`).get().pipe(
-                docMap,
-                tap(entry => this.updateEntries([...currentEntries, entry])),
-                take(1)
-            ).subscribe();
-        }
-
-        return this.entries$.pipe(flatMap(x => x), filter(entry => entry.id === id));
+        return this.entries$.pipe(
+            flatMap(x => x),
+            filter(entry => entry.id === id),
+        );
     }
 
     public add(entry: T): void {
@@ -58,15 +55,7 @@ export abstract class DataService<T extends Entry> {
     }
 
     public update(entry: T): void {
-        this.afs.doc(this.collectionPath).update(entry).then(() => {
-            const currentEntries = this.entries$.getValue().map(x => x);
-            const index = currentEntries.findIndex(currentEntry => currentEntry.id !== entry.id);
-            if (index && index !== -1) {
-                currentEntries[index] = entry;
-            }
-
-            this.updateEntries(currentEntries);
-        });
+        this.afs.doc(`${this.collectionPath}/${entry.id}`).update(entry).then(() => this.updateSingleEntryInEntries(entry));
     }
 
     public delete(id: string): void {
@@ -92,5 +81,15 @@ export abstract class DataService<T extends Entry> {
                 this.entries$.next(entries ? entries : []);
             })
         ).subscribe();
+    }
+
+    private updateSingleEntryInEntries(entry: T) {
+        const currentEntries = [...this.entries$.getValue()];
+        const index = currentEntries.findIndex(currentEntry => currentEntry.id === entry.id);
+        if (index !== -1) {
+            currentEntries.splice(index, 1, entry);
+        }
+
+        this.updateEntries(currentEntries);
     }
 }

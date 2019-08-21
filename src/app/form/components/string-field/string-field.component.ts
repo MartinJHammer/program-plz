@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FieldBase } from '../field-base';
 import { Field } from '../../models/field';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-string-field',

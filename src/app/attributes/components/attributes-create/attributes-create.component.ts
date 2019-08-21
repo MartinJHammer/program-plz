@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AttributesFields } from '../../attributes-fields';
+import { AttributesService } from '../../services/attributes.service';
 
 @Component({
   selector: 'pp-attributes-create',
@@ -7,6 +8,10 @@ import { AttributesFields } from '../../attributes-fields';
   styleUrls: ['./attributes-create.component.scss']
 })
 export class AttributesCreateComponent implements OnInit {
-  constructor(public fields: AttributesFields) { }
+  constructor(
+    public fields: AttributesFields,
+    public dataService: AttributesService
+  ) { }
+
   ngOnInit() { }
 }

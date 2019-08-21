@@ -3,6 +3,7 @@ import { Field } from '../../models/field';
 import { DynamicFormFieldDirective } from '../dynamic-form-field-directive';
 import { FieldBase } from '../field-base';
 import { FormGroup } from '@angular/forms';
+import { DataService } from 'src/app/start/services/data-service';
 
 @Component({
   selector: 'pp-field-loader',
@@ -13,6 +14,7 @@ export class FieldLoaderComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() field: Field;
   @Input() fields: Field[];
+  @Input() dataService: DataService<any>;
 
   @ViewChild(DynamicFormFieldDirective) dynamicFormField: DynamicFormFieldDirective;
 
@@ -26,6 +28,8 @@ export class FieldLoaderComponent implements OnInit {
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as FieldBase<any>).field = this.field;
+    (componentRef.instance as FieldBase<any>).fields = this.fields;
     (componentRef.instance as FieldBase<any>).form = this.form;
+    (componentRef.instance as FieldBase<any>).dataService = this.dataService;
   }
 }

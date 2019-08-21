@@ -6,12 +6,12 @@
 
     <!-- Dynamic fields -->
     <ng-container *ngFor="let field of fields">
-        <pp-field-loader *ngIf="field.component" [field]="field" [form]="form">
+        <pp-field-loader *ngIf="field.component" [field]="field" [form]="form" [dataService]="dataService">
         </pp-field-loader>
     </ng-container>
 
     <!-- Buttons -->
-    <a mat-raised-button [routerLink]="['/' + area]">Cancel</a>
+    <a mat-raised-button [routerLink]="['/' + collection]">Cancel</a>
     <button type="submit" mat-raised-button color="primary">Submit</button>
     <pre> {{ form.value | json }}</pre>
 

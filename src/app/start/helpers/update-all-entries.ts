@@ -1,23 +1,22 @@
-import { map, take } from 'rxjs/operators';
-import { DatabaseService } from '../services/database.service';
 import { Entry } from '../models/entry';
 import { getRandomNumber } from './random-number';
 
 /**
  * Updates all documents in a collection with provided logic.
+ * NOTE: NEEDS TO BE UPDATED WITH AFS OR DATASERVICE
  */
-export const updateAllEntries = (collectionPath: string, db: DatabaseService<any>, logic: (entries: Entry[]) => Entry[], updateOnFirestore: boolean = true) => {
-    db.getAll(collectionPath).pipe(
-        map(entries => {
-            const updatedEntries = logic(entries);
+// export const updateAllEntries = (collectionPath: string, db: DatabaseService<any>, logic: (entries: Entry[]) => Entry[], updateOnFirestore: boolean = true) => {
+//     db.getAll(collectionPath).pipe(
+//         map(entries => {
+//             const updatedEntries = logic(entries);
 
-            if (updateOnFirestore) {
-                updatedEntries.forEach(entry => db.update(collectionPath + '/' + entry.id, entry));
-            }
-        }),
-        take(1),
-    ).subscribe();
-};
+//             if (updateOnFirestore) {
+//                 updatedEntries.forEach(entry => db.update(collectionPath + '/' + entry.id, entry));
+//             }
+//         }),
+//         take(1),
+//     ).subscribe();
+// };
 
 /**
  * Adds a specific field IF IT IS UNDEFINED OR NULL. Usage example: updateAllEntries('exercises', this.db, addFieldForAll('exerciseTypeId', null));;
@@ -67,17 +66,18 @@ export const indexToAlgolia = (entries: Entry[]): Entry[] => {
 
 /**
  * Remove prop from all
+ * NOTE: NEEDS TO BE UPDATED WITH AFS OR DATASERVICE
  */
-export const removePropFromAll = (collectionPath: string, propName: string, db: DatabaseService<any>) => {
-    return db.getAll(collectionPath).pipe(
-        take(1),
-        map(entries => entries.map(entry => {
-            // Incomment when needed. Same is needed for db.removeFieldValue
-            // db.removeFieldValue(collectionPath + '/' + entry.id, propName);
-            return entry;
-        }))
-    ).subscribe();
-};
+// export const removePropFromAll = (collectionPath: string, propName: string, db: DatabaseService<any>) => {
+//     return db.getAll(collectionPath).pipe(
+//         take(1),
+//         map(entries => entries.map(entry => {
+//             // Incomment when needed. Same is needed for db.removeFieldValue
+//             // db.removeFieldValue(collectionPath + '/' + entry.id, propName);
+//             return entry;
+//         }))
+//     ).subscribe();
+// };
 
 
 

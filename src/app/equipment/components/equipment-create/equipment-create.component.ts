@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EquipmentFields } from '../../equipment-fields';
+import { EquipmentService } from '../../services/equipment.service';
 
 @Component({
   selector: 'pp-equipment-create',
@@ -7,6 +8,9 @@ import { EquipmentFields } from '../../equipment-fields';
   styleUrls: ['./equipment-create.component.scss']
 })
 export class EquipmentCreateComponent implements OnInit {
-  constructor(public fields: EquipmentFields) { }
+  constructor(
+    public fields: EquipmentFields,
+    public dataService: EquipmentService
+  ) { }
   ngOnInit() { }
 }

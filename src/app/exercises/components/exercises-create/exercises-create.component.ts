@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExercisesFields } from '../../exercises-fields';
+import { ExercisesService } from '../../services/exercises.service';
 
 @Component({
   selector: 'pp-exercises-create',
@@ -7,6 +8,9 @@ import { ExercisesFields } from '../../exercises-fields';
   styleUrls: ['./exercises-create.component.scss']
 })
 export class ExercisesCreateComponent implements OnInit {
-  constructor(public fields: ExercisesFields) { }
+  constructor(
+    public fields: ExercisesFields,
+    public dataService: ExercisesService
+  ) { }
   ngOnInit() { }
 }

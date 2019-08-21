@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { map, filter, switchMap, tap } from 'rxjs/operators';
+import { map, filter, switchMap, tap, take } from 'rxjs/operators';
 import { merge, Observable } from 'rxjs';
 import { Field } from '../../models/field';
-import { DatabaseService } from 'src/app/start/services/database.service';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
+import { DataService } from 'src/app/start/services/data-service';
 
 @Component({
   selector: 'pp-form',
@@ -15,19 +15,20 @@ import { getRandomNumber } from 'src/app/start/helpers/random-number';
 export class FormComponent implements OnInit {
 
   @Input() public fields: Field[];
-  @Input() public area: string;
+  @Input() public dataService: DataService<any>;
+  public collection: string;
   public form$: Observable<FormGroup>;
 
   @Output() public submitted = new EventEmitter();
 
   constructor(
     public fb: FormBuilder,
-    public db: DatabaseService<any>,
     public router: Router,
     public activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.collection = this.dataService.collection;
     const id$ = this.activatedRoute.params.pipe(map(params => params.id));
 
     const create$ = id$.pipe(
@@ -41,7 +42,7 @@ export class FormComponent implements OnInit {
 
     const edit$ = id$.pipe(
       filter(id => id),
-      switchMap(id => this.db.getSingle(this.area, id)),
+      switchMap(id => this.dataService.getSingle(id).pipe(take(1))),
       map(entry => this.fields.reduce((fields, field) => {
         fields[field.key] = Array.isArray(entry[field.key]) ? [entry[field.key]] : entry[field.key];
         return fields;
@@ -53,13 +54,13 @@ export class FormComponent implements OnInit {
 
   public onSubmit(form: FormGroup) {
     if (form.value.id) {
-      this.db.update(`${this.area}/${form.value.id}`, form.value);
+      this.dataService.update(form.value);
     } else {
       const values = form.value;
       values.random = getRandomNumber();
-      this.db.add(this.area, form.value);
+      this.dataService.add(form.value);
     }
 
-    this.router.navigate([this.area]);
+    this.router.navigate([this.collection]);
   }
 }
