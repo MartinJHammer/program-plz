@@ -2,7 +2,6 @@ import { Entry } from 'src/app/start/models/entry';
 
 export class Exercise extends Entry {
     // Actually implemented
-    public name: string;
     public description: string;
     public equipmentIds: string[];
     public exerciseTypeId: string;

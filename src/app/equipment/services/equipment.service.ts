@@ -5,7 +5,7 @@ import { StorageService } from 'src/app/start/services/storage.service';
 import { Equipment } from '../models/equipment';
 
 @Injectable({ providedIn: 'root' })
-export class EquipmentsService extends DataService<Equipment> {
+export class EquipmentService extends DataService<Equipment> {
     constructor(
         protected afs: AngularFirestore,
         protected storageService: StorageService

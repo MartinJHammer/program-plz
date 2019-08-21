@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { Entry } from 'src/app/start/models/entry';
-import { DatabaseService } from 'src/app/start/services/database.service';
 import { CrudService } from '../../services/crud.service';
+import { DataService } from 'src/app/start/services/data-service';
 
 @Component({
   selector: 'pp-crud-index',
@@ -16,22 +16,20 @@ import { CrudService } from '../../services/crud.service';
 })
 export class CrudIndexComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
-  @Input() public collectionName: string;
-  @Input() public identifier: string;
   @Input() public searchEnabled = false;
+  @Input() public dataService: DataService<any>;
   public entries$: Observable<Entry[]>;
   public showActions: boolean;
   public filterNoExerciseType = false; // Needs to be removed
 
   constructor(
-    public db: DatabaseService<any>,
     public service: CrudService<any>,
     public router: Router,
     public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.entries$ = this.service.getEntries(this.collectionName);
+    this.entries$ = this.service.getEntries(this.dataService.collection);
   }
 
   ngOnDestroy(): void {
@@ -42,7 +40,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
   }
 
   public routeToHit(hit: any): void {
-    this.router.navigate([`${this.collectionName}/edit`, hit.id]);
+    this.router.navigate([`${this.dataService.collection}/edit`, hit.id]);
   }
 
   public applyFilter(filterName: string) {
@@ -66,10 +64,10 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogComponent, {
       minWidth: '250px',
       data: {
-        title: `Are you sure you want to remove ${selectedEntry[this.identifier]}`,
+        title: `Are you sure you want to remove ${selectedEntry.name}`,
         body: 'This cannot be undone.',
         logic: () => {
-          this.db.delete(`${this.collectionName}/${selectedEntry.id}`);
+          this.dataService.delete(selectedEntry.id);
           this.service.removeFromEntries$(selectedEntry);
         }
       }

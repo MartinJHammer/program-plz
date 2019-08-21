@@ -26,9 +26,9 @@
 <p style="font-size: 12px; font-style: italic;">Swipe down or scroll to load more</p>
 <ng-container *ngIf="entries$ | async as entries">
   <cdk-virtual-scroll-viewport itemSize="100"
-    (scrolledIndexChange)="nextBatch((entries.length > 0 && entries[entries.length - 1][identifier]))">
+    (scrolledIndexChange)="nextBatch((entries.length > 0 && entries[entries.length - 1].name))">
     <div *cdkVirtualFor="let entry of entries; trackBy: trackById">
-      <pp-entry [identifier]="identifier" [entry]=entry>
+      <pp-entry [entry]=entry>
         <!-- Quick menu -->
         <button mat-icon-button [matMenuTriggerFor]="menu" class="entry-menu push">
           <mat-icon>more_vert</mat-icon>

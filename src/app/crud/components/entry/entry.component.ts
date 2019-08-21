@@ -9,7 +9,6 @@ import { Entry } from 'src/app/start/models/entry';
 export class EntryComponent implements OnInit {
 
   @Input() public entry: Entry;
-  @Input() public identifier: string;
 
   constructor() { }
 
