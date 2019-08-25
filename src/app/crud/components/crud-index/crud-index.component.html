@@ -25,8 +25,7 @@
 <!-- Entries -->
 <p style="font-size: 12px; font-style: italic;">Swipe down or scroll to load more</p>
 <ng-container *ngIf="entries$ | async as entries">
-  <cdk-virtual-scroll-viewport itemSize="100"
-    (scrolledIndexChange)="nextBatch((entries.length > 0 && entries[entries.length - 1].name))">
+  <cdk-virtual-scroll-viewport itemSize="100">
     <div *cdkVirtualFor="let entry of entries; trackBy: trackById">
       <pp-entry [entry]=entry>
         <!-- Quick menu -->

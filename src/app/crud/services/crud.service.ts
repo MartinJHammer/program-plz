@@ -4,12 +4,22 @@ import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { throttleTime, mergeMap, tap, map, scan } from 'rxjs/operators';
 import { Entry } from 'src/app/start/models/entry';
 
+// Place in component
+// On cdk-virtual-scroll-viewport (scrolledIndexChange)="nextBatch((entries.length > 0 && entries[entries.length - 1].name))"
+// @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
+// public nextBatch(offset: string): void {
+//     const end = this.viewport.getRenderedRange().end;
+//     const total = this.viewport.getDataLength();
+//     this.service.nextBatch(offset, end, total);
+// }
+
+
 @Injectable({ providedIn: 'root' })
 export class CrudService<T> {
     private collection: string;
     private deleting$ = new BehaviorSubject(undefined);
     private query$: Observable<QuerySnapshot<any>>;
-    private entries$ = new BehaviorSubject([]);  // Entries are updated via next()
+    private entries$ = new BehaviorSubject([]);
     private querySub$: SubscriptionLike;
     private batchSize = 10;
     private filters: any = {};

@@ -15,7 +15,6 @@ import { DataService } from 'src/app/start/services/data-service';
   styleUrls: ['./crud-index.component.scss']
 })
 export class CrudIndexComponent implements OnInit, OnDestroy {
-  @ViewChild(CdkVirtualScrollViewport) public viewport: CdkVirtualScrollViewport;
   @Input() public searchEnabled = false;
   @Input() public dataService: DataService<any>;
   public collection: string;
@@ -31,7 +30,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.collection = this.dataService.collection;
-    this.entries$ = this.service.getEntries(this.collection);
+    this.entries$ = this.dataService.getAll();
   }
 
   ngOnDestroy(): void {
@@ -51,12 +50,6 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
       .runFilters();
   }
 
-  public nextBatch(offset: string): void {
-    const end = this.viewport.getRenderedRange().end;
-    const total = this.viewport.getDataLength();
-    this.service.nextBatch(offset, end, total);
-  }
-
   public trackById(index: any, item: Entry): string {
     let temp = index; temp = temp;
     return item.id;
@@ -70,7 +63,7 @@ export class CrudIndexComponent implements OnInit, OnDestroy {
         body: 'This cannot be undone.',
         logic: () => {
           this.dataService.delete(selectedEntry.id);
-          this.service.removeFromEntries$(selectedEntry);
+          // this.service.removeFromEntries$(selectedEntry);
         }
       }
     } as MatDialogConfig);

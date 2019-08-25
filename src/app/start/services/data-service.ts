@@ -30,7 +30,7 @@ export abstract class DataService<T extends Entry> {
             take(1)
         ).subscribe();
 
-        return this.entries$;
+        return this.entries$.pipe(map(entries => [...entries].sort((a, b) => (a.name > b.name) ? 1 : -1)));
     }
 
     public getSingle(id: string): Observable<T> {
@@ -66,11 +66,6 @@ export abstract class DataService<T extends Entry> {
         });
     }
 
-    private updateEntries(entries: T[]) {
-        this.entries$.next(entries);
-        this.storageService.set(this.collectionPath, entries);
-    }
-
     private loadData() {
         this.storageService.select(this.collectionPath).pipe(
             take(1),
@@ -81,6 +76,11 @@ export abstract class DataService<T extends Entry> {
                 this.entries$.next(entries ? entries : []);
             })
         ).subscribe();
+    }
+
+    private updateEntries(entries: T[]) {
+        this.entries$.next(entries);
+        this.storageService.set(this.collectionPath, entries);
     }
 
     private updateSingleEntryInEntries(entry: T) {
