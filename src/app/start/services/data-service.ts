@@ -47,9 +47,9 @@ export abstract class DataService<T extends Entry> {
     }
 
     public add(entry: T): void {
+        const currentEntries = this.entries$.getValue();
         this.afs.collection<T>(this.collectionPath).add(entry).then(docRef => {
             entry.id = docRef.id;
-            const currentEntries = this.entries$.getValue();
             this.updateEntries([entry, ...currentEntries]);
         });
     }
