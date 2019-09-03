@@ -18,7 +18,7 @@ export class ProgramComponent implements OnInit {
 
   ngOnInit() {
     this.program.loadPreferences();
-    this.exercises$ = this.program.getExercises$();
+    this.exercises$ = this.program.exercises;
   }
 
   public toggleProgramStepper(): void {

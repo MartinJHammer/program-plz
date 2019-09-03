@@ -13,12 +13,14 @@ import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-t
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
     public programCreated: boolean;
+
+    public get exercises(): BehaviorSubject<Exercise[]> { return this.exercises$; }
     public get exerciseTypes(): Observable<ExerciseType[]> { return this.allStrengthRelatedExerciseTypes$; }
     public get selectedExerciseTypes(): BehaviorSubject<ExerciseType[]> { return this.selectedExerciseTypes$; }
 
+    private exercises$ = new BehaviorSubject<Exercise[]>([]);
     private allStrengthRelatedExerciseTypes$: Observable<ExerciseType[]>;
     private selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
-    private exercises$ = new BehaviorSubject<Exercise[]>([]);
 
     constructor(
         private afs: AngularFirestore,
@@ -31,7 +33,6 @@ export class ProgramService {
     public loadPreferences(): void {
         const strengthId$ = of('Zp0BbwRWuY5TjXDNVBA5'); // Strength id
 
-        // 
         this.allStrengthRelatedExerciseTypes$ = combineLatest(
             strengthId$,
             this.exerciseTypesService.getAll()
@@ -52,14 +53,6 @@ export class ProgramService {
             tap(() => this.programCreated = true),
             take(1)
         ).subscribe();
-    }
-
-    public getExercises$(): Observable<Exercise[]> {
-        return this.exercises$;
-    }
-
-    public getExercises(): Exercise[] {
-        return this.exercises$.getValue();
     }
 
     public updateProgram(exercises: Exercise[]) {

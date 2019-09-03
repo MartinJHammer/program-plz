@@ -19,7 +19,7 @@ export class ExercisesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.exercises$ = this.program.getExercises$();
+    this.exercises$ = this.program.exercises;
   }
 
   public trackById(item): string {
@@ -27,7 +27,7 @@ export class ExercisesComponent implements OnInit {
   }
 
   public exerciseDrop(event: CdkDragDrop<string[]>): void {
-    this.program.getExercises$().pipe(
+    this.program.exercises.pipe(
       take(1),
       map(exercises => {
         moveItemInArray(exercises, event.previousIndex, event.currentIndex);
