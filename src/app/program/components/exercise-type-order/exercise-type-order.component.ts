@@ -19,7 +19,7 @@ export class ExerciseTypeOrderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.selectedExerciseTypes$ = this.program.selectedExerciseTypes$;
+    this.selectedExerciseTypes$ = this.program.selectedExerciseTypes;
   }
 
   public trackById(item): string {
@@ -27,7 +27,7 @@ export class ExerciseTypeOrderComponent implements OnInit {
   }
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-    this.program.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+    this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
     this.program.applyExerciseTypeOrder();
   }
 }

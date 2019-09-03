@@ -19,15 +19,15 @@ export class ExerciseTypeSelectComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.allExerciseTypes$ = this.program.allExerciseTypes$;
+    this.allExerciseTypes$ = this.program.exerciseTypes;
   }
 
   public updateSelectedExercises(event: MatCheckboxChange) {
-    this.program.selectedExerciseTypes$.next(this.checkboxes.filter(checkbox => checkbox.checked).map(checkbox => ((checkbox.value) as unknown) as ExerciseType));
+    this.program.selectedExerciseTypes.next(this.checkboxes.filter(checkbox => checkbox.checked).map(checkbox => ((checkbox.value) as unknown) as ExerciseType));
   }
 
   public selectAllExerciseTypes() {
-    this.program.selectedExerciseTypes$.next(this.checkboxes.map(checkbox => {
+    this.program.selectedExerciseTypes.next(this.checkboxes.map(checkbox => {
       if (!checkbox.checked) {
         checkbox.checked = true;
       }
@@ -39,6 +39,6 @@ export class ExerciseTypeSelectComponent implements OnInit {
     this.checkboxes.forEach(checkbox => {
       checkbox.checked = false;
     });
-    this.program.selectedExerciseTypes$.next([]);
+    this.program.selectedExerciseTypes.next([]);
   }
 }

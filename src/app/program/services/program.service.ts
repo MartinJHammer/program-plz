@@ -13,10 +13,12 @@ import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-t
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
     public programCreated: boolean;
+    public get exerciseTypes(): Observable<ExerciseType[]> { return this.allStrengthRelatedExerciseTypes$; }
+    public get selectedExerciseTypes(): BehaviorSubject<ExerciseType[]> { return this.selectedExerciseTypes$; }
 
-    public allExerciseTypes$: Observable<ExerciseType[]>;
+    private allStrengthRelatedExerciseTypes$: Observable<ExerciseType[]>;
+    private selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
     private exercises$ = new BehaviorSubject<Exercise[]>([]);
-    public selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
 
     constructor(
         private afs: AngularFirestore,
@@ -29,14 +31,15 @@ export class ProgramService {
     public loadPreferences(): void {
         const strengthId$ = of('Zp0BbwRWuY5TjXDNVBA5'); // Strength id
 
-        this.allExerciseTypes$ = combineLatest(
+        // 
+        this.allStrengthRelatedExerciseTypes$ = combineLatest(
             strengthId$,
             this.exerciseTypesService.getAll()
         ).pipe(
             map(([strengthId, exerciseTypes]) => exerciseTypes.filter(exerciseType => exerciseType.attributes.includes(strengthId)))
         );
 
-        this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
+        this.allStrengthRelatedExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
     }
 
     /**
@@ -77,7 +80,7 @@ export class ProgramService {
     }
 
     public selectAllExerciseTypes() {
-        this.allExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
+        this.allStrengthRelatedExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
     }
 
     public deSelectAllExerciseTypes() {
