@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rxjs';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
@@ -47,8 +47,7 @@ export class ProgramService {
      * Inits the program.
      */
     public plz(): void {
-        // START HERE!
-        // Must not pipe selectedExerciseTypes$.
+        // TODO: Base on preferencesMust not pipe selectedExerciseTypes$.
         this.selectedExerciseTypes$.pipe(
             switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandomExercise(exerciseType.id)))),
             map(exercises => this.updateProgram(exercises.reduce((a, b) => a.concat(b), []))),

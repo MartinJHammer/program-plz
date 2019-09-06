@@ -4,7 +4,7 @@
   "extensions.autoUpdate": true,
   "vsicons.projectDetection.autoReload": true,
   "vsicons.dontShowNewVersionMessage": true,
-  "editor.fontSize": 15,
+  "editor.fontSize": 17,
   "explorer.openEditors.visible": 0,
   "git.confirmSync": false,
   "editor.tabSize": 4,
