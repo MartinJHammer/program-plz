@@ -19,3 +19,9 @@ firebase deploy --only firestore:rules
 - Components should only use its methods to call services.
 - Services should implement design patterns
 - Componenets should have no logic; they must only control layout/design + delegate user interaction + show results.
+
+## CRUD
+- Firestore rules
+- Service
+- Area: module + components (optional)
+- Search: Algolia index + enable search (optional)

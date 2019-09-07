@@ -16,7 +16,12 @@ service cloud.firestore {
       allow write, delete: if getRole('admin') == true;
     }
 
-      match /equipment/{id} {
+    match /equipment/{id} {
+      allow read;
+      allow write, delete: if getRole('admin') == true;
+    }
+
+    match /preferences/{id} {
       allow read;
       allow write, delete: if getRole('admin') == true;
     }
