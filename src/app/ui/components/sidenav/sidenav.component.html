@@ -26,7 +26,7 @@
       <a mat-list-item (click)="sidenav.toggle()" [routerLink]="['']">Home</a>
 
       <!-- Authenticated -->
-      <ng-container *ngIf="auth.user$ | async as user; else anon">
+      <ng-container *ngIf="auth.user | async as user; else anon">
 
         <!-- Admin -->
         <ng-container *ngIf="user.roles && user.roles.admin">

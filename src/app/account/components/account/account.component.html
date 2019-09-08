@@ -1,4 +1,4 @@
-<div *ngIf="auth.user$ | async as user">
+<div *ngIf="auth.user | async as user">
   <h3>Welcome, {{ user.displayName }}</h3>
   <!-- <img [src]="user.photoURL"> -->
   <p *ngIf="user.roles">Admin: {{ user.roles.admin }}</p>

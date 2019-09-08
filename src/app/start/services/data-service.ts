@@ -46,6 +46,7 @@ export abstract class DataService<T extends Entry> {
         );
     }
 
+    // START HERE: Add current user id to entry user id when creating
     public add(entry: T): void {
         const currentEntries = this.entries$.getValue();
         this.afs.collection<T>(this.collectionPath).add(entry).then(docRef => {
@@ -66,18 +67,6 @@ export abstract class DataService<T extends Entry> {
         });
     }
 
-    private loadData() {
-        this.storageService.select(this.collectionPath).pipe(
-            take(1),
-            tap((entries: T[]) => {
-                if (!entries || (entries && entries.length === 0)) {
-                    this.getAll();
-                }
-                this.entries$.next(entries ? entries : []);
-            })
-        ).subscribe();
-    }
-
     private updateEntries(entries: T[]) {
         this.entries$.next(entries);
         this.storageService.set(this.collectionPath, entries);
@@ -91,5 +80,17 @@ export abstract class DataService<T extends Entry> {
         }
 
         this.updateEntries(currentEntries);
+    }
+
+    private loadData() {
+        this.storageService.select(this.collectionPath).pipe(
+            take(1),
+            tap((entries: T[]) => {
+                if (!entries || (entries && entries.length === 0)) {
+                    this.getAll();
+                }
+                this.entries$.next(entries ? entries : []);
+            })
+        ).subscribe();
     }
 }
