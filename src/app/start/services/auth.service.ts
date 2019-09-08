@@ -5,17 +5,20 @@ import { auth, User } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import { switchMap, shareReplay, take, tap } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
     private user$ = new BehaviorSubject<User>(null);
-
     public get user(): BehaviorSubject<User> {
         return this.user$;
+    }
+
+    private dataLoaded$ = new BehaviorSubject<boolean>(false);
+    public get dataLoaded(): BehaviorSubject<boolean> {
+        return this.dataLoaded$;
     }
 
     constructor(
@@ -59,7 +62,8 @@ export class AuthService {
     private loadData() {
         this.storageService.select('user').pipe(
             take(1),
-            tap((user: User) => this.updateUser(user))
+            tap((user: User) => this.updateUser(user)),
+            tap(() => this.dataLoaded$.next(true))
         ).subscribe();
     }
 

@@ -5,6 +5,7 @@ import { docMap } from '../helpers/doc-map';
 import { StorageService } from './storage.service';
 import { take, tap, flatMap, filter, map } from 'rxjs/operators';
 import { Entry } from '../models/entry';
+import { AuthService } from './auth.service';
 
 export abstract class DataService<T extends Entry> {
     public get collection(): string {
@@ -16,7 +17,8 @@ export abstract class DataService<T extends Entry> {
     constructor(
         protected afs: AngularFirestore,
         protected storageService: StorageService,
-        protected collectionPath: string
+        protected authService: AuthService,
+        protected collectionPath: string,
     ) {
         this.loadData();
     }
@@ -48,11 +50,18 @@ export abstract class DataService<T extends Entry> {
 
     // START HERE: Add current user id to entry user id when creating
     public add(entry: T): void {
-        const currentEntries = this.entries$.getValue();
-        this.afs.collection<T>(this.collectionPath).add(entry).then(docRef => {
-            entry.id = docRef.id;
-            this.updateEntries([entry, ...currentEntries]);
-        });
+        this.authService.user.pipe(
+            filter(user => !!user),
+            tap(user => {
+                entry.userId = user.uid;
+                const currentEntries = this.entries$.getValue();
+                this.afs.collection<T>(this.collectionPath).add(entry).then(docRef => {
+                    entry.id = docRef.id;
+                    this.updateEntries([entry, ...currentEntries]);
+                });
+            }),
+            take(1),
+        ).subscribe();
     }
 
     public update(entry: T): void {
