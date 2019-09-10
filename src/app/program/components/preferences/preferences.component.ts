@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
-import { EquipmentService } from 'src/app/equipment/services/equipment.service';
+import { Preferences } from '../../models/preferences';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pp-preferences',
@@ -9,13 +10,17 @@ import { EquipmentService } from 'src/app/equipment/services/equipment.service';
 })
 export class PreferencesComponent implements OnInit {
 
-  constructor(
-    private service: PreferencesService,
-    private equipmentService: EquipmentService
-  ) { }
+  public preferences$: Observable<Preferences[]>;
 
-  ngOnInit() {
-    // TODO: If no preferences exists, go with a default one.
+  public get default(): Preferences {
+    return this.service.default;
   }
 
+  constructor(
+    private service: PreferencesService,
+  ) {
+    this.preferences$ = this.service.getAll();
+  }
+
+  ngOnInit() { }
 }

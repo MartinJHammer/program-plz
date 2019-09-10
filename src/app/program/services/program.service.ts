@@ -9,7 +9,6 @@ import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
 import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
-import { PreferencesService } from './preferences.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
@@ -23,7 +22,6 @@ export class ProgramService {
 
     constructor(
         private afs: AngularFirestore,
-        private preferencesService: PreferencesService,
         private exerciseTypesService: ExerciseTypesService,
         private storageService: StorageService
     ) {
@@ -35,11 +33,7 @@ export class ProgramService {
         this.loadProgramFromStorage();
 
         // Set selected exercise types
-        this.exerciseTypesService.getAll().pipe(
-            map(exerciseTypes => exerciseTypes.filter(exerciseType => this.preferencesService.default.exerciseTypes.includes(exerciseType.id))),
-            map(exerciseTypes => this.preferencesService.default.exerciseTypesOrder
-                .map(orderId => exerciseTypes.filter(exerciseType => exerciseType.id === orderId))
-                .reduce((a, b) => a.concat(b), [])),
+        this.exerciseTypesService.prefferedOnlyOrdered.pipe(
             tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
             takeWhile(exerciseTypes => !!exerciseTypes && exerciseTypes.length === 0)
         ).subscribe();
@@ -49,12 +43,16 @@ export class ProgramService {
      * Inits the program.
      */
     public plz(): void {
-        this.selectedExerciseTypes$.pipe(
-            switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandomExercise(exerciseType.id)))),
-            map(exercises => this.updateProgram(exercises.reduce((a, b) => a.concat(b), []))),
-            tap(() => this.programCreated = true),
-            take(1)
-        ).subscribe();
+        const selectedExercises = this.selectedExerciseTypes$.getValue();
+        if (selectedExercises.length > 0) {
+            combineLatest(selectedExercises.map(exerciseType => this.getRandomExercise(exerciseType.id))).pipe(
+                map(exercises => this.updateProgram(exercises.reduce((a, b) => a.concat(b), []))),
+                tap(() => this.programCreated = true),
+                take(1),
+            ).subscribe();
+        } else {
+            this.updateProgram([]);
+        }
     }
 
     public updateProgram(exercises: Exercise[]) {

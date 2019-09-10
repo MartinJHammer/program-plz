@@ -1,3 +1,5 @@
-<p>
-  preferences works!
-</p>
+<p>Preferences</p>
+<ul>
+  <li>{{ default.name }} (Currently used)</li>
+  <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }}</li>
+</ul>

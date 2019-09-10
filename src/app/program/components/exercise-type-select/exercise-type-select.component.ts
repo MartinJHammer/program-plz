@@ -1,19 +1,20 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
 import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
+import { take, tap, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-exercise-type-select',
   templateUrl: './exercise-type-select.component.html',
   styleUrls: ['./exercise-type-select.component.scss']
 })
-export class ExerciseTypeSelectComponent implements OnInit {
+export class ExerciseTypeSelectComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatCheckbox) public checkboxes !: QueryList<MatCheckbox>;
 
-  public allExerciseTypes$: Observable<ExerciseType[]>;
+  public exerciseTypes$: Observable<ExerciseType[]>;
 
   constructor(
     public program: ProgramService,
@@ -21,7 +22,19 @@ export class ExerciseTypeSelectComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.allExerciseTypes$ = this.exerciseTypesService.getAll();
+    this.exerciseTypes$ = this.exerciseTypesService.prefferedFirst.pipe(take(1));
+  }
+
+  ngAfterViewInit() {
+    this.program.selectedExerciseTypes.pipe(
+      debounceTime(0),
+      tap(selectedExerciseTypes => selectedExerciseTypes.forEach(selected => {
+        const found = this.checkboxes.find(checkBox => (((checkBox.value) as unknown) as ExerciseType).id === selected.id);
+        if (found) {
+          found.checked = true;
+        }
+      })),
+    ).subscribe();
   }
 
   public updateSelectedExercises(event: MatCheckboxChange) {

@@ -1,4 +1,4 @@
-<ng-container *ngFor="let exerciseType of allExerciseTypes$ | async">
+<ng-container *ngFor="let exerciseType of exerciseTypes$ | async">
   <mat-checkbox [value]="exerciseType" (change)="updateSelectedExercises($event)"> {{ exerciseType.name }}
   </mat-checkbox>
   <br />

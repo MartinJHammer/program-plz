@@ -7,8 +7,6 @@ import { AuthService } from 'src/app/start/services/auth.service';
 import { Observable } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
 import { tap, take, map } from 'rxjs/operators';
-import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
-import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
