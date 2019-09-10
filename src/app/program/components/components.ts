@@ -7,6 +7,7 @@ import { AddExercisesComponent } from './add-exercises/add-exercises.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ProgramStepperComponent } from './program-stepper/program-stepper.component';
 import { ReplaceExerciseSearchComponent } from './replace-exercise-search/replace-exercise-search.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 export const components = [
     ProgramComponent,
@@ -17,7 +18,8 @@ export const components = [
     ExerciseTypeSelectComponent,
     ExerciseTypeOrderComponent,
     ShuffleExercisesComponent,
-    ProgramStepperComponent
+    ProgramStepperComponent,
+    PreferencesComponent
 ];
 
 export const entryComponents = [

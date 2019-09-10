@@ -4,50 +4,51 @@ import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rx
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
-import { mergeMap, filter, map, switchMap, take, expand, tap } from 'rxjs/operators';
+import { mergeMap, filter, map, switchMap, take, expand, tap, takeWhile } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
 import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
+import { PreferencesService } from './preferences.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
     public programCreated: boolean;
 
     public get exercises(): BehaviorSubject<Exercise[]> { return this.exercises$; }
-    public get exerciseTypes(): Observable<ExerciseType[]> { return this.allStrengthRelatedExerciseTypes$; }
-    public get selectedExerciseTypes(): BehaviorSubject<ExerciseType[]> { return this.selectedExerciseTypes$; }
-
     private exercises$ = new BehaviorSubject<Exercise[]>([]);
-    private allStrengthRelatedExerciseTypes$: Observable<ExerciseType[]>;
+
+    public get selectedExerciseTypes(): BehaviorSubject<ExerciseType[]> { return this.selectedExerciseTypes$; }
     private selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
 
     constructor(
         private afs: AngularFirestore,
+        private preferencesService: PreferencesService,
         private exerciseTypesService: ExerciseTypesService,
         private storageService: StorageService
     ) {
-        this.loadProgramFromStorage();
+        this.init();
     }
 
-    public loadPreferences(): void {
-        const strengthId$ = of('Zp0BbwRWuY5TjXDNVBA5'); // Strength id
+    private init(): void {
+        // Load last program
+        this.loadProgramFromStorage();
 
-        this.allStrengthRelatedExerciseTypes$ = combineLatest(
-            strengthId$,
-            this.exerciseTypesService.getAll()
-        ).pipe(
-            map(([strengthId, exerciseTypes]) => exerciseTypes.filter(exerciseType => exerciseType.attributes.includes(strengthId)))
-        );
-
-        this.allStrengthRelatedExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
+        // Set selected exercise types
+        this.exerciseTypesService.getAll().pipe(
+            map(exerciseTypes => exerciseTypes.filter(exerciseType => this.preferencesService.default.exerciseTypes.includes(exerciseType.id))),
+            map(exerciseTypes => this.preferencesService.default.exerciseTypesOrder
+                .map(orderId => exerciseTypes.filter(exerciseType => exerciseType.id === orderId))
+                .reduce((a, b) => a.concat(b), [])),
+            tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
+            takeWhile(exerciseTypes => !!exerciseTypes && exerciseTypes.length === 0)
+        ).subscribe();
     }
 
     /**
      * Inits the program.
      */
     public plz(): void {
-        // TODO: Base on preferencesMust not pipe selectedExerciseTypes$.
         this.selectedExerciseTypes$.pipe(
             switchMap(exerciseTypes => combineLatest(exerciseTypes.map(exerciseType => this.getRandomExercise(exerciseType.id)))),
             map(exercises => this.updateProgram(exercises.reduce((a, b) => a.concat(b), []))),
@@ -74,7 +75,7 @@ export class ProgramService {
     }
 
     public selectAllExerciseTypes() {
-        this.allStrengthRelatedExerciseTypes$.pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
+        this.exerciseTypesService.getAll().pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
     }
 
     public deSelectAllExerciseTypes() {

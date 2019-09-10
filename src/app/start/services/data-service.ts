@@ -1,11 +1,12 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, from } from 'rxjs';
 import { snapshotChangesDocsMap } from '../helpers/snapshot-changes-docs-map';
 import { docMap } from '../helpers/doc-map';
 import { StorageService } from './storage.service';
-import { take, tap, flatMap, filter, map } from 'rxjs/operators';
+import { take, tap, flatMap, filter, map, switchMap } from 'rxjs/operators';
 import { Entry } from '../models/entry';
 import { AuthService } from './auth.service';
+import { User } from '../models/user';
 
 export abstract class DataService<T extends Entry> {
     public get collection(): string {
@@ -48,20 +49,15 @@ export abstract class DataService<T extends Entry> {
         );
     }
 
-    // START HERE: Add current user id to entry user id when creating
     public add(entry: T): void {
-        this.authService.user.pipe(
-            filter(user => !!user),
-            tap(user => {
-                entry.userId = user.uid;
-                const currentEntries = this.entries$.getValue();
-                this.afs.collection<T>(this.collectionPath).add(entry).then(docRef => {
-                    entry.id = docRef.id;
-                    this.updateEntries([entry, ...currentEntries]);
-                });
-            }),
-            take(1),
-        ).subscribe();
+        this.withUser(user => {
+            entry.userId = user.uid;
+            const currentEntries = this.entries$.getValue();
+            return from(this.afs.collection<T>(this.collectionPath).add(Object.assign({}, entry)).then(docRef => {
+                entry.id = docRef.id;
+                this.updateEntries([entry, ...currentEntries]);
+            }));
+        }).pipe(take(1)).subscribe();
     }
 
     public update(entry: T): void {
@@ -76,9 +72,16 @@ export abstract class DataService<T extends Entry> {
         });
     }
 
-    private updateEntries(entries: T[]) {
+    protected updateEntries(entries: T[]) {
         this.entries$.next(entries);
         this.storageService.set(this.collectionPath, entries);
+    }
+
+    protected withUser(logic: (user: User) => Observable<any>): Observable<any> {
+        return this.authService.user.pipe(
+            filter(user => !!user),
+            switchMap(user => logic(user))
+        );
     }
 
     private updateSingleEntryInEntries(entry: T) {

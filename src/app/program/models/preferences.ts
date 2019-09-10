@@ -2,13 +2,14 @@ import { Entry } from 'src/app/start/models/entry';
 
 export class Preferences extends Entry {
     /**
-     * What attributes must be true for the exercise type in order for it to be included.
+     * Equipment to be used
+     * Must be ids.
      */
-    public exerciseTypeAttributes: string[] = [];
+    public equipment: string[] = [];
 
     /**
      * What exercise types should be included in the program.
-     * Must be exercise type ids.
+     * Must be ids.
      */
     public exerciseTypes: string[] = [];
 
@@ -19,10 +20,10 @@ export class Preferences extends Entry {
     public exerciseTypesOrder: string[] = [];
 
     /**
-     * Equipment to be used
+     * What attributes must be true for the exercise type in order for it to be included.
+     * Must be ids.
      */
-    public equipmentIds: string[] = [];
-
+    public exerciseTypeAttributes: string[] = [];
 
     constructor(values: Partial<Preferences>) {
         super();

@@ -3,6 +3,7 @@ import { ProgramService } from '../../services/program.service';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
+import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
 
 @Component({
   selector: 'pp-exercise-type-select',
@@ -15,11 +16,12 @@ export class ExerciseTypeSelectComponent implements OnInit {
   public allExerciseTypes$: Observable<ExerciseType[]>;
 
   constructor(
-    public program: ProgramService
+    public program: ProgramService,
+    private exerciseTypesService: ExerciseTypesService,
   ) { }
 
   ngOnInit() {
-    this.allExerciseTypes$ = this.program.exerciseTypes;
+    this.allExerciseTypes$ = this.exerciseTypesService.getAll();
   }
 
   public updateSelectedExercises(event: MatCheckboxChange) {

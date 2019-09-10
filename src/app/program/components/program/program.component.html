@@ -1,7 +1,9 @@
 <div class="container" fxLayout fxLayout.xs="column">
   <div fxLayout.xs="column">
 
-    <button mat-raised-button color="primary" (click)="program.plz()">Program plz!</button>
+    <pp-preferences></pp-preferences>
+
+    <button mat-raised-button color="primary" (click)="plz()">Program plz!</button>
     <button *ngIf="!programStepper" mat-raised-button (click)="toggleProgramStepper()">Customize program</button>
     <button *ngIf="programStepper" mat-raised-button (click)="toggleProgramStepper()">Hide customize options</button>
 
