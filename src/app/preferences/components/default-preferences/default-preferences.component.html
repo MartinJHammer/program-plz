@@ -1,0 +1,35 @@
+<h2>Default preferences</h2>
+
+<h4>Equipment</h4>
+<ng-container *ngFor="let equipment of equipment$ | async">
+    <mat-checkbox [value]="equipment.id" [id]="equipment.id" (change)="setEquipmentCheckboxValue($event)"
+        [checked]="equipment.id | checked: form.get(field.key).value">
+        {{ entry[field.displayKey] }}
+    </mat-checkbox>
+    <br />
+</ng-container>
+<br />
+
+<h4>Exercise types</h4>
+<ng-container *ngFor="let exerciseType of exerciseTypes$ | async">
+    <mat-checkbox [value]="exerciseType.id" [id]="exerciseType.id" (change)="setExerciseTypesCheckboxValue($event)"
+        [checked]="exerciseType.id | checked: form.get(field.key).value">
+        {{ entry[field.displayKey] }}
+    </mat-checkbox>
+    <br />
+</ng-container>
+<br />
+
+<h4>Exercise types order</h4>
+<div cdkDropList (cdkDropListDropped)="exerciseTypeOrderDrop($event)">
+    <ng-container *ngFor="let exerciseType of selectedExerciseTypes$ | async; trackBy: trackById">
+
+        <div cdkDrag>
+            <div class="exercise-type-drag" fxLayout fxLayoutAlign="space-between">
+                {{ exerciseType.name }}
+                <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<br />

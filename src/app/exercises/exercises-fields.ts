@@ -7,7 +7,6 @@ import { EditorFieldComponent } from '../form/components/editor-field/editor-fie
 import { SelectFieldComponent } from '../form/components/select-field/select-field.component';
 import { MultiSelectFieldComponent } from '../form/components/multi-select-field/multi-select-field.component';
 import { ExerciseTypesService } from '../exercise-types/services/exercise-types.service';
-import { ExerciseType } from '../exercise-types/models/exercise-type';
 import { Equipment } from '../equipment/models/equipment';
 import { EquipmentService } from '../equipment/services/equipment.service';
 

@@ -19,12 +19,6 @@ export class Preferences extends Entry {
      */
     public exerciseTypesOrder: string[] = [];
 
-    /**
-     * What attributes must be true for the exercise type in order for it to be included.
-     * Must be ids.
-     */
-    public exerciseTypeAttributes: string[] = [];
-
     constructor(values: Partial<Preferences>) {
         super();
         Object.assign(this, values);

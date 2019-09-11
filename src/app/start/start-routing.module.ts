@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'equipment',
     loadChildren: '../equipment/equipment.module#EquipmentModule'
   },
+  {
+    path: 'default-preferences',
+    loadChildren: '../preferences/preferences.module#PreferencesModule'
+  },
   { path: '**', component: NotFoundComponent }
 ];
 

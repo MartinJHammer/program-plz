@@ -42,9 +42,6 @@ export class PreferencesService extends DataService<Preferences> {
                 'VeIVmw2kboBdiwHFBfG0', // Carry
                 'PGY7HqNN8uNrCkTBWcnc', // Support
                 '4pA4Vk86oSQ1sVq3tctW' // Core
-            ],
-            exerciseTypeAttributes: [
-                'Zp0BbwRWuY5TjXDNVBA5' // Strength
             ]
         });
     }
