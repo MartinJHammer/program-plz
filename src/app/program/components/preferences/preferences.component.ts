@@ -12,8 +12,8 @@ export class PreferencesComponent implements OnInit {
 
   public preferences$: Observable<Preferences[]>;
 
-  public get default(): Preferences {
-    return this.service.default;
+  public get defaultName(): string {
+    return this.service.getDefaultName();
   }
 
   constructor(

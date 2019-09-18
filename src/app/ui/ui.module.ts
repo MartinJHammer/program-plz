@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UiRoutingModule } from './ui.routing.module';
 import { CoalescingComponentFactoryResolver } from '../start/services/coalescing-component-factory-resolver.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
@@ -23,7 +23,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 const material = [
   FlexLayoutModule,
-  ScrollDispatchModule,
+  ScrollingModule,
   DragDropModule,
   MatSelectModule,
   MatMenuModule,

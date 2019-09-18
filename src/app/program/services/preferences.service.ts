@@ -11,8 +11,16 @@ import { tap, take, map } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
     // TODO: Make this something that exists in the DB
-    public get default(): Preferences {
-        return new Preferences({
+    private default: Preferences;
+
+
+    constructor(
+        protected afs: AngularFirestore,
+        protected storageService: StorageService,
+        protected authService: AuthService
+    ) {
+        super(afs, storageService, authService, 'preferences');
+        this.default = new Preferences({
             name: 'Default',
             userId: 'anon',
             equipment: [
@@ -46,14 +54,6 @@ export class PreferencesService extends DataService<Preferences> {
         });
     }
 
-    constructor(
-        protected afs: AngularFirestore,
-        protected storageService: StorageService,
-        protected authService: AuthService
-    ) {
-        super(afs, storageService, authService, 'preferences');
-    }
-
     public getAll(): Observable<Preferences[]> {
         this.withUser(user => this.afs.collection<Preferences>(this.collectionPath, ref => ref.where('userId', '==', user.uid)).snapshotChanges().pipe(
             snapshotChangesDocsMap,
@@ -62,5 +62,33 @@ export class PreferencesService extends DataService<Preferences> {
         )).subscribe();
 
         return this.entries$.pipe(map(entries => [...entries].sort((a, b) => (a.name > b.name) ? 1 : -1)));
+    }
+
+    public getDefaultName(): string {
+        return this.default.name;
+    }
+
+    public getDefaultEquipment(): string[] {
+        return this.default.equipment;
+    }
+
+    public getDefaultExerciseTypes(): string[] {
+        return this.default.exerciseTypes;
+    }
+
+    public getDefaultExerciseTypeOrder(): string[] {
+        return this.default.exerciseTypesOrder;
+    }
+
+    public setDefaultEquipment(ids: string[]): void {
+        this.default.equipment = ids;
+    }
+
+    public setDefaultExerciseTypes(ids: string[]): void {
+        this.default.exerciseTypes = ids;
+    }
+
+    public setDefaultExerciseTypeOrder(ids: string[]): void {
+        this.default.exerciseTypesOrder = ids;
     }
 }

@@ -5,6 +5,7 @@ import { CoalescingComponentFactoryResolver } from '../start/services/coalescing
 import { PreferencesRoutingModule } from './preferences.routing.module';
 import { UiModule } from '../ui/ui.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     PreferencesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    UiModule
+    UiModule,
+    UtilitiesModule
   ],
   declarations: [
     ...components

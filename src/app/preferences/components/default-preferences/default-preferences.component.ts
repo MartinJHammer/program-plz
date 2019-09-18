@@ -6,7 +6,8 @@ import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-t
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { PreferencesService } from 'src/app/program/services/preferences.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { map, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-default-preferences',
@@ -16,6 +17,17 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 export class DefaultPreferencesComponent implements OnInit {
   public equipment$: Observable<Equipment[]>;
   public exerciseTypes$: Observable<ExerciseType[]>;
+  public prefferedExerciseTypesInOrder$: Observable<ExerciseType[]>;
+
+  public get preferredEquipmentIds(): string[] {
+    return this.preferencesService.getDefaultEquipment();
+  }
+  public get preferredExerciseTypeIds(): string[] {
+    return this.preferencesService.getDefaultExerciseTypes();
+  }
+  public get preferredExerciseTypeOrderIds(): string[] {
+    return this.preferencesService.getDefaultExerciseTypeOrder();
+  }
 
   constructor(
     private equipmentService: EquipmentService,
@@ -26,26 +38,28 @@ export class DefaultPreferencesComponent implements OnInit {
   ngOnInit() {
     this.equipment$ = this.equipmentService.getAll();
     this.exerciseTypes$ = this.exerciseTypesService.getAll();
-  }
-
-  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-    // this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
-    // this.program.applyExerciseTypeOrder();
+    this.prefferedExerciseTypesInOrder$ = this.exerciseTypesService.prefferedOnlyOrdered;
   }
 
   public setEquipmentCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
-    // const control = this.form.get(this.field.key);
-    // this.preferencesService.default.exerciseTypes
-    // control.setValue(control.value ? control.value : []);
-    // control.setValue(checkbox.checked ? [...control.value, checkbox.value] : control.value.filter(id => checkbox.value !== id));
+    const currentValues = this.preferencesService.getDefaultEquipment();
+    const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
+    this.preferencesService.setDefaultEquipment(result);
   }
 
   public setExerciseTypesCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
-    // const control = this.form.get(this.field.key);
-    // this.preferencesService.default.exerciseTypes
-    // control.setValue(control.value ? control.value : []);
-    // control.setValue(checkbox.checked ? [...control.value, checkbox.value] : control.value.filter(id => checkbox.value !== id));
+    const currentValues = this.preferencesService.getDefaultExerciseTypes();
+    const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
+    this.preferencesService.setDefaultExerciseTypes(result);
+  }
+
+  public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
+    this.prefferedExerciseTypesInOrder$.pipe(
+      take(1),
+      tap(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)),
+      tap(exerciseTypes => this.preferencesService.setDefaultExerciseTypeOrder(exerciseTypes.map(exerciseType => exerciseType.id))),
+    ).subscribe();
   }
 }
