@@ -6,7 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/start/services/auth.service';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
-import { tap, take, map, filter, scan, } from 'rxjs/operators';
+import { tap, take, map, filter } from 'rxjs/operators';
 import { toBehaviorSubject } from 'src/app/start/helpers/to-behavior-subject';
 
 @Injectable({ providedIn: 'root' })
@@ -33,6 +33,10 @@ export class PreferencesService extends DataService<Preferences> {
         ), null);
     }
 
+    public getPreferencesChanged(): Observable<boolean> {
+        return this.preferencesChanged$;
+    }
+
     // Note: Preferences will always be user related - therefore the method overwrite.
     public getAll(): Observable<Preferences[]> {
         this.withUser(user => combineLatest(
@@ -45,7 +49,7 @@ export class PreferencesService extends DataService<Preferences> {
         )).subscribe();
 
         return this.entries$.pipe(
-            map(entries => [...entries].sort((a, b) => (a.name > b.name) ? 1 : -1)),
+            map(entries => [...entries].sort((a, b) => (a.name > b.name) ? 1 : -1))
         );
     }
 

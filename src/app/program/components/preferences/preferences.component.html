@@ -1,4 +1,5 @@
 <p>Preferences</p>
+<p *ngIf="preferencesChanged$ | async" style="color:red;">Preferences has changed!</p>
 <ul>
   <li>{{ (currentPreference$ | async) }} (Currently used)</li>
   <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }}</li>

@@ -13,12 +13,15 @@ export class PreferencesComponent implements OnInit {
 
   public preferences$: Observable<Preferences[]>;
   public currentPreference$ = new BehaviorSubject<string>('');
+  public preferencesChanged$: Observable<boolean>;
 
   constructor(
     private service: PreferencesService,
   ) { }
 
   ngOnInit() {
+    this.preferencesChanged$ = this.service.getPreferencesChanged();
+
     this.preferences$ = combineLatest(
       this.service.getAll(),
       this.service.getPreferencesId()
