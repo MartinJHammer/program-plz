@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
   selector: 'pp-exercise-type-order',
@@ -15,7 +16,8 @@ export class ExerciseTypeOrderComponent implements OnInit {
   public selectedExerciseTypes$: Observable<ExerciseType[]>;
 
   constructor(
-    public program: ProgramService
+    private program: ProgramService,
+    private preferencesService: PreferencesService
   ) { }
 
   ngOnInit() {
@@ -27,7 +29,10 @@ export class ExerciseTypeOrderComponent implements OnInit {
   }
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
-    this.selectedExerciseTypes$.pipe(map(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)), take(1)).subscribe();
+    this.selectedExerciseTypes$.pipe(
+      tap(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)),
+      tap(exerciseTypes => this.preferencesService.setExerciseTypeOrder(exerciseTypes.map(x => x.id))),
+      take(1)).subscribe();
     this.program.applyExerciseTypeOrder();
   }
 }
