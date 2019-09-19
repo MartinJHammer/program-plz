@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rx
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
-import { mergeMap, filter, map, switchMap, take, expand, tap } from 'rxjs/operators';
+import { mergeMap, filter, map, switchMap, take, expand, tap, takeWhile } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
@@ -26,6 +26,7 @@ export class ProgramService {
         private storageService: StorageService
     ) {
         this.loadProgramFromStorage();
+        this.initPreferences();
     }
 
     /**
@@ -124,7 +125,15 @@ export class ProgramService {
         this.updateProgram(currentExercises);
     }
 
-    private loadProgramFromStorage() {
+    private initPreferences(): void {
+        // Set selected exercise types
+        this.exerciseTypesService.prefferedOnlyOrdered().pipe(
+            tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
+            takeWhile(exerciseTypes => !!exerciseTypes && exerciseTypes.length === 0)
+        ).subscribe();
+    }
+
+    private loadProgramFromStorage(): void {
         this.storageService.select('program').pipe(
             take(1),
             tap((x: Exercise[]) => {

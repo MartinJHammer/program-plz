@@ -7,10 +7,18 @@ import { AuthService } from 'src/app/start/services/auth.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
 import { tap, take, map } from 'rxjs/operators';
+import { docMap } from 'src/app/start/helpers/doc-map';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
-    private defaultPreferences$ = new BehaviorSubject<Preferences>(null);
+    private defaultPlaceHolder = new Preferences({
+        name: 'Default',
+        userId: 'anon',
+        equipment: [],
+        exerciseTypes: [],
+        exerciseTypesOrder: []
+    });
+    private defaultPreferences$ = new BehaviorSubject<Preferences>(this.defaultPlaceHolder);
 
     constructor(
         protected afs: AngularFirestore,
@@ -18,38 +26,7 @@ export class PreferencesService extends DataService<Preferences> {
         protected authService: AuthService
     ) {
         super(afs, storageService, authService, 'preferences');
-        this.defaultPreferences$.next(new Preferences({
-            name: 'Default',
-            userId: 'anon',
-            equipment: [
-                'C9ECIwaujcJRUF5XpvmT', // Barbell
-                'fXBfzPw81q4oCx5OGLvG', // Dumbbell,
-                'kDjXemCkSn1wanj18niS', // Pull up bar
-                '5Qv21PNaeb2Fa1n1YfX2' // Body weight
-            ],
-            exerciseTypes: [
-                'WFzDwfcWEr1WwVF1ylhp', // Lunge
-                'dI2f23HP1pkg1JKez72M', // Lift
-                's9CtNxXaNOzp8jE5qPXB', // Vertical push
-                'tIBvOVz2iSLn7kI8ePry', // Vertical pull
-                'ZTQOWAf0v7QmLD5gwAMW', // Horizontal pull
-                'kDtgmFeQodOtZz95XRRV', // Horizontal push
-                'VeIVmw2kboBdiwHFBfG0', // Carry
-                'PGY7HqNN8uNrCkTBWcnc', // Support
-                '4pA4Vk86oSQ1sVq3tctW' // Core
-            ],
-            exerciseTypesOrder: [
-                'WFzDwfcWEr1WwVF1ylhp', // Lunge
-                'dI2f23HP1pkg1JKez72M', // Lift
-                's9CtNxXaNOzp8jE5qPXB', // Vertical push
-                'tIBvOVz2iSLn7kI8ePry', // Vertical pull
-                'ZTQOWAf0v7QmLD5gwAMW', // Horizontal pull
-                'kDtgmFeQodOtZz95XRRV', // Horizontal push
-                'VeIVmw2kboBdiwHFBfG0', // Carry
-                'PGY7HqNN8uNrCkTBWcnc', // Support
-                '4pA4Vk86oSQ1sVq3tctW' // Core
-            ]
-        }));
+        this.loadDefaultPreferences();
     }
 
     // Note: Preferences will always be user related - therefore the method overwrite.
@@ -88,18 +65,52 @@ export class PreferencesService extends DataService<Preferences> {
     public setDefaultEquipment(ids: string[]): void {
         const current = this.defaultPreferences$.getValue();
         current.equipment = ids;
-        this.defaultPreferences$.next(current);
+        this.updateRemoteDefaultPreferences(current);
     }
 
     public setDefaultExerciseTypes(ids: string[]): void {
         const current = this.defaultPreferences$.getValue();
         current.exerciseTypes = ids;
-        this.defaultPreferences$.next(current);
+        this.updateRemoteDefaultPreferences(current);
     }
 
     public setDefaultExerciseTypeOrder(ids: string[]): void {
         const current = this.defaultPreferences$.getValue();
         current.exerciseTypesOrder = ids;
-        this.defaultPreferences$.next(current);
+        this.updateRemoteDefaultPreferences(current);
+    }
+
+    private getDefaultPreferences(): void {
+        // Refactor this to get hash-ish value to check if anything has changed
+        // before fetching? Unless no local data, then always fetch.
+        this.afs.doc<Preferences>(`${this.collectionPath}/anon`).get().pipe(
+            docMap,
+            tap((defaultPreferences: Preferences) => this.updateLocalDefaultPreferences(defaultPreferences)),
+            take(1)
+        ).subscribe();
+    }
+
+    private updateRemoteDefaultPreferences(defaultPreferences: Preferences) {
+        // TODO: Revert changes on error. Remember to show the error!
+        this.updateLocalDefaultPreferences(defaultPreferences);
+        this.afs.collection<Preferences>(this.collectionPath).doc('anon').set(Object.assign({}, defaultPreferences)).then(docRef => { });
+    }
+
+    private updateLocalDefaultPreferences(defaultPreferences: Preferences) {
+        this.defaultPreferences$.next(defaultPreferences);
+        this.storageService.set('defaultPreferences', defaultPreferences);
+    }
+
+    private loadDefaultPreferences() {
+        this.storageService.select('defaultPreferences').pipe(
+            take(1),
+            tap((defaultPreferences: Preferences) => {
+                if (!defaultPreferences) {
+                    this.getDefaultPreferences();
+                }
+
+                this.defaultPreferences$.next(defaultPreferences ? defaultPreferences : this.defaultPlaceHolder);
+            })
+        ).subscribe();
     }
 }
