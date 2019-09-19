@@ -85,21 +85,18 @@ export class PreferencesService extends DataService<Preferences> {
         this.preferencesChanged$.next(true);
         const current = this.placeHolderPreference$.getValue();
         current.equipment = ids;
-        this.updateSingleEntryInEntries(current);
     }
 
     public setExerciseTypes(ids: string[]): void {
         this.preferencesChanged$.next(true);
         const current = this.placeHolderPreference$.getValue();
         current.exerciseTypes = ids;
-        this.updateSingleEntryInEntries(current);
     }
 
     public setExerciseTypeOrder(ids: string[]): void {
         this.preferencesChanged$.next(true);
         const current = this.placeHolderPreference$.getValue();
         current.exerciseTypesOrder = ids;
-        this.updateSingleEntryInEntries(current);
     }
 
     private initPreferences(): void {

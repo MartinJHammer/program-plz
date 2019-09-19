@@ -45,8 +45,6 @@ export class ExerciseTypesService extends DataService<ExerciseType> {
     }
 
     private sortExerciseTypes(exerciseTypes: ExerciseType[], prefferedOrder: string[]): any[] {
-        return [...exerciseTypes].sort((a, b) => {
-            return prefferedOrder.indexOf(a.id) - prefferedOrder.indexOf(b.id);
-        })
+        return [...exerciseTypes].sort((a, b) => prefferedOrder.indexOf(a.id) - prefferedOrder.indexOf(b.id));
     }
 }

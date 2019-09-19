@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Equipment } from 'src/app/equipment/models/equipment';
 import { EquipmentService } from 'src/app/equipment/services/equipment.service';
 import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
@@ -30,9 +30,22 @@ export class DefaultPreferencesComponent implements OnInit {
   ngOnInit() {
     this.equipment$ = this.equipmentService.getAll();
     this.exerciseTypes$ = this.exerciseTypesService.getAll();
-    this.preferredEquipmentIds$ = this.preferencesService.getEquipment();
-    this.preferredExerciseTypeIds$ = this.preferencesService.getExerciseTypes();
-    this.prefferedExerciseTypesInOrder$ = this.exerciseTypesService.prefferedOnlyOrdered();
+    const defaultPreferences = this.preferencesService.getSingle('anon');
+
+    this.preferredEquipmentIds$ = defaultPreferences.pipe(map(preferences => preferences.equipment));
+    this.preferredExerciseTypeIds$ = defaultPreferences.pipe(map(preferences => preferences.exerciseTypes));
+    const prefferedExerciseTypeOrderIds$ = defaultPreferences.pipe(map(preferences => preferences.exerciseTypesOrder));
+
+    this.prefferedExerciseTypesInOrder$ = combineLatest(
+      this.exerciseTypes$,
+      this.preferredExerciseTypeIds$,
+      prefferedExerciseTypeOrderIds$
+    ).pipe(
+      map(([exerciseTypes, prefferedOrder, prefferedExerciseTypeOrderIds]) => {
+        const prefferedOnly = exerciseTypes.filter(exerciseType => prefferedOrder.includes(exerciseType.id));
+        return this.sortExerciseTypes(prefferedOnly, prefferedExerciseTypeOrderIds);
+      })
+    );
   }
 
   public setEquipmentCheckboxValue(checkboxChange: MatCheckboxChange) {
@@ -64,5 +77,9 @@ export class DefaultPreferencesComponent implements OnInit {
       tap(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)),
       tap(exerciseTypes => this.preferencesService.setExerciseTypeOrder(exerciseTypes.map(exerciseType => exerciseType.id))),
     ).subscribe();
+  }
+
+  private sortExerciseTypes(exerciseTypes: ExerciseType[], prefferedOrder: string[]): any[] {
+    return [...exerciseTypes].sort((a, b) => prefferedOrder.indexOf(a.id) - prefferedOrder.indexOf(b.id));
   }
 }
