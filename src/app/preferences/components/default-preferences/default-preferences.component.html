@@ -3,7 +3,7 @@
 <h4>Equipment</h4>
 <ng-container *ngFor="let equipment of equipment$ | async">
     <mat-checkbox [value]="equipment.id" [id]="equipment.id" (change)="setEquipmentCheckboxValue($event)"
-        [checked]="equipment.id | checked: preferredEquipmentIds">
+        [checked]="equipment.id | checked: (preferredEquipmentIds$ | async)">
         {{ equipment.name }}
     </mat-checkbox>
     <br />
@@ -13,7 +13,7 @@
 <h4>Exercise types</h4>
 <ng-container *ngFor="let exerciseType of exerciseTypes$ | async">
     <mat-checkbox [value]="exerciseType.id" [id]="exerciseType.id" (change)="setExerciseTypesCheckboxValue($event)"
-        [checked]="exerciseType.id | checked: preferredExerciseTypeIds">
+        [checked]="exerciseType.id | checked: (preferredExerciseTypeIds$ | async)">
         {{ exerciseType.name }}
     </mat-checkbox>
     <br />

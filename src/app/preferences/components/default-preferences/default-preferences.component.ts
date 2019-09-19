@@ -18,16 +18,8 @@ export class DefaultPreferencesComponent implements OnInit {
   public equipment$: Observable<Equipment[]>;
   public exerciseTypes$: Observable<ExerciseType[]>;
   public prefferedExerciseTypesInOrder$: Observable<ExerciseType[]>;
-
-  public get preferredEquipmentIds(): string[] {
-    return this.preferencesService.getDefaultEquipment();
-  }
-  public get preferredExerciseTypeIds(): string[] {
-    return this.preferencesService.getDefaultExerciseTypes();
-  }
-  public get preferredExerciseTypeOrderIds(): string[] {
-    return this.preferencesService.getDefaultExerciseTypeOrder();
-  }
+  public preferredEquipmentIds$: Observable<string[]>;
+  public preferredExerciseTypeIds$: Observable<string[]>;
 
   constructor(
     private equipmentService: EquipmentService,
@@ -38,21 +30,31 @@ export class DefaultPreferencesComponent implements OnInit {
   ngOnInit() {
     this.equipment$ = this.equipmentService.getAll();
     this.exerciseTypes$ = this.exerciseTypesService.getAll();
+    this.preferredEquipmentIds$ = this.preferencesService.getDefaultEquipment();
+    this.preferredExerciseTypeIds$ = this.preferencesService.getDefaultExerciseTypes();
     this.prefferedExerciseTypesInOrder$ = this.exerciseTypesService.prefferedOnlyOrdered;
   }
 
   public setEquipmentCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
-    const currentValues = this.preferencesService.getDefaultEquipment();
-    const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
-    this.preferencesService.setDefaultEquipment(result);
+    this.preferencesService.getDefaultEquipment().pipe(
+      take(1),
+      tap(currentValues => {
+        const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
+        this.preferencesService.setDefaultEquipment(result);
+      })
+    ).subscribe();
   }
 
   public setExerciseTypesCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
-    const currentValues = this.preferencesService.getDefaultExerciseTypes();
-    const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
-    this.preferencesService.setDefaultExerciseTypes(result);
+    this.preferencesService.getDefaultEquipment().pipe(
+      take(1),
+      tap(currentValues => {
+        const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
+        this.preferencesService.setDefaultExerciseTypes(result);
+      })
+    ).subscribe();
   }
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {

@@ -11,15 +11,13 @@ import { Observable } from 'rxjs';
 export class PreferencesComponent implements OnInit {
 
   public preferences$: Observable<Preferences[]>;
-
-  public get defaultName(): string {
-    return this.service.getDefaultName();
-  }
+  public defaultName$: Observable<string>;
 
   constructor(
     private service: PreferencesService,
   ) {
     this.preferences$ = this.service.getAll();
+    this.defaultName$ = this.service.getDefaultName();
   }
 
   ngOnInit() { }

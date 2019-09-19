@@ -4,15 +4,13 @@ import { Preferences } from '../models/preferences';
 import { DataService } from 'src/app/start/services/data-service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/start/services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
 import { tap, take, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
-    // TODO: Make this something that exists in the DB
-    private default: Preferences;
-
+    private defaultPreferences$ = new BehaviorSubject<Preferences>(null);
 
     constructor(
         protected afs: AngularFirestore,
@@ -20,7 +18,7 @@ export class PreferencesService extends DataService<Preferences> {
         protected authService: AuthService
     ) {
         super(afs, storageService, authService, 'preferences');
-        this.default = new Preferences({
+        this.defaultPreferences$.next(new Preferences({
             name: 'Default',
             userId: 'anon',
             equipment: [
@@ -51,7 +49,7 @@ export class PreferencesService extends DataService<Preferences> {
                 'PGY7HqNN8uNrCkTBWcnc', // Support
                 '4pA4Vk86oSQ1sVq3tctW' // Core
             ]
-        });
+        }));
     }
 
     public getAll(): Observable<Preferences[]> {
@@ -64,31 +62,43 @@ export class PreferencesService extends DataService<Preferences> {
         return this.entries$.pipe(map(entries => [...entries].sort((a, b) => (a.name > b.name) ? 1 : -1)));
     }
 
-    public getDefaultName(): string {
-        return this.default.name;
+    public getDefaultName(): Observable<string> {
+        return this.defaultPreferences$.pipe(map(defaultPreferences => defaultPreferences.name));
     }
 
-    public getDefaultEquipment(): string[] {
-        return this.default.equipment;
+    public getDefaultEquipment(): Observable<string[]> {
+        return this.defaultPreferences$.pipe(
+            map(defaultPreferences => defaultPreferences.equipment)
+        );
     }
 
-    public getDefaultExerciseTypes(): string[] {
-        return this.default.exerciseTypes;
+    public getDefaultExerciseTypes(): Observable<string[]> {
+        return this.defaultPreferences$.pipe(
+            map(defaultPreferences => defaultPreferences.exerciseTypes)
+        );
     }
 
-    public getDefaultExerciseTypeOrder(): string[] {
-        return this.default.exerciseTypesOrder;
+    public getDefaultExerciseTypeOrder(): Observable<string[]> {
+        return this.defaultPreferences$.pipe(
+            map(defaultPreferences => defaultPreferences.exerciseTypesOrder)
+        );
     }
 
     public setDefaultEquipment(ids: string[]): void {
-        this.default.equipment = ids;
+        const current = this.defaultPreferences$.getValue();
+        current.equipment = ids;
+        this.defaultPreferences$.next(current);
     }
 
     public setDefaultExerciseTypes(ids: string[]): void {
-        this.default.exerciseTypes = ids;
+        const current = this.defaultPreferences$.getValue();
+        current.exerciseTypes = ids;
+        this.defaultPreferences$.next(current);
     }
 
     public setDefaultExerciseTypeOrder(ids: string[]): void {
-        this.default.exerciseTypesOrder = ids;
+        const current = this.defaultPreferences$.getValue();
+        current.exerciseTypesOrder = ids;
+        this.defaultPreferences$.next(current);
     }
 }

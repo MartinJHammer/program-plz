@@ -1,5 +1,5 @@
 <p>Preferences</p>
 <ul>
-  <li>{{ defaultName }} (Currently used)</li>
+  <li>{{ (defaultName$ | async) }} (Currently used)</li>
   <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }}</li>
 </ul>
