@@ -32,9 +32,10 @@ export class ExerciseTypeOrderComponent implements OnInit {
 
   public exerciseTypeOrderDrop(event: CdkDragDrop<string[]>): void {
     this.selectedExerciseTypes$.pipe(
+      take(1),
       tap(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)),
       tap(exerciseTypes => this.preferencesService.setExerciseTypeOrder(exerciseTypes.map(x => x.id))),
-      take(1)).subscribe();
+    ).subscribe();
     this.program.applyExerciseTypeOrder();
   }
 }
