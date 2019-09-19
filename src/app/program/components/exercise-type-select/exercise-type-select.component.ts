@@ -1,21 +1,23 @@
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, OnDestroy } from '@angular/core';
 import { ProgramService } from '../../services/program.service';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
 import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
-import { tap, debounceTime, switchMap } from 'rxjs/operators';
+import { tap, debounceTime } from 'rxjs/operators';
 import { PreferencesService } from '../../services/preferences.service';
+import { SubscriptionHandler } from 'src/app/start/helpers/subscription-handler';
 
 @Component({
   selector: 'pp-exercise-type-select',
   templateUrl: './exercise-type-select.component.html',
   styleUrls: ['./exercise-type-select.component.scss']
 })
-export class ExerciseTypeSelectComponent implements OnInit, AfterViewInit {
+export class ExerciseTypeSelectComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(MatCheckbox) public checkboxes !: QueryList<MatCheckbox>;
 
   public exerciseTypes$: Observable<ExerciseType[]>;
+  public subscriptionHandler = new SubscriptionHandler();
 
   constructor(
     public program: ProgramService,
@@ -28,27 +30,28 @@ export class ExerciseTypeSelectComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.exerciseTypesService.prefferedFirst().pipe(
+    const sub = this.exerciseTypesService.prefferedOnly().pipe(
       debounceTime(0),
-      switchMap(() => this.program.selectedExerciseTypes.pipe(
-        tap(selectedExerciseTypes => selectedExerciseTypes.forEach(selected => {
-          const found = this.checkboxes.find(checkBox => (((checkBox.value) as unknown) as ExerciseType).id === selected.id);
-          if (found) {
-            found.checked = true;
-          }
-        })),
-      ))
+      tap(selectedExerciseTypes => this.checkboxes.forEach(checkBox => {
+        const found = selectedExerciseTypes.find(selectedExerciseType => selectedExerciseType.id === (((checkBox.value) as unknown) as ExerciseType).id);
+        found ? checkBox.checked = true : checkBox.checked = false;
+      }))
     ).subscribe();
+
+    this.subscriptionHandler.register(sub);
+  }
+
+  ngOnDestroy() {
+    this.subscriptionHandler.unsubscribe();
   }
 
   public trackById(index, item: ExerciseType) {
     return item.id;
   }
 
-  public updateSelectedExercises(event: MatCheckboxChange) {
+  public updateSelectedExerciseTypes(event: MatCheckboxChange) {
     const selectedExerciseTypes = this.checkboxes.filter(checkbox => checkbox.checked).map(checkbox => ((checkbox.value) as unknown) as ExerciseType);
     this.preferencesService.setExerciseTypes(selectedExerciseTypes.map(exerciseType => exerciseType.id));
-    this.program.selectedExerciseTypes.next(selectedExerciseTypes);
   }
 
   public selectAllExerciseTypes() {
@@ -58,7 +61,6 @@ export class ExerciseTypeSelectComponent implements OnInit, AfterViewInit {
       }
       return ((checkbox.value) as unknown) as ExerciseType;
     });
-    this.program.selectedExerciseTypes.next(allExerciseTypes);
     this.preferencesService.setExerciseTypes(allExerciseTypes.map(exerciseTypes => exerciseTypes.id));
   }
 
@@ -66,7 +68,6 @@ export class ExerciseTypeSelectComponent implements OnInit, AfterViewInit {
     this.checkboxes.forEach(checkbox => {
       checkbox.checked = false;
     });
-    this.program.selectedExerciseTypes.next([]);
     this.preferencesService.setExerciseTypes([]);
   }
 }

@@ -37,4 +37,8 @@ export class PreferencesComponent implements OnInit {
       })
     );
   }
+
+  public selectPreference(preferences: Preferences) {
+    this.service.selectPreference(preferences.id);
+  }
 }

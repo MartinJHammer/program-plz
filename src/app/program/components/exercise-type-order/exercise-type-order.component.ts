@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { PreferencesService } from '../../services/preferences.service';
+import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
 
 @Component({
   selector: 'pp-exercise-type-order',
@@ -17,11 +18,12 @@ export class ExerciseTypeOrderComponent implements OnInit {
 
   constructor(
     private program: ProgramService,
-    private preferencesService: PreferencesService
+    private preferencesService: PreferencesService,
+    private exerciseTypesService: ExerciseTypesService
   ) { }
 
   ngOnInit() {
-    this.selectedExerciseTypes$ = this.program.selectedExerciseTypes;
+    this.selectedExerciseTypes$ = this.exerciseTypesService.prefferedOnlyOrdered();
   }
 
   public trackById(item): string {

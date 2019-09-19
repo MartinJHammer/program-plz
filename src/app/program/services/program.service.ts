@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rxjs';
-import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
 import { mergeMap, filter, map, switchMap, take, expand, tap, takeWhile } from 'rxjs/operators';
@@ -9,6 +8,8 @@ import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
 import { ExerciseTypesService } from 'src/app/exercise-types/services/exercise-types.service';
+import { PreferencesService } from './preferences.service';
+import { toBehaviorSubject } from 'src/app/start/helpers/to-behavior-subject';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramService {
@@ -17,30 +18,21 @@ export class ProgramService {
     public get exercises(): BehaviorSubject<Exercise[]> { return this.exercises$; }
     private exercises$ = new BehaviorSubject<Exercise[]>([]);
 
-    public get selectedExerciseTypes(): BehaviorSubject<ExerciseType[]> { return this.selectedExerciseTypes$; }
-    private selectedExerciseTypes$ = new BehaviorSubject<ExerciseType[]>([]);
-
     constructor(
         private afs: AngularFirestore,
         private exerciseTypesService: ExerciseTypesService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private preferencesService: PreferencesService
     ) {
         this.loadProgramFromStorage();
-        this.initPreferences();
     }
 
     /**
      * Inits the program.
      */
     public plz(): void {
-        // Set selected exercise types
-        this.exerciseTypesService.prefferedOnlyOrdered().pipe(
-            tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
-            take(1)
-        ).subscribe();
-
         // If there are any selected exercise types, create a program
-        const selectedExercises = this.selectedExerciseTypes$.getValue();
+        const selectedExercises = toBehaviorSubject(this.exerciseTypesService.prefferedOnlyOrdered(), null).getValue();
         if (selectedExercises.length > 0) {
             combineLatest(selectedExercises.map(exerciseType => this.getRandomExercise(exerciseType.id))).pipe(
                 map(exercises => this.updateProgram(exercises.reduce((a, b) => a.concat(b), []))),
@@ -71,11 +63,11 @@ export class ProgramService {
     }
 
     public selectAllExerciseTypes() {
-        this.exerciseTypesService.getAll().pipe(map(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)), take(1)).subscribe();
+        this.exerciseTypesService.getAll().pipe(map(exerciseTypes => this.preferencesService.setExerciseTypes(exerciseTypes.map(x => x.id)), take(1))).subscribe();
     }
 
     public deSelectAllExerciseTypes() {
-        this.selectedExerciseTypes$.next([]);
+        this.preferencesService.setExerciseTypes([]);
     }
 
     public shuffleExercises(): void {
@@ -91,7 +83,7 @@ export class ProgramService {
 
     public applyExerciseTypeOrder(): void {
         combineLatest(
-            this.selectedExerciseTypes$,
+            this.exerciseTypesService.prefferedOnlyOrdered(),
             this.exercises$.pipe(take(1))
         ).pipe(
             map(([selectedExercises, exercises]) => {
@@ -123,14 +115,6 @@ export class ProgramService {
         const currentExercises = this.exercises$.getValue();
         currentExercises[exerciseIndex] = newExercise;
         this.updateProgram(currentExercises);
-    }
-
-    private initPreferences(): void {
-        // Set selected exercise types
-        this.exerciseTypesService.prefferedOnlyOrdered().pipe(
-            tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
-            takeWhile(exerciseTypes => !!exerciseTypes && exerciseTypes.length === 0)
-        ).subscribe();
     }
 
     private loadProgramFromStorage(): void {

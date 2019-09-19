@@ -13,7 +13,7 @@ import { toBehaviorSubject } from 'src/app/start/helpers/to-behavior-subject';
 export class PreferencesService extends DataService<Preferences> {
 
     private selectedPreferenceId$: BehaviorSubject<string>;
-    private placeHolderPreference$: BehaviorSubject<Preferences>;
+    private placeHolderPreference$ = new BehaviorSubject<Preferences>(null);
     private preferencesChanged$ = new BehaviorSubject<boolean>(false);
 
     constructor(
@@ -28,9 +28,12 @@ export class PreferencesService extends DataService<Preferences> {
     public selectPreference(preferencesId: string): void {
         this.selectedPreferenceId$.next(preferencesId);
         this.storageService.set('selectedPreferenceId', preferencesId);
-        this.placeHolderPreference$ = toBehaviorSubject(this.getSingle(preferencesId).pipe(
-            map(x => new Preferences(JSON.parse(JSON.stringify(x)))) // Clone preferences so original isn't affected
-        ), null);
+        this.preferencesChanged$.next(false);
+        this.getSingle(preferencesId).pipe(
+            map(x => new Preferences(JSON.parse(JSON.stringify(x)))), // Clone preferences so original isn't affected
+            map(x => this.placeHolderPreference$.next(x)),
+            take(1)
+        ).subscribe();
     }
 
     public getPreferencesChanged(): Observable<boolean> {
@@ -83,20 +86,23 @@ export class PreferencesService extends DataService<Preferences> {
 
     public setEquipment(ids: string[]): void {
         this.preferencesChanged$.next(true);
-        const current = this.placeHolderPreference$.getValue();
+        const current = Object.assign({}, this.placeHolderPreference$.getValue());
         current.equipment = ids;
+        this.placeHolderPreference$.next(current);
     }
 
     public setExerciseTypes(ids: string[]): void {
         this.preferencesChanged$.next(true);
-        const current = this.placeHolderPreference$.getValue();
+        const current = Object.assign({}, this.placeHolderPreference$.getValue());
         current.exerciseTypes = ids;
+        this.placeHolderPreference$.next(current);
     }
 
     public setExerciseTypeOrder(ids: string[]): void {
         this.preferencesChanged$.next(true);
-        const current = this.placeHolderPreference$.getValue();
+        const current = Object.assign({}, this.placeHolderPreference$.getValue());
         current.exerciseTypesOrder = ids;
+        this.placeHolderPreference$.next(current);
     }
 
     private initPreferences(): void {
