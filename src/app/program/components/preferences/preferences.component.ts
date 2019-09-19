@@ -17,7 +17,7 @@ export class PreferencesComponent implements OnInit {
     private service: PreferencesService,
   ) {
     this.preferences$ = this.service.getAll();
-    this.defaultName$ = this.service.getDefaultName();
+    this.defaultName$ = this.service.getPreferencesName();
   }
 
   ngOnInit() { }

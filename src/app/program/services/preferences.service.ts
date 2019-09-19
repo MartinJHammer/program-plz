@@ -11,6 +11,9 @@ import { docMap } from 'src/app/start/helpers/doc-map';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
+
+    private placeHolderPreference: Preferences;
+
     private defaultPlaceHolder = new Preferences({
         name: 'Default',
         userId: 'anon',
@@ -18,6 +21,7 @@ export class PreferencesService extends DataService<Preferences> {
         exerciseTypes: [],
         exerciseTypesOrder: []
     });
+
     private defaultPreferences$ = new BehaviorSubject<Preferences>(this.defaultPlaceHolder);
 
     constructor(
@@ -40,41 +44,41 @@ export class PreferencesService extends DataService<Preferences> {
         return this.entries$.pipe(map(entries => [...entries].sort((a, b) => (a.name > b.name) ? 1 : -1)));
     }
 
-    public getDefaultName(): Observable<string> {
+    public getPreferencesName(): Observable<string> {
         return this.defaultPreferences$.pipe(map(defaultPreferences => defaultPreferences.name));
     }
 
-    public getDefaultEquipment(): Observable<string[]> {
+    public getEquipment(): Observable<string[]> {
         return this.defaultPreferences$.pipe(
             map(defaultPreferences => defaultPreferences.equipment)
         );
     }
 
-    public getDefaultExerciseTypes(): Observable<string[]> {
+    public getExerciseTypes(): Observable<string[]> {
         return this.defaultPreferences$.pipe(
             map(defaultPreferences => defaultPreferences.exerciseTypes)
         );
     }
 
-    public getDefaultExerciseTypeOrder(): Observable<string[]> {
+    public getExerciseTypeOrder(): Observable<string[]> {
         return this.defaultPreferences$.pipe(
             map(defaultPreferences => defaultPreferences.exerciseTypesOrder)
         );
     }
 
-    public setDefaultEquipment(ids: string[]): void {
+    public setEquipment(ids: string[]): void {
         const current = this.defaultPreferences$.getValue();
         current.equipment = ids;
         this.updateRemoteDefaultPreferences(current);
     }
 
-    public setDefaultExerciseTypes(ids: string[]): void {
+    public setExerciseTypes(ids: string[]): void {
         const current = this.defaultPreferences$.getValue();
         current.exerciseTypes = ids;
         this.updateRemoteDefaultPreferences(current);
     }
 
-    public setDefaultExerciseTypeOrder(ids: string[]): void {
+    public setExerciseTypeOrder(ids: string[]): void {
         const current = this.defaultPreferences$.getValue();
         current.exerciseTypesOrder = ids;
         this.updateRemoteDefaultPreferences(current);

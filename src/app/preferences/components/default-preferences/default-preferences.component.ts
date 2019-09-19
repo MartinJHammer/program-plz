@@ -30,30 +30,30 @@ export class DefaultPreferencesComponent implements OnInit {
   ngOnInit() {
     this.equipment$ = this.equipmentService.getAll();
     this.exerciseTypes$ = this.exerciseTypesService.getAll();
-    this.preferredEquipmentIds$ = this.preferencesService.getDefaultEquipment();
-    this.preferredExerciseTypeIds$ = this.preferencesService.getDefaultExerciseTypes();
+    this.preferredEquipmentIds$ = this.preferencesService.getEquipment();
+    this.preferredExerciseTypeIds$ = this.preferencesService.getExerciseTypes();
     this.prefferedExerciseTypesInOrder$ = this.exerciseTypesService.prefferedOnlyOrdered();
   }
 
   public setEquipmentCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
 
-    this.preferencesService.getDefaultEquipment().pipe(
+    this.preferencesService.getEquipment().pipe(
       take(1),
       tap(currentValues => {
         const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
-        this.preferencesService.setDefaultEquipment(result);
+        this.preferencesService.setEquipment(result);
       })
     ).subscribe();
   }
 
   public setExerciseTypesCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
-    this.preferencesService.getDefaultExerciseTypes().pipe(
+    this.preferencesService.getExerciseTypes().pipe(
       take(1),
       tap(currentValues => {
         const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);
-        this.preferencesService.setDefaultExerciseTypes(result);
+        this.preferencesService.setExerciseTypes(result);
       })
     ).subscribe();
   }
@@ -62,7 +62,7 @@ export class DefaultPreferencesComponent implements OnInit {
     this.prefferedExerciseTypesInOrder$.pipe(
       take(1),
       tap(exerciseTypes => moveItemInArray(exerciseTypes, event.previousIndex, event.currentIndex)),
-      tap(exerciseTypes => this.preferencesService.setDefaultExerciseTypeOrder(exerciseTypes.map(exerciseType => exerciseType.id))),
+      tap(exerciseTypes => this.preferencesService.setExerciseTypeOrder(exerciseTypes.map(exerciseType => exerciseType.id))),
     ).subscribe();
   }
 }

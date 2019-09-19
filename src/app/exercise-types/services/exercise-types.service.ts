@@ -20,7 +20,7 @@ export class ExerciseTypesService extends DataService<ExerciseType> {
     public prefferedOnly(): Observable<ExerciseType[]> {
         return combineLatest(
             this.getAll(),
-            this.preferencesService.getDefaultExerciseTypes(),
+            this.preferencesService.getExerciseTypes(),
         ).pipe(
             map(([exerciseTypes, defaultExerciseTypes]) => exerciseTypes.filter(exerciseType => defaultExerciseTypes.includes(exerciseType.id)))
         );
@@ -29,7 +29,7 @@ export class ExerciseTypesService extends DataService<ExerciseType> {
     public prefferedFirst(): Observable<ExerciseType[]> {
         return combineLatest(
             this.getAll(),
-            this.preferencesService.getDefaultExerciseTypeOrder()
+            this.preferencesService.getExerciseTypeOrder()
         ).pipe(
             map(([exerciseTypes, prefferedOrder]) => this.sortExerciseTypes(exerciseTypes, prefferedOrder))
         );
@@ -38,7 +38,7 @@ export class ExerciseTypesService extends DataService<ExerciseType> {
     public prefferedOnlyOrdered(): Observable<ExerciseType[]> {
         return combineLatest(
             this.prefferedOnly(),
-            this.preferencesService.getDefaultExerciseTypeOrder()
+            this.preferencesService.getExerciseTypeOrder()
         ).pipe(
             map(([prefferedExerciseTypes, prefferedOrder]) => this.sortExerciseTypes(prefferedExerciseTypes, prefferedOrder))
         );
