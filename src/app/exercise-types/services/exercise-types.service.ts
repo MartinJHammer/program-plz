@@ -5,8 +5,8 @@ import { DataService } from 'src/app/start/services/data-service';
 import { ExerciseType } from '../models/exercise-type';
 import { AuthService } from 'src/app/start/services/auth.service';
 import { PreferencesService } from 'src/app/program/services/preferences.service';
-import { map, switchMap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseTypesService extends DataService<ExerciseType> {
@@ -17,32 +17,36 @@ export class ExerciseTypesService extends DataService<ExerciseType> {
         protected preferencesService: PreferencesService
     ) { super(afs, storageService, authService, 'exercise-types'); }
 
-    public get prefferedOnly(): Observable<ExerciseType[]> {
-        return this.preferencesService.getDefaultExerciseTypes().pipe(
-            switchMap(defaultExerciseTypes => this.getAll().pipe(
-                map(exerciseTypes => exerciseTypes.filter(exerciseType => defaultExerciseTypes.includes(exerciseType.id)))
-            ))
+    public prefferedOnly(): Observable<ExerciseType[]> {
+        return combineLatest(
+            this.getAll(),
+            this.preferencesService.getDefaultExerciseTypes(),
+        ).pipe(
+            map(([exerciseTypes, defaultExerciseTypes]) => exerciseTypes.filter(exerciseType => defaultExerciseTypes.includes(exerciseType.id)))
         );
     }
 
-    public get prefferedFirst(): Observable<ExerciseType[]> {
-        return this.preferencesService.getDefaultExerciseTypeOrder().pipe(
-            switchMap(prefferedOrder => this.getAll().pipe(
-                map(exerciseTypes => [...exerciseTypes].sort((a, b) => {
-                    return prefferedOrder.indexOf(a.id) - prefferedOrder.indexOf(b.id);
-                }))
-            ))
+    public prefferedFirst(): Observable<ExerciseType[]> {
+        return combineLatest(
+            this.getAll(),
+            this.preferencesService.getDefaultExerciseTypeOrder()
+        ).pipe(
+            map(([exerciseTypes, prefferedOrder]) => this.sortExerciseTypes(exerciseTypes, prefferedOrder))
         );
     }
 
-    public get prefferedOnlyOrdered(): Observable<ExerciseType[]> {
-        return this.preferencesService.getDefaultExerciseTypeOrder().pipe(
-            switchMap(defaultExerciseTypeOrder => this.getAll().pipe(
-                map(exerciseTypes => defaultExerciseTypeOrder
-                    .map(orderId => exerciseTypes.filter(exerciseType => exerciseType.id === orderId))
-                    .reduce((a, b) => a.concat(b), [])
-                )
-            ))
+    public prefferedOnlyOrdered(): Observable<ExerciseType[]> {
+        return combineLatest(
+            this.prefferedOnly(),
+            this.preferencesService.getDefaultExerciseTypeOrder()
+        ).pipe(
+            map(([prefferedExerciseTypes, prefferedOrder]) => this.sortExerciseTypes(prefferedExerciseTypes, prefferedOrder))
         );
+    }
+
+    private sortExerciseTypes(exerciseTypes: ExerciseType[], prefferedOrder: string[]): any[] {
+        return [...exerciseTypes].sort((a, b) => {
+            return prefferedOrder.indexOf(a.id) - prefferedOrder.indexOf(b.id);
+        })
     }
 }

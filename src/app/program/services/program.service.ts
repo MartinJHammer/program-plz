@@ -25,24 +25,19 @@ export class ProgramService {
         private exerciseTypesService: ExerciseTypesService,
         private storageService: StorageService
     ) {
-        this.init();
-    }
-
-    private init(): void {
-        // Load last program
         this.loadProgramFromStorage();
-
-        // Set selected exercise types
-        this.exerciseTypesService.prefferedOnlyOrdered.pipe(
-            tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
-            takeWhile(exerciseTypes => !!exerciseTypes && exerciseTypes.length === 0)
-        ).subscribe();
     }
 
     /**
      * Inits the program.
      */
     public plz(): void {
+        // Set selected exercise types
+        this.exerciseTypesService.prefferedOnlyOrdered().pipe(
+            tap(exerciseTypes => this.selectedExerciseTypes$.next(exerciseTypes)),
+            takeWhile(exerciseTypes => !!exerciseTypes && exerciseTypes.length === 0)
+        ).subscribe();
+
         const selectedExercises = this.selectedExerciseTypes$.getValue();
         if (selectedExercises.length > 0) {
             combineLatest(selectedExercises.map(exerciseType => this.getRandomExercise(exerciseType.id))).pipe(

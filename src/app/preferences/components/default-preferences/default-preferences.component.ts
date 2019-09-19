@@ -7,7 +7,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ExerciseType } from 'src/app/exercise-types/models/exercise-type';
 import { PreferencesService } from 'src/app/program/services/preferences.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take, tap, share } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-default-preferences',
@@ -17,9 +17,9 @@ import { map, take, tap } from 'rxjs/operators';
 export class DefaultPreferencesComponent implements OnInit {
   public equipment$: Observable<Equipment[]>;
   public exerciseTypes$: Observable<ExerciseType[]>;
-  public prefferedExerciseTypesInOrder$: Observable<ExerciseType[]>;
   public preferredEquipmentIds$: Observable<string[]>;
   public preferredExerciseTypeIds$: Observable<string[]>;
+  public prefferedExerciseTypesInOrder$: Observable<ExerciseType[]>;
 
   constructor(
     private equipmentService: EquipmentService,
@@ -32,11 +32,12 @@ export class DefaultPreferencesComponent implements OnInit {
     this.exerciseTypes$ = this.exerciseTypesService.getAll();
     this.preferredEquipmentIds$ = this.preferencesService.getDefaultEquipment();
     this.preferredExerciseTypeIds$ = this.preferencesService.getDefaultExerciseTypes();
-    this.prefferedExerciseTypesInOrder$ = this.exerciseTypesService.prefferedOnlyOrdered;
+    this.prefferedExerciseTypesInOrder$ = this.exerciseTypesService.prefferedOnlyOrdered();
   }
 
   public setEquipmentCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
+
     this.preferencesService.getDefaultEquipment().pipe(
       take(1),
       tap(currentValues => {
@@ -48,7 +49,7 @@ export class DefaultPreferencesComponent implements OnInit {
 
   public setExerciseTypesCheckboxValue(checkboxChange: MatCheckboxChange) {
     const checkbox = checkboxChange.source;
-    this.preferencesService.getDefaultEquipment().pipe(
+    this.preferencesService.getDefaultExerciseTypes().pipe(
       take(1),
       tap(currentValues => {
         const result = checkbox.checked ? [...currentValues, checkbox.value] : currentValues.filter(id => checkbox.value !== id);

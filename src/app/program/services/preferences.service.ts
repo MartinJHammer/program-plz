@@ -52,6 +52,7 @@ export class PreferencesService extends DataService<Preferences> {
         }));
     }
 
+    // Note: Preferences will always be user related - therefore the method overwrite.
     public getAll(): Observable<Preferences[]> {
         this.withUser(user => this.afs.collection<Preferences>(this.collectionPath, ref => ref.where('userId', '==', user.uid)).snapshotChanges().pipe(
             snapshotChangesDocsMap,

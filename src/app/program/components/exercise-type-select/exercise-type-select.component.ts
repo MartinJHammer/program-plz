@@ -22,7 +22,7 @@ export class ExerciseTypeSelectComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.exerciseTypes$ = this.exerciseTypesService.prefferedFirst.pipe(take(1));
+    this.exerciseTypes$ = this.exerciseTypesService.prefferedFirst().pipe(take(1));
   }
 
   ngAfterViewInit() {
