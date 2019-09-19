@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-preferences',
@@ -11,14 +12,26 @@ import { Observable } from 'rxjs';
 export class PreferencesComponent implements OnInit {
 
   public preferences$: Observable<Preferences[]>;
-  public defaultName$: Observable<string>;
+  public currentPreference$ = new BehaviorSubject<string>('');
 
   constructor(
     private service: PreferencesService,
-  ) {
-    this.preferences$ = this.service.getAll();
-    this.defaultName$ = this.service.getPreferencesName();
-  }
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.preferences$ = combineLatest(
+      this.service.getAll(),
+      this.service.getPreferencesId()
+    ).pipe(
+      map(([allPreferences, currentId]) => {
+        return allPreferences.filter(pref => {
+          if (pref.id !== currentId) {
+            return true;
+          }
+          this.currentPreference$.next(pref.name);
+          return false;
+        });
+      })
+    );
+  }
 }
