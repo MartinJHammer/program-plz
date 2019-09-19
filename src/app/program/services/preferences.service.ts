@@ -6,23 +6,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/start/services/auth.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
-import { tap, take, map } from 'rxjs/operators';
-import { docMap } from 'src/app/start/helpers/doc-map';
+import { tap, take, map, filter, switchMap } from 'rxjs/operators';
+import { toBehaviorSubject } from 'src/app/start/helpers/to-behavior-subject';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
 
-    private placeHolderPreference: Preferences;
-
-    private defaultPlaceHolder = new Preferences({
-        name: 'Default',
-        userId: 'anon',
-        equipment: [],
-        exerciseTypes: [],
-        exerciseTypesOrder: []
-    });
-
-    private defaultPreferences$ = new BehaviorSubject<Preferences>(this.defaultPlaceHolder);
+    private selectedPreferenceId$: BehaviorSubject<string>;
+    private placeHolderPreference$: BehaviorSubject<Preferences>;
 
     constructor(
         protected afs: AngularFirestore,
@@ -30,7 +21,17 @@ export class PreferencesService extends DataService<Preferences> {
         protected authService: AuthService
     ) {
         super(afs, storageService, authService, 'preferences');
-        this.loadDefaultPreferences();
+
+        // get selected preference id
+        this.selectedPreferenceId$ = toBehaviorSubject<string>(this.storageService.select('selectedPreferenceId'), 'anon');
+        this.selectPreference(this.selectedPreferenceId$.getValue());
+        this.getSingle('anon').pipe(tap(x => console.log(x))).subscribe();
+    }
+
+    public selectPreference(preferencesId: string): void {
+        this.selectedPreferenceId$.next(preferencesId);
+        this.storageService.set('selectedPreferenceId', preferencesId);
+        this.placeHolderPreference$ = toBehaviorSubject(this.getSingle(preferencesId), null);
     }
 
     // Note: Preferences will always be user related - therefore the method overwrite.
@@ -45,76 +46,56 @@ export class PreferencesService extends DataService<Preferences> {
     }
 
     public getPreferencesName(): Observable<string> {
-        return this.defaultPreferences$.pipe(map(defaultPreferences => defaultPreferences.name));
+        return this.placeHolderPreference$.pipe(
+            filter(x => !!x),
+            map(preferences => preferences.name)
+        );
     }
 
     public getEquipment(): Observable<string[]> {
-        return this.defaultPreferences$.pipe(
-            map(defaultPreferences => defaultPreferences.equipment)
+        return this.placeHolderPreference$.pipe(
+            filter(x => !!x),
+            map(preferences => preferences.equipment)
         );
     }
 
     public getExerciseTypes(): Observable<string[]> {
-        return this.defaultPreferences$.pipe(
-            map(defaultPreferences => defaultPreferences.exerciseTypes)
+        return this.placeHolderPreference$.pipe(
+            filter(x => !!x),
+            map(preferences => preferences.exerciseTypes)
         );
     }
 
     public getExerciseTypeOrder(): Observable<string[]> {
-        return this.defaultPreferences$.pipe(
-            map(defaultPreferences => defaultPreferences.exerciseTypesOrder)
+        return this.placeHolderPreference$.pipe(
+            filter(x => !!x),
+            map(preferences => preferences.exerciseTypesOrder)
         );
     }
 
     public setEquipment(ids: string[]): void {
-        const current = this.defaultPreferences$.getValue();
+        const current = this.placeHolderPreference$.getValue();
         current.equipment = ids;
-        this.updateRemoteDefaultPreferences(current);
+        this.updateSingleEntryInEntries(current);
     }
 
     public setExerciseTypes(ids: string[]): void {
-        const current = this.defaultPreferences$.getValue();
+        const current = this.placeHolderPreference$.getValue();
         current.exerciseTypes = ids;
-        this.updateRemoteDefaultPreferences(current);
+        this.updateSingleEntryInEntries(current);
     }
 
     public setExerciseTypeOrder(ids: string[]): void {
-        const current = this.defaultPreferences$.getValue();
+        const current = this.placeHolderPreference$.getValue();
         current.exerciseTypesOrder = ids;
-        this.updateRemoteDefaultPreferences(current);
+        this.updateSingleEntryInEntries(current);
     }
 
-    private getDefaultPreferences(): void {
-        // Refactor this to get hash-ish value to check if anything has changed
-        // before fetching? Unless no local data, then always fetch.
-        this.afs.doc<Preferences>(`${this.collectionPath}/anon`).get().pipe(
-            docMap,
-            tap((defaultPreferences: Preferences) => this.updateLocalDefaultPreferences(defaultPreferences)),
-            take(1)
-        ).subscribe();
-    }
-
-    private updateRemoteDefaultPreferences(defaultPreferences: Preferences) {
-        // TODO: Revert changes on error. Remember to show the error!
-        this.updateLocalDefaultPreferences(defaultPreferences);
-        this.afs.collection<Preferences>(this.collectionPath).doc('anon').set(Object.assign({}, defaultPreferences)).then(docRef => { });
-    }
-
-    private updateLocalDefaultPreferences(defaultPreferences: Preferences) {
-        this.defaultPreferences$.next(defaultPreferences);
-        this.storageService.set('defaultPreferences', defaultPreferences);
-    }
-
-    private loadDefaultPreferences() {
-        this.storageService.select('defaultPreferences').pipe(
-            take(1),
-            tap((defaultPreferences: Preferences) => {
-                if (!defaultPreferences) {
-                    this.getDefaultPreferences();
-                }
-
-                this.defaultPreferences$.next(defaultPreferences ? defaultPreferences : this.defaultPlaceHolder);
-            })
-        ).subscribe();
+    private getPlaceHolderPref(): Observable<Preferences> {
+        return this.selectedPreferenceId$.pipe(
+            switchMap(selectedPreferenceId => this.entries$.pipe(
+                map(entries => entries.find(entry => entry.id === selectedPreferenceId))
+            ))
+        );
     }
 }

@@ -84,11 +84,13 @@ export abstract class DataService<T extends Entry> {
         );
     }
 
-    private updateSingleEntryInEntries(entry: T) {
+    protected updateSingleEntryInEntries(entry: T) {
         const currentEntries = [...this.entries$.getValue()];
         const index = currentEntries.findIndex(currentEntry => currentEntry.id === entry.id);
         if (index !== -1) {
             currentEntries.splice(index, 1, entry);
+        } else {
+            currentEntries.push(entry);
         }
 
         this.updateEntries(currentEntries);
