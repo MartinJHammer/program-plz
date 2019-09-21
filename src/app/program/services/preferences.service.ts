@@ -12,7 +12,7 @@ import { toBehaviorSubject } from 'src/app/start/helpers/to-behavior-subject';
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
 
-    private selectedPreferenceId$: BehaviorSubject<string>;
+    private selectedPreferenceId$ = new BehaviorSubject<string>('');
     private placeHolderPreference$ = new BehaviorSubject<Preferences>(null);
     private preferencesChanged$ = new BehaviorSubject<boolean>(false);
 
@@ -123,7 +123,10 @@ export class PreferencesService extends DataService<Preferences> {
     }
 
     private initPreferences(): void {
-        this.selectedPreferenceId$ = toBehaviorSubject<string>(this.storageService.select('selectedPreferenceId'), 'anon');
-        this.selectPreference(this.selectedPreferenceId$.getValue());
+        const selectedPreferenceId$ = this.storageService.select('selectedPreferenceId');
+        selectedPreferenceId$.pipe(
+            take(1),
+            tap(selectedPreferenceId => this.selectPreference(selectedPreferenceId))
+        ).subscribe();
     }
 }
