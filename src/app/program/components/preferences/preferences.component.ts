@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap, filter, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-preferences',
@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 export class PreferencesComponent implements OnInit {
 
   public preferences$: Observable<Preferences[]>;
-  public currentPreference$ = new BehaviorSubject<string>('');
+  public currentPreferenceName$ = new BehaviorSubject<string>('');
   public preferencesChanged$: Observable<boolean>;
 
   constructor(
@@ -20,7 +20,12 @@ export class PreferencesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.preferencesChanged$ = this.service.getPreferencesChanged();
+    this.preferencesChanged$ = this.service.getPreferencesChanged().pipe(
+      switchMap(changed => this.service.getSelectedPreferenceId().pipe(
+        filter(x => !!x && x !== 'anon'),
+        map(() => changed)
+      ))
+    );
 
     this.preferences$ = combineLatest(
       this.service.getAll(),
@@ -31,7 +36,7 @@ export class PreferencesComponent implements OnInit {
           if (pref.id !== currentId) {
             return true;
           }
-          this.currentPreference$.next(pref.name);
+          this.currentPreferenceName$.next(pref.name);
           return false;
         });
       })
@@ -40,5 +45,17 @@ export class PreferencesComponent implements OnInit {
 
   public selectPreference(preferences: Preferences) {
     this.service.selectPreference(preferences.id);
+  }
+
+  public save(): void {
+    this.service.saveCurrentPreferenceChanges();
+  }
+
+  public discard(): void {
+    this.service.discardCurrentPreferenceChanges();
+  }
+
+  public newPreference(): void {
+
   }
 }

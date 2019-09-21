@@ -36,8 +36,25 @@ export class PreferencesService extends DataService<Preferences> {
         ).subscribe();
     }
 
+    public getSelectedPreferenceId(): Observable<string> {
+        return this.selectedPreferenceId$;
+    }
+
     public getPreferencesChanged(): Observable<boolean> {
         return this.preferencesChanged$;
+    }
+
+    public saveCurrentPreferenceChanges(): void {
+        this.update(this.placeHolderPreference$.getValue());
+        this.preferencesChanged$.next(false);
+    }
+
+    public discardCurrentPreferenceChanges(): void {
+        this.selectPreference(this.selectedPreferenceId$.getValue());
+    }
+
+    public newPreference(): void {
+
     }
 
     // Note: Preferences will always be user related - therefore the method overwrite.
