@@ -6,7 +6,7 @@
 
   <!-- Options -->
   <ng-container *ngIf="!creatingPreference">
-    <button mat-button color="primary" (click)="save()">Save</button>
+    <button mat-button color="primary" (click)="save()" *ngIf="changedPreferenceAndNotAnon$ | async">Save</button>
     <button mat-button color="warn" (click)="discard()">Discard</button>
     <button mat-button color="accent" (click)="newPreference()">New</button>
   </ng-container>
@@ -25,25 +25,47 @@
 
     <!-- Buttons -->
     <button mat-button color="primary" (click)="createPreference()">Create</button>
-    <button mat-button color="default" (click)="cancelCreatePreference()">Cancel</button>
+    <button mat-button color="default" (click)="cancelForm()">Cancel</button>
 
   </ng-container>
 </ng-container>
 
 <!-- Preferences -->
-<ul>
-  <li>{{ (currentPreferenceName$ | async) }} (Currently used)</li>
+<ul *ngIf="!renamingPreference">
+  <!-- Currently selected preferences -->
+  <li *ngIf="currentPreference$ | async as currentPreference">
+    {{ currentPreference.name }} (Currently used)
+  </li>
+
+  <!-- Other preferences -->
   <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }} -
     <span style="cursor: pointer; color:brown;" (click)="selectPreference(preferences)">
       use
     </span>
-    -
-    <span style="cursor: pointer; color:skyblue;" (click)="renamePreference(preferences)">
-      rename
-    </span>
-    -
-    <span style="cursor: pointer; color:red;" (click)="deletePreference(preferences)">
-      delete
-    </span>
+    <ng-container *ngIf="preferences.id !== 'anon'">
+      <span style="cursor: pointer; color:skyblue;" (click)="renamePreference(preferences)">
+        - rename
+      </span>
+      <span style="cursor: pointer; color:red;" (click)="deletePreference(preferences)">
+        - delete
+      </span>
+    </ng-container>
   </li>
 </ul>
+
+<!-- Renaming preference -->
+<ng-container *ngIf="renamingPreference">
+  <!-- Input -->
+  <mat-form-field>
+    <input matInput input="text" name="name" [formControl]="nameControl" placeholder="Name" />
+  </mat-form-field>
+
+  <!-- Validation -->
+  <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
+
+  <!-- Buttons -->
+  <button mat-button color="primary" (click)="updatePreference()">Rename</button>
+  <button mat-button color="default" (click)="cancelForm()">Cancel</button>
+
+</ng-container>
+<br />

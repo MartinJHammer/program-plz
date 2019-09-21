@@ -15,11 +15,16 @@ import { MatDialog } from '@angular/material/dialog';
 export class PreferencesComponent implements OnInit {
 
   public preferences$: Observable<Preferences[]>;
-  public currentPreferenceName$ = new BehaviorSubject<string>('');
+  public currentPreference$ = new BehaviorSubject<Preferences>(null);
   public preferencesChanged$: Observable<boolean>;
+  public changedPreferenceAndNotAnon$: Observable<boolean>;
+
   public creatingPreference: boolean;
+  public renamingPreference: boolean;
+  private preferenceToRename: Preferences;
   public nameControl: FormControl = new FormControl();
   public validationMessage: string;
+
 
 
   constructor(
@@ -28,12 +33,15 @@ export class PreferencesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.preferencesChanged$ = this.service.getPreferencesChanged().pipe(
+    this.preferencesChanged$ = this.service.getPreferencesChanged();
+
+    this.changedPreferenceAndNotAnon$ = this.service.getPreferencesChanged().pipe(
       switchMap(changed => this.service.getSelectedPreferenceId().pipe(
         filter(x => !!x && x !== 'anon'),
         map(() => changed)
       ))
     );
+
 
     this.preferences$ = combineLatest(
       this.service.getAll(),
@@ -44,29 +52,11 @@ export class PreferencesComponent implements OnInit {
           if (pref.id !== currentId) {
             return true;
           }
-          this.currentPreferenceName$.next(pref.name);
+          this.currentPreference$.next(pref);
           return false;
         });
       })
     );
-  }
-
-  public selectPreference(preferences: Preferences) {
-    this.service.selectPreference(preferences.id);
-  }
-
-  public renamePreference(preferences: Preferences) {
-
-  }
-
-  public deletePreference(preferences: Preferences) {
-    this.dialog.open(DialogComponent, {
-      data: {
-        title: `Delete ${preferences.name} preference?`,
-        body: `This cannot be undone`,
-        logic: () => this.service.delete(preferences.id)
-      }
-    });
   }
 
   public save(): void {
@@ -81,6 +71,26 @@ export class PreferencesComponent implements OnInit {
     this.creatingPreference = true;
   }
 
+  public selectPreference(preferences: Preferences) {
+    this.service.selectPreference(preferences.id);
+  }
+
+  public renamePreference(preferences: Preferences) {
+    this.preferenceToRename = preferences;
+    this.nameControl.setValue(preferences.name);
+    this.renamingPreference = true;
+  }
+
+  public deletePreference(preferences: Preferences) {
+    this.dialog.open(DialogComponent, {
+      data: {
+        title: `Delete ${preferences.name} preference?`,
+        body: `This cannot be undone`,
+        logic: () => this.service.delete(preferences.id)
+      }
+    });
+  }
+
   public createPreference(): void {
     const preferenceName = this.nameControl.value;
     if (preferenceName && preferenceName.length >= 3) {
@@ -93,8 +103,23 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  public cancelCreatePreference(): void {
+  public updatePreference() {
+    const preferenceName = this.nameControl.value;
+    if (preferenceName && preferenceName.length >= 3) {
+      this.validationMessage = undefined;
+      this.renamingPreference = false;
+      this.nameControl.setValue('');
+      this.preferenceToRename.name = preferenceName;
+      this.service.update(this.preferenceToRename);
+      this.preferenceToRename = undefined;
+    } else {
+      this.validationMessage = 'Please enter a name of 3 characters or more';
+    }
+  }
+
+  public cancelForm(): void {
     this.creatingPreference = false;
+    this.renamingPreference = false;
     this.nameControl.setValue('');
   }
 }
