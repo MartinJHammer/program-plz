@@ -6,7 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/start/services/auth.service';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
-import { tap, take, map, filter, switchMap } from 'rxjs/operators';
+import { tap, take, map, filter, switchMap, startWith } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
@@ -35,8 +35,8 @@ export class PreferencesService extends DataService<Preferences> {
         ).subscribe();
     }
 
-    public getSelectedPreferenceId(): Observable<string> {
-        return this.selectedPreferenceId$;
+    public getPlaceholderPreference(): Observable<Preferences> {
+        return this.placeHolderPreference$;
     }
 
     public getPreferencesChanged(): Observable<boolean> {
@@ -135,6 +135,7 @@ export class PreferencesService extends DataService<Preferences> {
         const selectedPreferenceId$ = this.storageService.select('selectedPreferenceId');
         selectedPreferenceId$.pipe(
             take(1),
+            map(selectedPreferenceId => !!selectedPreferenceId ? selectedPreferenceId : 'anon'),
             tap(selectedPreferenceId => this.selectPreference(selectedPreferenceId))
         ).subscribe();
     }

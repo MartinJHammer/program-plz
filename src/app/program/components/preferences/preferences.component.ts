@@ -36,8 +36,8 @@ export class PreferencesComponent implements OnInit {
     this.preferencesChanged$ = this.service.getPreferencesChanged();
 
     this.changedPreferenceAndNotAnon$ = this.service.getPreferencesChanged().pipe(
-      switchMap(changed => this.service.getSelectedPreferenceId().pipe(
-        filter(x => !!x && x !== 'anon'),
+      switchMap(changed => this.service.getPlaceholderPreference().pipe(
+        filter(x => !!x && x.id !== 'anon'),
         map(() => changed)
       ))
     );
@@ -45,11 +45,11 @@ export class PreferencesComponent implements OnInit {
 
     this.preferences$ = combineLatest(
       this.service.getAll(),
-      this.service.getPreferencesId()
+      this.service.getPlaceholderPreference().pipe(filter(x => !!x))
     ).pipe(
-      map(([allPreferences, currentId]) => {
+      map(([allPreferences, placeHolderPref]) => {
         return allPreferences.filter(pref => {
-          if (pref.id !== currentId) {
+          if (pref.id !== placeHolderPref.id) {
             return true;
           }
           this.currentPreference$.next(pref);
