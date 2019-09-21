@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
-import { map, switchMap, filter, tap } from 'rxjs/operators';
+import { map, switchMap, filter, tap, take } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
+import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'pp-preferences',
@@ -22,6 +24,7 @@ export class PreferencesComponent implements OnInit {
 
   constructor(
     private service: PreferencesService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -52,6 +55,20 @@ export class PreferencesComponent implements OnInit {
     this.service.selectPreference(preferences.id);
   }
 
+  public renamePreference(preferences: Preferences) {
+
+  }
+
+  public deletePreference(preferences: Preferences) {
+    this.dialog.open(DialogComponent, {
+      data: {
+        title: `Delete ${preferences.name} preference?`,
+        body: `This cannot be undone`,
+        logic: () => this.service.delete(preferences.id)
+      }
+    });
+  }
+
   public save(): void {
     this.service.saveCurrentPreferenceChanges();
   }
@@ -78,5 +95,6 @@ export class PreferencesComponent implements OnInit {
 
   public cancelCreatePreference(): void {
     this.creatingPreference = false;
+    this.nameControl.setValue('');
   }
 }

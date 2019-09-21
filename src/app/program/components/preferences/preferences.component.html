@@ -15,18 +15,35 @@
 
   <!-- Creating preference -->
   <ng-container *ngIf="creatingPreference">
+    <!-- Input -->
+    <mat-form-field>
+      <input matInput input="text" name="name" [formControl]="nameControl" placeholder="Name" />
+    </mat-form-field>
+
+    <!-- Validation -->
+    <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
+
+    <!-- Buttons -->
     <button mat-button color="primary" (click)="createPreference()">Create</button>
     <button mat-button color="default" (click)="cancelCreatePreference()">Cancel</button>
-    <mat-form-field>
-      <input matInput input="text" name="name" [formControl]="nameControl" />
-    </mat-form-field>
-    <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
+
   </ng-container>
 </ng-container>
 
-<!-- List -->
+<!-- Preferences -->
 <ul>
   <li>{{ (currentPreferenceName$ | async) }} (Currently used)</li>
-  <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }} - <span
-      style="cursor: pointer; color:brown;" (click)="selectPreference(preferences)">use</span></li>
+  <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }} -
+    <span style="cursor: pointer; color:brown;" (click)="selectPreference(preferences)">
+      use
+    </span>
+    -
+    <span style="cursor: pointer; color:skyblue;" (click)="renamePreference(preferences)">
+      rename
+    </span>
+    -
+    <span style="cursor: pointer; color:red;" (click)="deletePreference(preferences)">
+      delete
+    </span>
+  </li>
 </ul>
