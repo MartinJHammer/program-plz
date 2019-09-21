@@ -3,6 +3,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, switchMap, filter, tap } from 'rxjs/operators';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'pp-preferences',
@@ -14,6 +15,10 @@ export class PreferencesComponent implements OnInit {
   public preferences$: Observable<Preferences[]>;
   public currentPreferenceName$ = new BehaviorSubject<string>('');
   public preferencesChanged$: Observable<boolean>;
+  public creatingPreference: boolean;
+  public nameControl: FormControl = new FormControl();
+  public validationMessage: string;
+
 
   constructor(
     private service: PreferencesService,
@@ -56,6 +61,22 @@ export class PreferencesComponent implements OnInit {
   }
 
   public newPreference(): void {
+    this.creatingPreference = true;
+  }
 
+  public createPreference(): void {
+    const preferenceName = this.nameControl.value;
+    if (preferenceName && preferenceName.length >= 3) {
+      this.validationMessage = undefined;
+      this.creatingPreference = false;
+      this.nameControl.setValue('');
+      this.service.newPreference(preferenceName);
+    } else {
+      this.validationMessage = 'Please enter a name of 3 characters or more';
+    }
+  }
+
+  public cancelCreatePreference(): void {
+    this.creatingPreference = false;
   }
 }

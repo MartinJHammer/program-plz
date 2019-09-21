@@ -58,7 +58,7 @@ export class FormComponent implements OnInit {
     } else {
       const values = form.value;
       values.random = getRandomNumber();
-      this.dataService.add(form.value);
+      this.dataService.add(form.value).pipe(take(1)).subscribe();
     }
 
     this.router.navigate([this.collection]);

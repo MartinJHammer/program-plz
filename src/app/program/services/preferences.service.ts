@@ -6,8 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/start/services/auth.service';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { snapshotChangesDocsMap } from 'src/app/start/helpers/snapshot-changes-docs-map';
-import { tap, take, map, filter } from 'rxjs/operators';
-import { toBehaviorSubject } from 'src/app/start/helpers/to-behavior-subject';
+import { tap, take, map, filter, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService extends DataService<Preferences> {
@@ -53,8 +52,18 @@ export class PreferencesService extends DataService<Preferences> {
         this.selectPreference(this.selectedPreferenceId$.getValue());
     }
 
-    public newPreference(): void {
-
+    public newPreference(preferenceName): void {
+        this.placeHolderPreference$.pipe(
+            take(1),
+            switchMap(placeholderPref => {
+                delete placeholderPref.id;
+                placeholderPref.name = preferenceName;
+                return this.add(placeholderPref).pipe(
+                    take(1),
+                    tap(newPreferenceId => this.selectPreference(newPreferenceId)));
+            }),
+            tap(() => this.preferencesChanged$.next(false))
+        ).subscribe();
     }
 
     // Note: Preferences will always be user related - therefore the method overwrite.

@@ -49,15 +49,16 @@ export abstract class DataService<T extends Entry> {
         );
     }
 
-    public add(entry: T): void {
-        this.withUser(user => {
+    public add(entry: T): Observable<string> {
+        return this.withUser(user => {
             entry.userId = user.uid;
             const currentEntries = this.entries$.getValue();
             return from(this.afs.collection<T>(this.collectionPath).add(Object.assign({}, entry)).then(docRef => {
                 entry.id = docRef.id;
                 this.updateEntries([entry, ...currentEntries]);
+                return entry.id;
             }));
-        }).pipe(take(1)).subscribe();
+        });
     }
 
     public update(entry: T): void {

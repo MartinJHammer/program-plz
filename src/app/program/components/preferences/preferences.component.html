@@ -1,10 +1,27 @@
 <p>Preferences</p>
-<!-- Options -->
+
+<!-- Preferences changed -->
 <ng-container *ngIf="preferencesChanged$ | async">
   <p style="color:red;">Preferences has changed!</p>
-  <button mat-button color="primary" (click)="save()">Save</button>
-  <button mat-button color="warn" (click)="discard()">Discard</button>
-  <button mat-button color="accent" (click)="newPreference()">New</button>
+
+  <!-- Options -->
+  <ng-container *ngIf="!creatingPreference">
+    <button mat-button color="primary" (click)="save()">Save</button>
+    <button mat-button color="warn" (click)="discard()">Discard</button>
+    <button mat-button color="accent" (click)="newPreference()">New</button>
+  </ng-container>
+
+  <br />
+
+  <!-- Creating preference -->
+  <ng-container *ngIf="creatingPreference">
+    <button mat-button color="primary" (click)="createPreference()">Create</button>
+    <button mat-button color="default" (click)="cancelCreatePreference()">Cancel</button>
+    <mat-form-field>
+      <input matInput input="text" name="name" [formControl]="nameControl" />
+    </mat-form-field>
+    <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
+  </ng-container>
 </ng-container>
 
 <!-- List -->

@@ -5,11 +5,13 @@ import { components, entryComponents } from './components/components';
 import { UiModule } from '../ui/ui.module';
 import { ExercisesModule } from '../exercises/exercises.module';
 import { SearchModule } from '../search/search.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     ProgramRoutingModule,
+    ReactiveFormsModule,
     ExercisesModule,
     UiModule,
     SearchModule
