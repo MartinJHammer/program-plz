@@ -9,7 +9,7 @@ import { connectSearchBox } from 'instantsearch.js/es/connectors';
 })
 export class SearchInputComponent extends BaseWidget implements OnInit {
   @Input() public autofocus: boolean;
-  @ViewChild('input') public input: ElementRef;
+  @ViewChild('input', { static: true }) public input: ElementRef;
   @Output() public change = new EventEmitter();
 
   public state: {

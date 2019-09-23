@@ -5,31 +5,31 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: '../program/program.module#ProgramModule'
+    loadChildren: () => import('../program/program.module').then(m => m.ProgramModule)
   },
   {
     path: 'account',
-    loadChildren: '../account/account.module#AccountModule'
+    loadChildren: () => import('../account/account.module').then(m => m.AccountModule)
   },
   {
     path: 'exercises',
-    loadChildren: '../exercises/exercises.module#ExercisesModule'
+    loadChildren: () => import('../exercises/exercises.module').then(m => m.ExercisesModule)
   },
   {
     path: 'exercise-types',
-    loadChildren: '../exercise-types/exercise-types.module#ExerciseTypesModule'
+    loadChildren: () => import('../exercise-types/exercise-types.module').then(m => m.ExerciseTypesModule)
   },
   {
     path: 'attributes',
-    loadChildren: '../attributes/attributes.module#AttributesModule'
+    loadChildren: () => import('../attributes/attributes.module').then(m => m.AttributesModule)
   },
   {
     path: 'equipment',
-    loadChildren: '../equipment/equipment.module#EquipmentModule'
+    loadChildren: () => import('../equipment/equipment.module').then(m => m.EquipmentModule)
   },
   {
     path: 'default-preferences',
-    loadChildren: '../preferences/preferences.module#PreferencesModule'
+    loadChildren: () => import('../preferences/preferences.module').then(m => m.PreferencesModule)
   },
   { path: '**', component: NotFoundComponent }
 ];

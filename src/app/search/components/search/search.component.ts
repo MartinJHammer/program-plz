@@ -8,7 +8,7 @@ import { SearchInputComponent } from '../search-input/search-input.component';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  @ViewChild('searchBox') searchbox: any; // NgAisSearchBox;
+  @ViewChild('searchBox', { static: true }) searchbox: any; // NgAisSearchBox;
   @Input() public collection: string;
   public searchConfig: any;
   public showSearchResults = false;

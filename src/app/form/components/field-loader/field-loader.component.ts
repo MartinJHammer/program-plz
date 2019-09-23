@@ -16,7 +16,7 @@ export class FieldLoaderComponent implements OnInit {
   @Input() fields: Field[];
   @Input() dataService: DataService<any>;
 
-  @ViewChild(DynamicFormFieldDirective) dynamicFormField: DynamicFormFieldDirective;
+  @ViewChild(DynamicFormFieldDirective, { static: true }) dynamicFormField: DynamicFormFieldDirective;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
