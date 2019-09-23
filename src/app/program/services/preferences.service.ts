@@ -68,10 +68,10 @@ export class PreferencesService extends DataService<Preferences> {
 
     // Note: Preferences will always be user related - therefore the method overwrite.
     public getAll(): Observable<Preferences[]> {
-        this.withUser(user => combineLatest(
+        this.withUser(user => combineLatest([
             this.getSingle('anon').pipe(filter(x => !!x), take(1), map(x => [x])),
             this.afs.collection<Preferences>(this.collectionPath, ref => ref.where('userId', '==', user.uid)).snapshotChanges().pipe(snapshotChangesDocsMap)
-        ).pipe(
+        ]).pipe(
             map(([a, b]) => a.concat(b), []),
             tap(entries => this.updateEntries(entries)),
             take(1)

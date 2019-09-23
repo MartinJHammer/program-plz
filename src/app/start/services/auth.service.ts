@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 
 import { auth, User } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
 
-import { of, BehaviorSubject } from 'rxjs';
-import { switchMap, shareReplay, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, of, from, merge } from 'rxjs';
+import { take, tap, map, shareReplay, switchMap, filter } from 'rxjs/operators';
 import { StorageService } from './storage.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -52,8 +52,25 @@ export class AuthService {
         this.afAuth.authState.pipe(
             switchMap(user => {
                 if (user) {
+                    const newUser = {
+                        displayName: user.displayName,
+                        photoUrl: user.photoURL,
+                        uid: user.uid,
+                        email: user.email,
+                        roles: {}
+                    };
+                    const user$ = this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+
+                    const userFound$ = user$.pipe(
+                        filter(dbUser => dbUser !== undefined && dbUser !== null),
+                    );
+                    const userNotFound$ = user$.pipe(
+                        filter(dbUser => dbUser === undefined || dbUser === null),
+                        switchMap(() => from(this.afs.collection<any>('users').doc(user.uid).set(newUser).then(() => newUser)))
+                    );
+
                     // Logged in
-                    return this.afs.doc<User>(`users/${user.uid}`).valueChanges().pipe(shareReplay(1));
+                    return merge(userFound$, userNotFound$);
                 } else {
                     // Logged out
                     return of(null);

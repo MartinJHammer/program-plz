@@ -1,7 +1,7 @@
 <div *ngIf="auth.user | async as user">
   <h3>Welcome, {{ user.displayName }}</h3>
   <!-- <img [src]="user.photoURL"> -->
-  <p *ngIf="user.roles">Admin: {{ user.roles.admin }}</p>
+  <p *ngIf="user.roles && user.roles.admin">Admin: {{ user.roles.admin }}</p>
   <a mat-raised-button color="primary" color="primary" [routerLink]="['/']">Home</a>
   <button mat-raised-button (click)="auth.signOut()">Logout</button>
 </div>

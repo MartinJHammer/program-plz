@@ -4,6 +4,7 @@
   "scripts": {
     "build": "ng build --prod",
     "pp:deploy": "npm run build && cd firebase && firebase deploy",
+    "pp:d:h": "npm run build && cd firebase && firebase deploy --only hosting",
     "pp:analyze": "ng build --stats-json && webpack-bundle-analyzer firebase/public/stats.json",
     "pp:d:f": "cd firebase && firebase deploy --only functions",
     "pp:d:r": "cd firebase && firebase deploy --only firestore:rules"

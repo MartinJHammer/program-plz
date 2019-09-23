@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { tap, map, take, filter, switchMap } from 'rxjs/operators';
+import { tap, map, switchMap, filter } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -16,13 +16,13 @@ export class AuthGuard implements CanActivate {
     return this.auth.dataLoaded.pipe(
       filter(x => x),
       switchMap(() => this.auth.user),
-      take(1),
       map(user => !!user), // <-- map to boolean
       tap(loggedIn => {
         if (!loggedIn) {
           this.router.navigate(['/login']);
         }
-      })
+        return loggedIn;
+      }),
     );
   }
 }

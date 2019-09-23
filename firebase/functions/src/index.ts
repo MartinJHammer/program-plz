@@ -1,15 +1,15 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as algoliasearch from 'algoliasearch';
+
 admin.initializeApp();
 const env = functions.config();
 
-import * as algoliasearch from 'algoliasearch';
-
+//#region Algolia
 // Initialize the Algolia Client
 const client = algoliasearch(env.algolia.app_id, env.algolia.api_key);
 const exercisesIndex = client.initIndex('exercises');
 
-//#region Algolia
 /**
  * Index on create
  */
