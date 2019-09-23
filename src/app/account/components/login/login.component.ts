@@ -25,6 +25,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     ).subscribe());
   }
 
+  public googleSigninViaPopUp(): void {
+    this.auth.googleSigninViaPopUp();
+  }
+
+  public googleSigninViaRedirect(): void {
+    this.auth.googleSigninViaRedirect();
+  }
+
   ngOnDestroy() {
     this.subscriptionHandler.unsubscribe();
   }

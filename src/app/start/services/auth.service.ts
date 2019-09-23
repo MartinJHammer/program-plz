@@ -31,8 +31,12 @@ export class AuthService {
         this.listenForUserAuthActions();
     }
 
-    public async googleSignin() {
+    public async googleSigninViaPopUp() {
         await this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    }
+
+    public async googleSigninViaRedirect() {
+        await this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
     }
 
     public async signOut() {

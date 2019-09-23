@@ -1,5 +1,25 @@
-<h3>Login</h3>
+<h2>Login</h2>
 
-<button mat-raised-button color="primary" (click)="auth.googleSignin()">
-  Connect via Google
+<p>Please use your preffered way of logging in below</p>
+<p>Remember to try the other options if one doesn't work</p>
+
+<h3>Google</h3>
+<button mat-button color="primary" (click)="googleSigninViaPopUp()">
+  Google (Popup)
 </button>
+
+<br />
+<br />
+
+<button mat-button color="primary" (click)="googleSigninViaRedirect()">
+  Google (Redirect)
+</button>
+
+<h3>Facebook</h3>
+<p>Coming later</p>
+
+<h3>Twitter</h3>
+<p>Coming later</p>
+
+<h3>Others</h3>
+<p>Coming later</p>
