@@ -22,8 +22,9 @@ service cloud.firestore {
     }
 
     match /preferences/{id} {
-      allow read;
-      allow write, delete: if getRole('admin') == true;
+      allow read: if isOwner(request.auth.uid);
+      allow write: if request.auth.token.email_verified;
+      allow delete: if isOwner(request.auth.uid);
     }
 
     match /users/{userId} {
