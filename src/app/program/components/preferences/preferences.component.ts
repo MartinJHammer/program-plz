@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
-import { map, switchMap, filter, tap, take } from 'rxjs/operators';
-import { FormControl, Validators } from '@angular/forms';
+import { map, switchMap, filter } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 

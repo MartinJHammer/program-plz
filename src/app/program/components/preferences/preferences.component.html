@@ -1,69 +1,90 @@
-<!-- Preferences changed -->
-<ng-container *ngIf="changedPreferenceAndNotAnon$ | async">
-  <p style="color:red;">Preferences has changed!</p>
-
-  <!-- Options -->
-  <ng-container *ngIf="!creatingPreference">
-    <button mat-button color="primary" (click)="save()">Save</button>
-    <button mat-button color="warn" (click)="discard()">Discard</button>
-    <button mat-button color="accent" (click)="newPreference()">New</button>
-  </ng-container>
-
-  <br />
-
-  <!-- Creating preference -->
-  <ng-container *ngIf="creatingPreference">
-    <!-- Input -->
-    <mat-form-field>
-      <input matInput input="text" name="name" [formControl]="nameControl" placeholder="Name" />
-    </mat-form-field>
-
-    <!-- Validation -->
-    <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
-
-    <!-- Buttons -->
-    <button mat-button color="primary" (click)="createPreference()">Create</button>
-    <button mat-button color="default" (click)="cancelForm()">Cancel</button>
-
-  </ng-container>
-</ng-container>
-
 <!-- Preferences -->
-<ul *ngIf="!renamingPreference">
-  <!-- Currently selected preferences -->
-  <li *ngIf="currentPreference$ | async as currentPreference">
-    {{ currentPreference.name }} (Currently used)
-  </li>
+<mat-accordion>
+  <mat-expansion-panel hideToggle>
 
-  <!-- Other preferences -->
-  <li *ngFor="let preferences of preferences$ | async">{{ preferences.name }} -
-    <span style="cursor: pointer; color:brown;" (click)="selectPreference(preferences)">
-      use
-    </span>
-    <ng-container *ngIf="preferences.id !== 'anon'">
-      <span style="cursor: pointer; color:skyblue;" (click)="renamePreference(preferences)">
-        - rename
-      </span>
-      <span style="cursor: pointer; color:red;" (click)="deletePreference(preferences)">
-        - delete
-      </span>
+    <!-- Panel header -->
+    <mat-expansion-panel-header fxLayoutAlign="space-between center">
+      <mat-panel-title>
+        Preference
+      </mat-panel-title>
+      <mat-panel-description>
+        <div *ngIf="currentPreference$ | async as currentPreference">
+          {{ currentPreference.name }}
+        </div>
+      </mat-panel-description>
+      <mat-icon *ngIf="changedPreferenceAndNotAnon$ | async" style="color:red;">info</mat-icon>
+    </mat-expansion-panel-header>
+
+    <!-- Preferences changed options -->
+    <ng-container *ngIf="changedPreferenceAndNotAnon$ | async">
+      <h3 style="color:red;font-weight:lighter;" *ngIf="currentPreference$ | async as currentPreference">
+        {{ currentPreference.name }} has
+        changed!</h3>
+
+      <!-- Options -->
+      <ng-container *ngIf="!creatingPreference">
+        <button mat-button color="primary" (click)="save()">Save</button>
+        <button mat-button color="warn" (click)="discard()">Discard</button>
+        <button mat-button color="accent" (click)="newPreference()">New</button>
+      </ng-container>
+
+      <br />
+
+      <!-- Creating preference -->
+      <ng-container *ngIf="creatingPreference">
+        <!-- Input -->
+        <mat-form-field>
+          <input matInput input="text" name="name" [formControl]="nameControl" placeholder="Name" />
+        </mat-form-field>
+
+        <!-- Validation -->
+        <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
+
+        <!-- Buttons -->
+        <button mat-button color="primary" (click)="createPreference()">Create</button>
+        <button mat-button color="default" (click)="cancelForm()">Cancel</button>
+
+      </ng-container>
     </ng-container>
-  </li>
-</ul>
 
-<!-- Renaming preference -->
-<ng-container *ngIf="renamingPreference">
-  <!-- Input -->
-  <mat-form-field>
-    <input matInput input="text" name="name" [formControl]="nameControl" placeholder="Name" />
-  </mat-form-field>
+    <!-- Preferences list -->
+    <mat-list role="list" *ngIf="!renamingPreference && !(changedPreferenceAndNotAnon$ | async)">
+      <mat-list-item role="listitem" *ngFor="let preferences of preferences$ | async">
+        {{ preferences.name }}
+        <!-- Preferences options -->
+        <div style="text-align: right">
+          <mat-icon style="cursor: pointer; color:brown;" (click)="selectPreference(preferences)" matTooltip="Use">
+            done
+          </mat-icon>
+          <ng-container *ngIf="preferences.id !== 'anon'">
+            <mat-icon style="cursor: pointer; color:skyblue;" (click)="renamePreference(preferences)"
+              matTooltip="Rename">
+              create
+            </mat-icon>
+            <mat-icon style="cursor: pointer; color:red;" (click)="deletePreference(preferences)" matTooltip="Delete">
+              delete
+            </mat-icon>
+          </ng-container>
+        </div>
+      </mat-list-item>
+    </mat-list>
 
-  <!-- Validation -->
-  <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
+    <!-- Renaming preference -->
+    <ng-container *ngIf="renamingPreference">
+      <!-- Input -->
+      <mat-form-field>
+        <input matInput input="text" name="name" [formControl]="nameControl" placeholder="Name" />
+      </mat-form-field>
 
-  <!-- Buttons -->
-  <button mat-button color="primary" (click)="updatePreference()">Rename</button>
-  <button mat-button color="default" (click)="cancelForm()">Cancel</button>
+      <!-- Validation -->
+      <p *ngIf="validationMessage" style="color: red;">{{ validationMessage }}</p>
 
-</ng-container>
+      <!-- Buttons -->
+      <button mat-button color="primary" (click)="updatePreference()">Rename</button>
+      <button mat-button color="default" (click)="cancelForm()">Cancel</button>
+
+    </ng-container>
+
+  </mat-expansion-panel>
+</mat-accordion>
 <br />

@@ -20,6 +20,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const material = [
   FlexLayoutModule,
@@ -37,7 +38,8 @@ const material = [
   MatToolbarModule,
   MatListModule,
   MatStepperModule,
-  MatInputModule
+  MatInputModule,
+  MatTooltipModule
 ];
 
 @NgModule({
