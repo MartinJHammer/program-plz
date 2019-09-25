@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preferences } from '../../models/preferences';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { map, switchMap, filter, tap, take } from 'rxjs/operators';
+import { FormControl, Validators } from '@angular/forms';
 import { DialogComponent } from 'src/app/ui/components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -17,6 +17,7 @@ export class PreferencesComponent implements OnInit {
   public preferences$: Observable<Preferences[]>;
   public currentPreference$ = new BehaviorSubject<Preferences>(null);
   public preferencesChanged$: Observable<boolean>;
+  public changedPreferenceAndNotAnon$: Observable<boolean>;
 
   public creatingPreference: boolean;
   public renamingPreference: boolean;
@@ -31,6 +32,14 @@ export class PreferencesComponent implements OnInit {
 
   ngOnInit() {
     this.preferencesChanged$ = this.service.getPreferencesChanged();
+
+    this.changedPreferenceAndNotAnon$ = this.service.getPreferencesChanged().pipe(
+      switchMap(changed => this.service.getPlaceholderPreference().pipe(
+        filter(x => !!x && x.id !== 'anon'),
+        map(() => changed)
+      ))
+    );
+
 
     this.preferences$ = combineLatest([
       this.service.getAll(),

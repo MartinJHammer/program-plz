@@ -1,5 +1,5 @@
 <!-- Preferences changed -->
-<ng-container *ngIf="preferencesChanged$ | async">
+<ng-container *ngIf="changedPreferenceAndNotAnon$ | async">
   <p style="color:red;">Preferences has changed!</p>
 
   <!-- Options -->
