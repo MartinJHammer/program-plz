@@ -49,6 +49,11 @@ export class StorageService {
         }
     }
 
+    public wipeStorage(): void {
+        this.subjects = {};
+        localforage.clear();
+    }
+
     private persist(key: string, data: any): Promise<any> {
         return this.ready(() => localforage.setItem(key, data));
     }

@@ -5,12 +5,13 @@ import { auth, User } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 import { BehaviorSubject, of, from, merge } from 'rxjs';
-import { take, tap, map, shareReplay, switchMap, filter } from 'rxjs/operators';
+import { take, tap, switchMap, filter } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+    public static loggingOut$ = new BehaviorSubject(false);
     private user$ = new BehaviorSubject<User>(null);
     public get user(): BehaviorSubject<User> {
         return this.user$;
@@ -41,6 +42,9 @@ export class AuthService {
 
     public async signOut() {
         await this.afAuth.auth.signOut();
+        this.storageService.wipeStorage();
+        AuthService.loggingOut$.next(true);
+        AuthService.loggingOut$.next(false);
         this.router.navigate(['/']);
     }
 
