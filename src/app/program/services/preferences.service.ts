@@ -46,9 +46,11 @@ export class PreferencesService extends DataService<Preferences> {
     public saveCurrentPreferenceChanges(): void {
         this.update(this.placeHolderPreference$.getValue());
         this.preferencesChanged$.next(false);
+        this.clearPlaceHolderPref();
     }
 
     public discardCurrentPreferenceChanges(): void {
+        this.clearPlaceHolderPref();
         this.selectPreference(this.selectedPreferenceId$.getValue());
     }
 
@@ -111,32 +113,47 @@ export class PreferencesService extends DataService<Preferences> {
     }
 
     public setEquipment(ids: string[]): void {
-        this.preferencesChanged$.next(true);
         const current = Object.assign({}, this.placeHolderPreference$.getValue());
         current.equipment = ids;
-        this.placeHolderPreference$.next(current);
+        this.updatePlaceHolderPref(current);
     }
 
     public setExerciseTypes(ids: string[]): void {
-        this.preferencesChanged$.next(true);
         const current = Object.assign({}, this.placeHolderPreference$.getValue());
         current.exerciseTypes = ids;
-        this.placeHolderPreference$.next(current);
+        this.updatePlaceHolderPref(current);
     }
 
     public setExerciseTypeOrder(ids: string[]): void {
-        this.preferencesChanged$.next(true);
         const current = Object.assign({}, this.placeHolderPreference$.getValue());
         current.exerciseTypesOrder = ids;
-        this.placeHolderPreference$.next(current);
+        this.updatePlaceHolderPref(current);
+    }
+
+    private updatePlaceHolderPref(placeHolderPref: Preferences): void {
+        this.preferencesChanged$.next(true);
+        this.placeHolderPreference$.next(placeHolderPref);
+        this.storageService.set('placeHolderPref', placeHolderPref);
+    }
+
+    private clearPlaceHolderPref(): void {
+        this.preferencesChanged$.next(false);
+        this.storageService.remove('placeHolderPref');
     }
 
     private initPreferences(): void {
-        const selectedPreferenceId$ = this.storageService.select('selectedPreferenceId');
-        selectedPreferenceId$.pipe(
+        this.storageService.select('selectedPreferenceId').pipe(
             take(1),
             map(selectedPreferenceId => !!selectedPreferenceId ? selectedPreferenceId : 'anon'),
             tap(selectedPreferenceId => this.selectPreference(selectedPreferenceId))
         ).subscribe();
+
+        this.storageService.select('placeHolderPref').pipe(
+            tap(x => console.log(x)),
+            take(1),
+            filter(x => !!x),
+            tap(placeHolderPref => this.updatePlaceHolderPref(placeHolderPref))
+        ).subscribe();
+
     }
 }
