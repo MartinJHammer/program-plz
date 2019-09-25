@@ -40,7 +40,11 @@ export class PreferencesService extends DataService<Preferences> {
     }
 
     public getPreferencesChanged(): Observable<boolean> {
-        return this.preferencesChanged$;
+        return this.preferencesChanged$.pipe(
+            switchMap(changed => this.authService.user.pipe(
+                map(user => user ? changed : false)
+            ))
+        );
     }
 
     public saveCurrentPreferenceChanges(): void {
@@ -149,7 +153,6 @@ export class PreferencesService extends DataService<Preferences> {
         ).subscribe();
 
         this.storageService.select('placeHolderPref').pipe(
-            tap(x => console.log(x)),
             take(1),
             filter(x => !!x),
             tap(placeHolderPref => this.updatePlaceHolderPref(placeHolderPref))

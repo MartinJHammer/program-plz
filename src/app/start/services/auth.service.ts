@@ -11,7 +11,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    public static loggingOut$ = new BehaviorSubject(false);
     private user$ = new BehaviorSubject<User>(null);
     public get user(): BehaviorSubject<User> {
         return this.user$;
@@ -41,11 +40,10 @@ export class AuthService {
     }
 
     public async signOut() {
-        await this.afAuth.auth.signOut();
-        this.storageService.wipeStorage();
-        AuthService.loggingOut$.next(true);
-        AuthService.loggingOut$.next(false);
-        this.router.navigate(['/']);
+        await this.afAuth.auth.signOut().then(() => {
+            this.storageService.wipeStorage();
+            window.location.reload();
+        });
     }
 
     /**

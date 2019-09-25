@@ -107,10 +107,5 @@ export abstract class DataService<T extends Entry> {
                 this.entries$.next(entries ? entries : []);
             })
         ).subscribe();
-
-        AuthService.loggingOut$.pipe(
-            filter(x => x),
-            tap(() => this.entries$.next([]))
-        ).subscribe();
     }
 }
