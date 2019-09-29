@@ -3,7 +3,7 @@
     <h3 *ngIf="!loading">{{ exercise.name }}</h3>
     <pp-spinner class="exercise-spinner" *ngIf="loading" [spinner]="'dot'"></pp-spinner>
     <!-- Menu button -->
-    <button class="exercise-menu push" mat-icon-button [matMenuTriggerFor]="menu">
+    <button class="push-right" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
 

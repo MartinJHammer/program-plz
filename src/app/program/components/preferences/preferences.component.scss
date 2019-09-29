@@ -1,3 +1,50 @@
 mat-panel-title, mat-panel-description {
     padding-top:3px;
 }
+
+mat-panel-description {
+    font-style: italic;
+    font-size: 12px;
+    vertical-align: center;
+    margin-top: 2px;
+}
+
+.preference-name {
+    max-width: 100px;
+    word-break: break-all;
+}
+
+.push-right {
+  margin-left: auto;
+}
+
+.preference-option {
+    cursor: pointer;
+}
+
+.space-right {
+    margin-right: 5px;
+}
+
+.preference-option-create {
+    @extend .preference-option;
+    color: #519839;
+}
+
+.preference-option-rename {
+    @extend .preference-option;
+    color: skyblue;
+}
+
+.preference-option-delete {
+    @extend .preference-option;
+    color: red;
+}
+
+.preference-option-disabled {
+    @extend .preference-option;
+    cursor: default;
+    color: grey;
+    visibility: hidden;
+}
+

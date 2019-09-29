@@ -4,20 +4,21 @@
 
     <!-- Panel header -->
     <mat-expansion-panel-header fxLayoutAlign="space-between center">
-      <mat-panel-title>
-        Preference
-      </mat-panel-title>
-      <mat-panel-description>
-        <div *ngIf="currentPreference$ | async as currentPreference">
+      <mat-panel-title *ngIf="currentPreference$ | async as currentPreference">
+        <div class="preference-name">
           {{ currentPreference.name }}
         </div>
+      </mat-panel-title>
+      <mat-panel-description>
+        current preference
       </mat-panel-description>
       <mat-icon *ngIf="changedPreferenceAndNotAnon$ | async" style="color:red;">info</mat-icon>
     </mat-expansion-panel-header>
 
     <!-- Preferences changed options -->
     <ng-container *ngIf="changedPreferenceAndNotAnon$ | async">
-      <h3 style="color:red;font-weight:lighter;" *ngIf="currentPreference$ | async as currentPreference">
+      <h3 style="color:red;font-weight:lighter; max-width:200px"
+        *ngIf="currentPreference$ | async as currentPreference">
         {{ currentPreference.name }} has
         changed!</h3>
 
@@ -47,27 +48,42 @@
       </ng-container>
     </ng-container>
 
-    <!-- Preferences list -->
-    <mat-list role="list" *ngIf="!renamingPreference && !(changedPreferenceAndNotAnon$ | async)">
-      <mat-list-item role="listitem" *ngFor="let preferences of preferences$ | async">
-        {{ preferences.name }}
+    <!-- Preferences -->
+    <div role="list" *ngIf="!renamingPreference && !(changedPreferenceAndNotAnon$ | async)">
+      <!-- Preference -->
+      <div role="listitem" *ngFor="let preferences of preferences$ | async" fxLayout
+        fxLayoutAlign="space-between center">
+        <p class="preference-name">
+          {{ preferences.name }}
+        </p>
         <!-- Preferences options -->
-        <div style="text-align: right">
-          <mat-icon style="cursor: pointer; color:brown;" (click)="selectPreference(preferences)" matTooltip="Use">
+        <span class="push-right">
+          <!-- Use -->
+          <mat-icon class="preference-option-create space-right" (click)="selectPreference(preferences)"
+            matTooltip="Use">
             done
           </mat-icon>
-          <ng-container *ngIf="preferences.id !== 'anon'">
-            <mat-icon style="cursor: pointer; color:skyblue;" (click)="renamePreference(preferences)"
-              matTooltip="Rename">
-              create
-            </mat-icon>
-            <mat-icon style="cursor: pointer; color:red;" (click)="deletePreference(preferences)" matTooltip="Delete">
-              delete
-            </mat-icon>
-          </ng-container>
-        </div>
-      </mat-list-item>
-    </mat-list>
+
+          <!-- Rename -->
+          <mat-icon *ngIf="preferences.id !== 'anon'" class="preference-option-rename space-right"
+            (click)="renamePreference(preferences)" matTooltip="Rename">
+            create
+          </mat-icon>
+          <mat-icon *ngIf="preferences.id === 'anon'" class="preference-option-disabled space-right">
+            create
+          </mat-icon>
+
+          <!-- Delete -->
+          <mat-icon *ngIf="preferences.id !== 'anon'" class="preference-option-delete"
+            (click)="deletePreference(preferences)" matTooltip="Delete">
+            delete
+          </mat-icon>
+          <mat-icon *ngIf="preferences.id === 'anon'" class="preference-option-disabled">
+            delete
+          </mat-icon>
+        </span>
+      </div>
+    </div>
 
     <!-- Renaming preference -->
     <ng-container *ngIf="renamingPreference">
