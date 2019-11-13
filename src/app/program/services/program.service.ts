@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, combineLatest, merge, of, EMPTY } from 'rxjs';
 import { Exercise } from 'src/app/exercises/models/exercise';
 import { docsMap } from 'src/app/start/helpers/docs-map';
-import { mergeMap, filter, map, switchMap, take, expand, tap, takeWhile } from 'rxjs/operators';
+import { mergeMap, filter, map, switchMap, take, expand, tap } from 'rxjs/operators';
 import { getRandomNumber } from 'src/app/start/helpers/random-number';
 import { shuffle } from 'src/app/start/helpers/shuffle';
 import { StorageService } from 'src/app/start/services/storage.service';
@@ -82,10 +82,10 @@ export class ProgramService {
     }
 
     public applyExerciseTypeOrder(): void {
-        combineLatest(
+        combineLatest([
             this.exerciseTypesService.prefferedOnlyOrdered(),
             this.exercises$.pipe(take(1))
-        ).pipe(
+        ]).pipe(
             map(([selectedExercises, exercises]) => {
                 const orderedExercises: Exercise[] = selectedExercises.map(selectedExercise => {
                     return exercises.filter(exercise => exercise.exerciseTypeId === selectedExercise.id);
