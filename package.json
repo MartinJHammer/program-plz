@@ -32,6 +32,7 @@
     "firebase": "6.6.2",
     "hammerjs": "2.0.8",
     "localforage": "1.7.3",
+    "ramda": "^0.26.1",
     "rxjs": "6.5.3",
     "tslib": "1.10.0",
     "zone.js": "0.9.1"
@@ -44,6 +45,7 @@
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "12.7.5",
+    "@types/ramda": "github:types/npm-ramda",
     "codelyzer": "5.0.1",
     "jasmine-core": "2.99.1",
     "jasmine-spec-reporter": "4.2.1",

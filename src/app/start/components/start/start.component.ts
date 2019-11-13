@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PwaService } from '../../services/pwa.service';
+import { RamdaService } from 'src/app/program/services/ramda.service ';
 
 @Component({
   selector: 'pp-start',
@@ -8,7 +9,10 @@ import { PwaService } from '../../services/pwa.service';
 })
 export class StartComponent implements OnInit {
 
-  constructor(public pwa: PwaService) { }
+  constructor(
+    public pwa: PwaService,
+    public ramdaSersvice: RamdaService
+  ) { }
 
   ngOnInit() {
   }
