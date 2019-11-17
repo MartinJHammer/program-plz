@@ -13,13 +13,15 @@ import {
     ascend,
     length,
     mean,
-    sortBy
+    sortBy,
+    sum
 } from 'ramda';
 
 // Numbers
 export const highestFirst = sort((a, b) => b - a);
 export const lowestFirst = sort((a, b) => a - b);
 export const average = x => mean(x);
+export const total = x => sum(x);
 
 // Volume prop
 export const volumeProp = prop('volume');
@@ -36,7 +38,10 @@ export const averageVolume = pipe(
     volumeProps,
     average
 );
-
+export const totalVolume = pipe(
+    volumeProps,
+    total
+);
 
 
 
